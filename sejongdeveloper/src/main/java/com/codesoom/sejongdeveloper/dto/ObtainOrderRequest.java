@@ -25,4 +25,5 @@ public class ObtainOrderRequest {
         this.date = date;
         this.obtainOrderDetails = obtainOrderDetails;
     }
+
 }
