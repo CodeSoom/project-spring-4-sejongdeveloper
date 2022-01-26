@@ -32,14 +32,18 @@ public class ObtainOrderController {
     public Long create(@RequestBody ObtainOrderRequest obtainOrderRequest) {
         ObtainOrder obtainOrder = obtainOrderRequest.createObtainOrder();
 
-        List<ObtainOrderDetail> obtainOrderDetails = obtainOrderRequest.getObtainOrderDetails().stream()
+        List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrderRequest);
+
+        return obtainOrderService.save(obtainOrder, obtainOrderDetails);
+    }
+
+    private List<ObtainOrderDetail> getObtainOrderDetails(ObtainOrderRequest obtainOrderRequest) {
+        return obtainOrderRequest.getObtainOrderDetails().stream()
                 .map(obtainOrderDetailRequest -> {
                     Item item = itemRepository.findById(obtainOrderDetailRequest.getItemId())
                             .orElseThrow(() -> new ItemNotFoundException(obtainOrderDetailRequest.getItemId()));
 
                     return obtainOrderDetailRequest.createObtainOrderDetail(item);
                 }).collect(Collectors.toList());
-
-        return obtainOrderService.save(obtainOrder, obtainOrderDetails);
     }
 }
