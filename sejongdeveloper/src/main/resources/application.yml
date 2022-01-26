@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/sejongdeveloper
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
