@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.dto;
 
+import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.Builder;
@@ -24,6 +25,13 @@ public class ObtainOrderRequest {
         this.name = name;
         this.date = date;
         this.obtainOrderDetails = obtainOrderDetails;
+    }
+
+    public ObtainOrder createObtainOrder() {
+        return ObtainOrder.builder()
+                .name(name)
+                .date(date)
+                .build();
     }
 
 }

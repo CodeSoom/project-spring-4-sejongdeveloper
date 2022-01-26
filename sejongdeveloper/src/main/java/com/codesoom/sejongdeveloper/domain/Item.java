@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,12 @@ public class Item extends BaseEntity {
 
     private Boolean useYn;  //사용여부
 
+    @Builder
+    public Item(Long id, String code, String name, BigDecimal quantity, Boolean useYn) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.quantity = quantity;
+        this.useYn = useYn;
+    }
 }

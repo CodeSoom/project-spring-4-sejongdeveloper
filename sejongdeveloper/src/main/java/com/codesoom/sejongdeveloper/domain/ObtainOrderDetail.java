@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,4 +37,11 @@ public class ObtainOrderDetail extends BaseEntity {
 
     private BigDecimal quantity;    //수주 수량
 
+    @Builder
+    public ObtainOrderDetail(Long id, ObtainOrder obtainOrder, Item item, BigDecimal quantity) {
+        this.id = id;
+        this.obtainOrder = obtainOrder;
+        this.item = item;
+        this.quantity = quantity;
+    }
 }

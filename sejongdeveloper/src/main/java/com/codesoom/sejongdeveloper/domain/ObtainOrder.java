@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,10 @@ public class ObtainOrder {
 
     private LocalDate date; //수주날짜
 
+    @Builder
+    public ObtainOrder(Long id, String name, LocalDate date) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+    }
 }

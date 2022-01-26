@@ -1,8 +1,12 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
+import com.codesoom.sejongdeveloper.domain.Item;
+import com.codesoom.sejongdeveloper.domain.ObtainOrder;
+import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
+import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -26,6 +31,7 @@ class ObtainOrderControllerTest {
 
     private static final String OBTAIN_ORDER_NAME = "수주명 테스트";
     private static final Long OBTAIN_ORDER_ID = 1L;
+    private static final Long ITEM_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,13 +39,21 @@ class ObtainOrderControllerTest {
     @MockBean
     private ObtainOrderService obtainOrderService;
 
+    @MockBean
+    private ItemRepository itemRepository;
+
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
 
-        given(obtainOrderService.save(any(ObtainOrderRequest.class))).willReturn(OBTAIN_ORDER_ID);
+        given(obtainOrderService.save(any(ObtainOrder.class), any(List.class))).willReturn(OBTAIN_ORDER_ID);
+
+        Item item = Item.builder()
+                .id(ITEM_ID)
+                .build();
+        given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
     }
 
     @Test
@@ -52,7 +66,7 @@ class ObtainOrderControllerTest {
                         .content(json))
                 .andExpect(status().isCreated());
 
-        verify(obtainOrderService).save(any(ObtainOrderRequest.class));
+        verify(obtainOrderService).save(any(ObtainOrder.class), any(List.class));
     }
 
     private ObtainOrderRequest getObtainOrderRequest() {
