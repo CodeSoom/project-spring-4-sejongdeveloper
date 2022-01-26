@@ -1,7 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
-import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
