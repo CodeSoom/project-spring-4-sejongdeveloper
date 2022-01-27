@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,6 +33,7 @@ class ObtainOrderControllerTest {
     private static final Long OBTAIN_ORDER_ID = 1L;
     private static final Long ITEM_ID = 1L;
     private static final Long INVALID_ITEM_ID = 2L;
+    private static final String UPDATE_OBTAIN_ORDER_NAME = "수정한 수주명 테스트";
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,7 +60,7 @@ class ObtainOrderControllerTest {
 
     @Test
     void createValidRequest() throws Exception {
-        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest();
+        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(OBTAIN_ORDER_NAME);
         String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(post("/obtain-orders")
@@ -117,6 +119,17 @@ class ObtainOrderControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void updateValidRequest() throws Exception {
+        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME);
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
+
+        mockMvc.perform(patch("/obtain-orders/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk());
+    }
+
     private ObtainOrderRequest getInvalidItem() {
         ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
                 .quantity(new BigDecimal(1_000))
@@ -140,11 +153,11 @@ class ObtainOrderControllerTest {
                     .build();
     }
 
-    private ObtainOrderRequest getObtainOrderRequest() {
+    private ObtainOrderRequest getObtainOrderRequest(String name) {
         ObtainOrderDetailRequest obtainOrderDetailRequest = getObtainOrderDetailRequest();
 
         return ObtainOrderRequest.builder()
-                .name(OBTAIN_ORDER_NAME)
+                .name(name)
                 .obtainOrderDetails(List.of(obtainOrderDetailRequest))
                 .build();
     }
