@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class ObtainOrderDetailServiceTest {
 
@@ -26,6 +28,8 @@ class ObtainOrderDetailServiceTest {
         List<ObtainOrderDetail> obtainOrderDetails = new ArrayList<>();
 
         obtainOrderDetailService.createObtainOrderDetails(obtainOrderDetails);
+
+        verify(obtainOrderDetailRepository).saveAll(any(List.class));
     }
 
 }
