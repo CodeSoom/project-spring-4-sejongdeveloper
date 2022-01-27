@@ -3,7 +3,6 @@ package com.codesoom.sejongdeveloper.controllers;
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
-import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
@@ -67,6 +66,57 @@ class ObtainOrderControllerTest {
                 .andExpect(status().isCreated());
 
         verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), any(List.class));
+    }
+
+    @Test
+    void createInValidRequest() throws Exception {
+        ObtainOrderRequest obtainOrderRequest = getInvalidName();
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
+
+        mockMvc.perform(post("/obtain-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
+
+        obtainOrderRequest = getIsNullObtainOrderDetails();
+        json = objectMapper.writeValueAsString(obtainOrderRequest);
+
+        mockMvc.perform(post("/obtain-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
+
+        obtainOrderRequest = getInvalidItem();
+        json = objectMapper.writeValueAsString(obtainOrderRequest);
+
+        mockMvc.perform(post("/obtain-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    private ObtainOrderRequest getInvalidItem() {
+        ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
+                .quantity(new BigDecimal(1_000))
+                .build();
+
+        return ObtainOrderRequest.builder()
+                .name(OBTAIN_ORDER_NAME)
+                .obtainOrderDetails(List.of(obtainOrderDetailRequest))
+                .build();
+    }
+
+    private ObtainOrderRequest getIsNullObtainOrderDetails() {
+        return ObtainOrderRequest.builder()
+                .name(OBTAIN_ORDER_NAME)
+                .build();
+    }
+
+    private ObtainOrderRequest getInvalidName() {
+        return ObtainOrderRequest.builder()
+                    .name("")
+                    .build();
     }
 
     private ObtainOrderRequest getObtainOrderRequest() {

@@ -7,17 +7,25 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class ObtainOrderRequest {
 
+    @NotBlank
     private String name;
 
     private LocalDate date;
 
+    @NotNull
+    @Valid
     private List<ObtainOrderDetailRequest> obtainOrderDetails;
 
     @Builder
