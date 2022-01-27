@@ -25,4 +25,8 @@ public class ObtainOrderService {
 
         return savedObtainOrder.getId();
     }
+
+    public Long updateObtainOrder(Long id, ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
+        return null;
+    }
 }

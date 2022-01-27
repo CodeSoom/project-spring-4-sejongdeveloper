@@ -10,6 +10,7 @@ import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,11 @@ public class ObtainOrderController {
     }
 
     @PatchMapping("{id}")
-    public Long update(@RequestBody @Valid ObtainOrderRequest obtainOrderRequest) {
-        return null;
+    public Long update(@PathVariable Long id, @RequestBody @Valid ObtainOrderRequest obtainOrderRequest) {
+        ObtainOrder obtainOrder = obtainOrderRequest.createObtainOrder();
+
+        List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrderRequest);
+
+        return obtainOrderService.updateObtainOrder(id, obtainOrder, obtainOrderDetails);
     }
 }

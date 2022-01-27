@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -128,6 +129,8 @@ class ObtainOrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
+
+        verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
     }
 
     private ObtainOrderRequest getInvalidItem() {
