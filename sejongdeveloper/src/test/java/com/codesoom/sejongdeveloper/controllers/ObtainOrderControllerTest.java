@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
+import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,11 +53,21 @@ class ObtainOrderControllerTest {
     void setUp() {
         objectMapper = new ObjectMapper();
 
-        given(obtainOrderService.createObtainOrder(any(ObtainOrder.class), any(List.class))).willReturn(OBTAIN_ORDER_ID);
+        given(obtainOrderService.createObtainOrder(
+                any(ObtainOrder.class),
+                any(List.class))
+        ).willReturn(OBTAIN_ORDER_ID);
+
+        given(obtainOrderService.updateObtainOrder(
+                eq(INVALID_OBTAIN_ORDER_ID),
+                any(ObtainOrder.class),
+                any(List.class))
+        ).willThrow(new ObtainOrderNotFoundException(INVALID_OBTAIN_ORDER_ID));
 
         Item item = Item.builder()
                 .id(ITEM_ID)
                 .build();
+
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
     }
 
@@ -144,7 +155,7 @@ class ObtainOrderControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest());
 
-        verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
+        verify(obtainOrderService).updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
     }
 
     private ObtainOrderRequest getInvalidItem() {
