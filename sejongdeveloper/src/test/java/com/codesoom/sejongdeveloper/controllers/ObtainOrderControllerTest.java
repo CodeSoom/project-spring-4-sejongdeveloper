@@ -31,6 +31,7 @@ class ObtainOrderControllerTest {
     private static final String OBTAIN_ORDER_NAME = "수주명 테스트";
     private static final Long OBTAIN_ORDER_ID = 1L;
     private static final Long ITEM_ID = 1L;
+    private static final Long INVALID_ITEM_ID = 2L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -94,6 +95,26 @@ class ObtainOrderControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    void createWrongItem() throws Exception {
+        ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
+                .itemId(INVALID_ITEM_ID)
+                .quantity(new BigDecimal(1_000))
+                .build();
+
+        ObtainOrderRequest obtainOrderRequest = ObtainOrderRequest.builder()
+                .name(OBTAIN_ORDER_NAME)
+                .obtainOrderDetails(List.of(obtainOrderDetailRequest))
+                .build();
+
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
+
+        mockMvc.perform(post("/obtain-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
     }
 
     private ObtainOrderRequest getInvalidItem() {
