@@ -3,7 +3,9 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -20,6 +23,7 @@ class ObtainOrderServiceTest {
 
     private static final Long OBTAIN_ORDER_ID = 1L;
     private static final String UPDATE_OBTAIN_ORDER_NAME = "수정된 수주명 이름";
+    private static final Long INVALID_OBTAIN_ORDER_ID = 2L;
 
     private ObtainOrderService obtainOrderService;
 
@@ -66,6 +70,18 @@ class ObtainOrderServiceTest {
         obtainOrderService.updateObtainOrder(OBTAIN_ORDER_ID, obtainOrder, List.of(obtainOrderDetail));
 
         verify(obtainOrderDetailService).updateObtainOrderDetails(any(List.class));
+    }
+
+    @Test
+    void updateWithoutObtainOrder() {
+        ObtainOrder obtainOrder = ObtainOrder.builder().build();
+        ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder().build();
+
+        assertThatThrownBy(() -> obtainOrderService.updateObtainOrder(
+                INVALID_OBTAIN_ORDER_ID,
+                obtainOrder,
+                List.of(obtainOrderDetail))
+        ).isInstanceOf(ObtainOrderNotFoundException.class);
     }
 
 }
