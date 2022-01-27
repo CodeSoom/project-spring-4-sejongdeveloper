@@ -15,9 +15,14 @@ import java.util.List;
 public class ObtainOrderService {
 
     private final ObtainOrderRepository obtainOrderRepository;
+    private final ObtainOrderDetailService obtainOrderDetailService;
 
     @Transactional
     public Long createObtainOrder(ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
-        return null;
+        ObtainOrder savedObtainOrder = obtainOrderRepository.save(obtainOrder);
+
+        obtainOrderDetailService.createObtainOrderDetails(obtainOrderDetails);
+
+        return savedObtainOrder.getId();
     }
 }
