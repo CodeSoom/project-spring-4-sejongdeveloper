@@ -35,6 +35,7 @@ class ObtainOrderControllerTest {
     private static final Long ITEM_ID = 1L;
     private static final Long INVALID_ITEM_ID = 2L;
     private static final String UPDATE_OBTAIN_ORDER_NAME = "수정한 수주명 테스트";
+    private static final Long INVALID_OBTAIN_ORDER_ID = 2L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -125,10 +126,23 @@ class ObtainOrderControllerTest {
         ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME);
         String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
-        mockMvc.perform(patch("/obtain-orders/1")
+        mockMvc.perform(patch("/obtain-orders/"+OBTAIN_ORDER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
+
+        verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
+    }
+
+    @Test
+    void updateWithoutObtainOrder() throws Exception {
+        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME);
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
+
+        mockMvc.perform(patch("/obtain-orders/"+INVALID_OBTAIN_ORDER_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
 
         verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
     }
