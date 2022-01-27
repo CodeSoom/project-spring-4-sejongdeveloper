@@ -44,4 +44,9 @@ public class ObtainOrderDetail extends BaseEntity {
         this.item = item;
         this.quantity = quantity;
     }
+
+    public void update(Item item, BigDecimal quantity) {
+        this.item = item;
+        this.quantity = quantity;
+    }
 }
