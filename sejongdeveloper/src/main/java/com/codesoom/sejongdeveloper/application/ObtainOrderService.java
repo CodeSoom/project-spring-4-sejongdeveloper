@@ -17,7 +17,7 @@ public class ObtainOrderService {
     private final ObtainOrderRepository obtainOrderRepository;
 
     @Transactional
-    public Long save(ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
+    public Long createObtainOrder(ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
         return null;
     }
 }

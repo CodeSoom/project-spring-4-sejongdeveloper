@@ -34,7 +34,7 @@ public class ObtainOrderController {
 
         List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrderRequest);
 
-        return obtainOrderService.save(obtainOrder, obtainOrderDetails);
+        return obtainOrderService.createObtainOrder(obtainOrder, obtainOrderDetails);
     }
 
     private List<ObtainOrderDetail> getObtainOrderDetails(ObtainOrderRequest obtainOrderRequest) {

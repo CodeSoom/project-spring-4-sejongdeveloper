@@ -48,7 +48,7 @@ class ObtainOrderControllerTest {
     void setUp() {
         objectMapper = new ObjectMapper();
 
-        given(obtainOrderService.save(any(ObtainOrder.class), any(List.class))).willReturn(OBTAIN_ORDER_ID);
+        given(obtainOrderService.createObtainOrder(any(ObtainOrder.class), any(List.class))).willReturn(OBTAIN_ORDER_ID);
 
         Item item = Item.builder()
                 .id(ITEM_ID)
@@ -66,7 +66,7 @@ class ObtainOrderControllerTest {
                         .content(json))
                 .andExpect(status().isCreated());
 
-        verify(obtainOrderService).save(any(ObtainOrder.class), any(List.class));
+        verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), any(List.class));
     }
 
     private ObtainOrderRequest getObtainOrderRequest() {
