@@ -34,4 +34,9 @@ public class ObtainOrder {
         this.name = name;
         this.date = date;
     }
+
+    public void update(String name, LocalDate date) {
+        this.name = name;
+        this.date = date;
+    }
 }

@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,18 @@ public class ObtainOrderService {
         return savedObtainOrder.getId();
     }
 
+    @Transactional
     public Long updateObtainOrder(Long id, ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
-        return null;
+        ObtainOrder updatedObtainOrder = obtainOrderRepository.findById(id)
+                .orElseThrow(() -> new ObtainOrderNotFoundException(id));
+
+        updatedObtainOrder.update(
+                obtainOrder.getName(),
+                obtainOrder.getDate()
+        );
+
+        obtainOrderDetailService.updateObtainOrderDetails(obtainOrderDetails);
+
+        return updatedObtainOrder.getId();
     }
 }

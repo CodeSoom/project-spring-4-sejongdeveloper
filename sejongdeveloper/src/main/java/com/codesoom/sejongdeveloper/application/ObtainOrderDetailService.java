@@ -18,4 +18,8 @@ public class ObtainOrderDetailService {
     public void createObtainOrderDetails(List<ObtainOrderDetail> obtainOrderDetails) {
         obtainOrderDetailRepository.saveAll(obtainOrderDetails);
     }
+
+    public void updateObtainOrderDetails(List<ObtainOrderDetail> obtainOrderDetails) {
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.application;
 
+import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.verify;
 class ObtainOrderServiceTest {
 
     private static final Long OBTAIN_ORDER_ID = 1L;
+    private static final String UPDATE_OBTAIN_ORDER_NAME = "수정된 수주명 이름";
 
     private ObtainOrderService obtainOrderService;
 
@@ -33,6 +36,8 @@ class ObtainOrderServiceTest {
                 .build();
 
         given(obtainOrderRepository.save(any(ObtainOrder.class))).willReturn(obtainOrder);
+
+        given(obtainOrderRepository.findById(OBTAIN_ORDER_ID)).willReturn(Optional.of(obtainOrder));
     }
 
     @Test
@@ -44,6 +49,23 @@ class ObtainOrderServiceTest {
 
         verify(obtainOrderRepository).save(any(ObtainOrder.class));
         verify(obtainOrderDetailService).createObtainOrderDetails(any(List.class));
+    }
+
+    @Test
+    void updateObtainOrder() {
+        Item item = Item.builder().build();
+
+        ObtainOrder obtainOrder = ObtainOrder.builder()
+                .name(UPDATE_OBTAIN_ORDER_NAME)
+                .build();
+
+        ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
+                .item(item)
+                .build();
+
+        obtainOrderService.updateObtainOrder(OBTAIN_ORDER_ID, obtainOrder, List.of(obtainOrderDetail));
+
+        verify(obtainOrderDetailService).updateObtainOrderDetails(any(List.class));
     }
 
 }
