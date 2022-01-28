@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,6 +57,12 @@ class ObtainOrderControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
+
+        ObtainOrderResponse obtainOrderResponse = ObtainOrderResponse.builder()
+                .id(OBTAIN_ORDER_ID)
+                .build();
+
+        given(obtainOrderService.getObtainOrder(OBTAIN_ORDER_ID)).willReturn(obtainOrderResponse);
 
         given(obtainOrderService.createObtainOrder(
                 any(ObtainOrder.class),
@@ -150,7 +157,9 @@ class ObtainOrderControllerTest {
     void getObtainOrder() throws Exception {
         mockMvc.perform(get("/obtain-orders/" + OBTAIN_ORDER_ID))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("id=" + OBTAIN_ORDER_ID)));
+                .andExpect(content().string(containsString("\"id\":" + OBTAIN_ORDER_ID)));
+
+        verify(obtainOrderService).getObtainOrder(OBTAIN_ORDER_ID);
     }
 
     private ObtainOrderRequest getObtainOrderWithInvalidItemId() {

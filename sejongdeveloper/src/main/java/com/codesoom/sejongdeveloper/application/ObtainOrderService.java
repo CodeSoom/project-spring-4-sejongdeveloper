@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,9 @@ public class ObtainOrderService {
         obtainOrderDetailService.updateObtainOrderDetails(obtainOrderDetails);
 
         return updatedObtainOrder.getId();
+    }
+
+    public ObtainOrderResponse getObtainOrder(Long id) {
+        return null;
     }
 }

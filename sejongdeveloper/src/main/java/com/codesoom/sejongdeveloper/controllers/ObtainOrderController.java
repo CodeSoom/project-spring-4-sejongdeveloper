@@ -64,6 +64,6 @@ public class ObtainOrderController {
 
     @GetMapping("{id}")
     public ObtainOrderResponse detail(@PathVariable Long id) {
-        return null;
+        return obtainOrderService.getObtainOrder(id);
     }
 }
