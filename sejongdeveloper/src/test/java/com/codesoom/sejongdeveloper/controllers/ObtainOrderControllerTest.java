@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -56,13 +55,13 @@ class ObtainOrderControllerTest {
 
         given(obtainOrderService.createObtainOrder(
                 any(ObtainOrder.class),
-                anyList())
+                any(List.class))
         ).willReturn(OBTAIN_ORDER_ID);
 
         given(obtainOrderService.updateObtainOrder(
                 eq(INVALID_OBTAIN_ORDER_ID),
                 any(ObtainOrder.class),
-                anyList())
+                any(List.class))
         ).willThrow(new ObtainOrderNotFoundException(INVALID_OBTAIN_ORDER_ID));
 
         Item item = Item.builder()
@@ -74,33 +73,37 @@ class ObtainOrderControllerTest {
 
     @Test
     void createValidRequest() throws Exception {
-        String json = objectMapper.writeValueAsString(getObtainOrderRequest(OBTAIN_ORDER_NAME));
+        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(OBTAIN_ORDER_NAME);
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated());
 
-        verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), anyList());
+        verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), any(List.class));
     }
 
     @Test
     void createInValidRequest() throws Exception {
-        String json = objectMapper.writeValueAsString(getInvalidName());
+        ObtainOrderRequest obtainOrderRequest = getInvalidName();
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
 
-        json = objectMapper.writeValueAsString(getIsNullObtainOrderDetails());
+        obtainOrderRequest = getIsNullObtainOrderDetails();
+        json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
 
-        json = objectMapper.writeValueAsString(getInvalidItem());
+        obtainOrderRequest = getInvalidItem();
+        json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +114,17 @@ class ObtainOrderControllerTest {
 
     @Test
     void createWrongItem() throws Exception {
-        String json = objectMapper.writeValueAsString(getObtainOrderWithInvalidItemId());
+        ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
+                .itemId(INVALID_ITEM_ID)
+                .quantity(new BigDecimal(1_000))
+                .build();
+
+        ObtainOrderRequest obtainOrderRequest = ObtainOrderRequest.builder()
+                .name(OBTAIN_ORDER_NAME)
+                .obtainOrderDetails(List.of(obtainOrderDetailRequest))
+                .build();
+
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,38 +134,28 @@ class ObtainOrderControllerTest {
 
     @Test
     void updateValidRequest() throws Exception {
-        String json = objectMapper.writeValueAsString(getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME));
+        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME);
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(patch("/obtain-orders/"+OBTAIN_ORDER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
 
-        verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
+        verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
     }
 
     @Test
     void updateWithoutObtainOrder() throws Exception {
-        String json = objectMapper.writeValueAsString(getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME));
+        ObtainOrderRequest obtainOrderRequest = getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME);
+        String json = objectMapper.writeValueAsString(obtainOrderRequest);
 
         mockMvc.perform(patch("/obtain-orders/"+INVALID_OBTAIN_ORDER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
 
-        verify(obtainOrderService).updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
-    }
-
-    private ObtainOrderRequest getObtainOrderWithInvalidItemId() {
-        ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
-                .itemId(INVALID_ITEM_ID)
-                .quantity(new BigDecimal(1_000))
-                .build();
-
-        return ObtainOrderRequest.builder()
-                .name(OBTAIN_ORDER_NAME)
-                .obtainOrderDetails(List.of(obtainOrderDetailRequest))
-                .build();
+        verify(obtainOrderService).updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), any(List.class));
     }
 
     private ObtainOrderRequest getInvalidItem() {
