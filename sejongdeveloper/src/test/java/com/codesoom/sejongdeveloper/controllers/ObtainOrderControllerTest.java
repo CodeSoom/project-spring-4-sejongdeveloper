@@ -10,6 +10,7 @@ import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -85,6 +86,7 @@ class ObtainOrderControllerTest {
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
     }
 
+    @DisplayName("수주를 저장한다.")
     @Test
     void createValidRequest() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderRequest(OBTAIN_ORDER_NAME));
@@ -97,6 +99,7 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), anyList());
     }
 
+    @DisplayName("유효하지 않는 파라미터에 대한 수주저장 요청은 예외를 던진다.")
     @Test
     void createInValidRequest() throws Exception {
         String json = objectMapper.writeValueAsString(getInvalidName());
@@ -122,6 +125,7 @@ class ObtainOrderControllerTest {
 
     }
 
+    @DisplayName("존재하지 않는 아이디의 품목에 대한 수주저장 요청은 예외를 던진다.")
     @Test
     void createWrongItem() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderWithInvalidItemId());
@@ -132,6 +136,7 @@ class ObtainOrderControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @DisplayName("수주를 저장한다.")
     @Test
     void updateValidRequest() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME));
@@ -144,8 +149,9 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
     }
 
+    @DisplayName("존재하지 않는 아이디의 수주에 대한 수주수정 요청은 예외를 던진다.")
     @Test
-    void updateWithoutObtainOrder() throws Exception {
+    void updateInvalidObtainOrder() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME));
 
         mockMvc.perform(patch("/obtain-orders/"+INVALID_OBTAIN_ORDER_ID)
@@ -156,6 +162,7 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
     }
 
+    @DisplayName("주어진 아이디의 수주를 리턴한다.")
     @Test
     void getObtainOrder() throws Exception {
         mockMvc.perform(get("/obtain-orders/" + OBTAIN_ORDER_ID))
@@ -165,6 +172,7 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).getObtainOrder(OBTAIN_ORDER_ID);
     }
 
+    @DisplayName("존재하지 않는 아이디의 수주 대한 수주조회 요청은 예외를 던진다.")
     @Test
     void getObtainOrderInvalidId() throws Exception {
         mockMvc.perform(get("/obtain-orders/" + INVALID_OBTAIN_ORDER_ID))
