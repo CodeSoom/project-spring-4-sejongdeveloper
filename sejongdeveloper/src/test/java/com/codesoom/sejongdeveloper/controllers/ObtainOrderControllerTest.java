@@ -64,6 +64,9 @@ class ObtainOrderControllerTest {
 
         given(obtainOrderService.getObtainOrder(OBTAIN_ORDER_ID)).willReturn(obtainOrderResponse);
 
+        given(obtainOrderService.getObtainOrder(INVALID_OBTAIN_ORDER_ID))
+                .willThrow(new ObtainOrderNotFoundException(INVALID_OBTAIN_ORDER_ID));
+
         given(obtainOrderService.createObtainOrder(
                 any(ObtainOrder.class),
                 anyList())
@@ -160,6 +163,12 @@ class ObtainOrderControllerTest {
                 .andExpect(content().string(containsString("\"id\":" + OBTAIN_ORDER_ID)));
 
         verify(obtainOrderService).getObtainOrder(OBTAIN_ORDER_ID);
+    }
+
+    @Test
+    void getObtainOrderInvalidId() throws Exception {
+        mockMvc.perform(get("/obtain-orders/" + INVALID_OBTAIN_ORDER_ID))
+                .andExpect(status().isBadRequest());
     }
 
     private ObtainOrderRequest getObtainOrderWithInvalidItemId() {
