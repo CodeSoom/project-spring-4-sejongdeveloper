@@ -3,7 +3,6 @@ package com.codesoom.sejongdeveloper.controllers;
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
-import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
@@ -21,8 +20,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
