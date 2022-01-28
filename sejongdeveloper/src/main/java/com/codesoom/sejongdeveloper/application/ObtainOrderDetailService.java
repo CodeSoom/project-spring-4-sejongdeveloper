@@ -23,14 +23,16 @@ public class ObtainOrderDetailService {
 
     @Transactional
     public void updateObtainOrderDetails(List<ObtainOrderDetail> obtainOrderDetails) {
-        obtainOrderDetails.stream().forEach(obtainOrderDetail -> {
-            ObtainOrderDetail updatedObtainOrderDetail = obtainOrderDetailRepository.findById(obtainOrderDetail.getId())
-                    .orElseThrow(() -> new ObtainOrderDetailNotFoundException(obtainOrderDetail.getId()));
+        obtainOrderDetails.forEach(source -> getObtainOrderDetail(source.getId())
+                .update(
+                        source.getItem(),
+                        source.getQuantity()
+                )
+        );
+    }
 
-            updatedObtainOrderDetail.update(
-                    obtainOrderDetail.getItem(),
-                    obtainOrderDetail.getQuantity()
-            );
-        });
+    private ObtainOrderDetail getObtainOrderDetail(Long id) {
+        return obtainOrderDetailRepository.findById(id)
+                .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
     }
 }
