@@ -20,13 +20,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ObtainOrderController.class)
@@ -141,6 +144,13 @@ class ObtainOrderControllerTest {
                 .andExpect(status().isBadRequest());
 
         verify(obtainOrderService).updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
+    }
+
+    @Test
+    void getObtainOrder() throws Exception {
+        mockMvc.perform(get("/obtain-orders/" + OBTAIN_ORDER_ID))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("id=" + OBTAIN_ORDER_ID)));
     }
 
     private ObtainOrderRequest getObtainOrderWithInvalidItemId() {
