@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -88,4 +90,11 @@ class ObtainOrderServiceTest {
         ).isInstanceOf(ObtainOrderNotFoundException.class);
     }
 
+    @DisplayName("주어진 아이디의 수주를 상세조회한다.")
+    @Test
+    void getObtainOrder() {
+        ObtainOrderResponse obtainOrder = obtainOrderService.getObtainOrder(OBTAIN_ORDER_ID);
+
+        assertThat(obtainOrder.getId()).isEqualTo(OBTAIN_ORDER_ID);
+    }
 }
