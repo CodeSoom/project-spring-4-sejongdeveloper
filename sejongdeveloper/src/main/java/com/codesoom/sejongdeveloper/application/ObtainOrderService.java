@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,7 @@ public class ObtainOrderService {
 
     @Transactional
     public Long updateObtainOrder(Long id, ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
-        ObtainOrder updatedObtainOrder = obtainOrderRepository.findById(id)
-                .orElseThrow(() -> new ObtainOrderNotFoundException(id));
+        ObtainOrder updatedObtainOrder = getObtainOrder(id);
 
         updatedObtainOrder.update(
                 obtainOrder.getName(),
@@ -41,4 +41,21 @@ public class ObtainOrderService {
 
         return updatedObtainOrder.getId();
     }
+
+    public ObtainOrderResponse findObtainOrder(Long id) {
+        ObtainOrder obtainOrder = getObtainOrder(id);
+
+        return ObtainOrderResponse.builder()
+                .id(obtainOrder.getId())
+                .name(obtainOrder.getName())
+                .date(obtainOrder.getDate())
+                .obtainOrderDetails(obtainOrderDetailService.getObtainOrderDetails(id))
+                .build();
+    }
+
+    private ObtainOrder getObtainOrder(Long id) {
+        return obtainOrderRepository.findById(id)
+                .orElseThrow(() -> new ObtainOrderNotFoundException(id));
+    }
+
 }

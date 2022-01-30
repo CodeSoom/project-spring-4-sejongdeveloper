@@ -3,18 +3,23 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
+import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -24,6 +29,8 @@ class ObtainOrderServiceTest {
     private static final Long OBTAIN_ORDER_ID = 1L;
     private static final String UPDATE_OBTAIN_ORDER_NAME = "수정된 수주명 이름";
     private static final Long INVALID_OBTAIN_ORDER_ID = 2L;
+    private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;
+    private static final int OBTAIN_ORDER_DETAIL_SIZE = 1;
 
     private ObtainOrderService obtainOrderService;
 
@@ -39,11 +46,30 @@ class ObtainOrderServiceTest {
                 .id(OBTAIN_ORDER_ID)
                 .build();
 
+        ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
+                .id(OBTAIN_ORDER_DETAIL_ID)
+                .obtainOrder(obtainOrder)
+                .build();
+
+
         given(obtainOrderRepository.save(any(ObtainOrder.class))).willReturn(obtainOrder);
+
+        ObtainOrderResponse obtainOrderResponse = ObtainOrderResponse.builder()
+                .id(OBTAIN_ORDER_ID)
+                .build();
+
+        ObtainOrderDetailResponse obtainOrderDetailResponse = ObtainOrderDetailResponse.builder()
+                .id(OBTAIN_ORDER_DETAIL_ID)
+                .obtainOrder(obtainOrderResponse)
+                .build();
+
+        given(obtainOrderDetailService.getObtainOrderDetails(OBTAIN_ORDER_ID))
+                .willReturn(List.of(obtainOrderDetailResponse));
 
         given(obtainOrderRepository.findById(OBTAIN_ORDER_ID)).willReturn(Optional.of(obtainOrder));
     }
 
+    @DisplayName("수주를 저장한다.")
     @Test
     void createObtainOrder() {
         ObtainOrder obtainOrder = ObtainOrder.builder().build();
@@ -52,9 +78,10 @@ class ObtainOrderServiceTest {
         obtainOrderService.createObtainOrder(obtainOrder, obtainOrderDetails);
 
         verify(obtainOrderRepository).save(any(ObtainOrder.class));
-        verify(obtainOrderDetailService).createObtainOrderDetails(any(List.class));
+        verify(obtainOrderDetailService).createObtainOrderDetails(anyList());
     }
 
+    @DisplayName("수주를 수정한다.")
     @Test
     void updateObtainOrder() {
         Item item = Item.builder().build();
@@ -69,9 +96,10 @@ class ObtainOrderServiceTest {
 
         obtainOrderService.updateObtainOrder(OBTAIN_ORDER_ID, obtainOrder, List.of(obtainOrderDetail));
 
-        verify(obtainOrderDetailService).updateObtainOrderDetails(any(List.class));
+        verify(obtainOrderDetailService).updateObtainOrderDetails(anyList());
     }
 
+    @DisplayName("존재하지 않는 아이디의 수주를 수정한다.")
     @Test
     void updateWithoutObtainOrder() {
         ObtainOrder obtainOrder = ObtainOrder.builder().build();
@@ -84,4 +112,12 @@ class ObtainOrderServiceTest {
         ).isInstanceOf(ObtainOrderNotFoundException.class);
     }
 
+    @DisplayName("주어진 아이디의 수주를 상세조회한다.")
+    @Test
+    void getObtainOrder() {
+        ObtainOrderResponse obtainOrder = obtainOrderService.findObtainOrder(OBTAIN_ORDER_ID);
+
+        assertThat(obtainOrder.getId()).isEqualTo(OBTAIN_ORDER_ID);
+        assertThat(obtainOrder.getObtainOrderDetails()).hasSize(OBTAIN_ORDER_DETAIL_SIZE);
+    }
 }
