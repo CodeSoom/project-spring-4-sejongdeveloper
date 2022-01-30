@@ -1,7 +1,9 @@
 package com.codesoom.sejongdeveloper.application;
 
+import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +40,22 @@ public class ObtainOrderDetailService {
                 .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
     }
 
-    public List<ObtainOrderDetailResponse> getObtainOrderDetails(Long id) {
-        return null;
+    public List<ObtainOrderDetailResponse> getObtainOrderDetails(Long obtainOrderId) {
+        return obtainOrderDetailRepository.findAllByObtainOrderId(obtainOrderId).stream()
+                .map(source -> ObtainOrderDetailResponse.builder()
+                        .id(source.getId())
+                        .obtainOrder(getObtainOrderResponse(source.getObtainOrder()))
+                        .item(source.getItem())
+                        .quantity(source.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private ObtainOrderResponse getObtainOrderResponse(ObtainOrder source) {
+        return ObtainOrderResponse.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .date(source.getDate())
+                .build();
     }
 }

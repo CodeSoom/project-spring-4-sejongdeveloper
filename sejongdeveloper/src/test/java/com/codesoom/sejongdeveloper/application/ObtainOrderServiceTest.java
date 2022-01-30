@@ -3,8 +3,10 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
+import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +29,8 @@ class ObtainOrderServiceTest {
     private static final Long OBTAIN_ORDER_ID = 1L;
     private static final String UPDATE_OBTAIN_ORDER_NAME = "수정된 수주명 이름";
     private static final Long INVALID_OBTAIN_ORDER_ID = 2L;
+    private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;
+    private static final int OBTAIN_ORDER_DETAIL_SIZE = 1;
 
     private ObtainOrderService obtainOrderService;
 
@@ -42,7 +46,25 @@ class ObtainOrderServiceTest {
                 .id(OBTAIN_ORDER_ID)
                 .build();
 
+        ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
+                .id(OBTAIN_ORDER_DETAIL_ID)
+                .obtainOrder(obtainOrder)
+                .build();
+
+
         given(obtainOrderRepository.save(any(ObtainOrder.class))).willReturn(obtainOrder);
+
+        ObtainOrderResponse obtainOrderResponse = ObtainOrderResponse.builder()
+                .id(OBTAIN_ORDER_ID)
+                .build();
+
+        ObtainOrderDetailResponse obtainOrderDetailResponse = ObtainOrderDetailResponse.builder()
+                .id(OBTAIN_ORDER_DETAIL_ID)
+                .obtainOrder(obtainOrderResponse)
+                .build();
+
+        given(obtainOrderDetailService.getObtainOrderDetails(OBTAIN_ORDER_ID))
+                .willReturn(List.of(obtainOrderDetailResponse));
 
         given(obtainOrderRepository.findById(OBTAIN_ORDER_ID)).willReturn(Optional.of(obtainOrder));
     }
@@ -96,5 +118,6 @@ class ObtainOrderServiceTest {
         ObtainOrderResponse obtainOrder = obtainOrderService.findObtainOrder(OBTAIN_ORDER_ID);
 
         assertThat(obtainOrder.getId()).isEqualTo(OBTAIN_ORDER_ID);
+        assertThat(obtainOrder.getObtainOrderDetails()).hasSize(OBTAIN_ORDER_DETAIL_SIZE);
     }
 }

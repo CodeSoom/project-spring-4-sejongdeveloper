@@ -19,7 +19,7 @@ public class ObtainOrderDetailResponse {
 
     private Long id;    //수주 상세 일련번호
 
-    private ObtainOrder obtainOrder;    //수주
+    private ObtainOrderResponse obtainOrder;    //수주
 
     private Item item;  //상품
 
