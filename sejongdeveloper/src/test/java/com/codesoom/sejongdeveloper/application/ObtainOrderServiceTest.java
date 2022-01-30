@@ -93,7 +93,7 @@ class ObtainOrderServiceTest {
     @DisplayName("주어진 아이디의 수주를 상세조회한다.")
     @Test
     void getObtainOrder() {
-        ObtainOrderResponse obtainOrder = obtainOrderService.getObtainOrder(OBTAIN_ORDER_ID);
+        ObtainOrderResponse obtainOrder = obtainOrderService.findObtainOrder(OBTAIN_ORDER_ID);
 
         assertThat(obtainOrder.getId()).isEqualTo(OBTAIN_ORDER_ID);
     }

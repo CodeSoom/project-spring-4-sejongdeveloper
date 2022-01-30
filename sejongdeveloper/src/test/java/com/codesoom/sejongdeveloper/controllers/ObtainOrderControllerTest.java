@@ -63,9 +63,9 @@ class ObtainOrderControllerTest {
                 .id(OBTAIN_ORDER_ID)
                 .build();
 
-        given(obtainOrderService.getObtainOrder(OBTAIN_ORDER_ID)).willReturn(obtainOrderResponse);
+        given(obtainOrderService.findObtainOrder(OBTAIN_ORDER_ID)).willReturn(obtainOrderResponse);
 
-        given(obtainOrderService.getObtainOrder(INVALID_OBTAIN_ORDER_ID))
+        given(obtainOrderService.findObtainOrder(INVALID_OBTAIN_ORDER_ID))
                 .willThrow(new ObtainOrderNotFoundException(INVALID_OBTAIN_ORDER_ID));
 
         given(obtainOrderService.createObtainOrder(
@@ -169,7 +169,7 @@ class ObtainOrderControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":" + OBTAIN_ORDER_ID)));
 
-        verify(obtainOrderService).getObtainOrder(OBTAIN_ORDER_ID);
+        verify(obtainOrderService).findObtainOrder(OBTAIN_ORDER_ID);
     }
 
     @DisplayName("존재하지 않는 아이디의 수주 대한 수주조회 요청은 예외를 던진다.")

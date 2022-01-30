@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,9 @@ public class ObtainOrderDetailService {
     private ObtainOrderDetail getObtainOrderDetail(Long id) {
         return obtainOrderDetailRepository.findById(id)
                 .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
+    }
+
+    public List<ObtainOrderDetailResponse> getObtainOrderDetails(Long id) {
+        return null;
     }
 }

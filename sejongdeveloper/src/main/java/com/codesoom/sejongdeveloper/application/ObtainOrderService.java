@@ -30,8 +30,7 @@ public class ObtainOrderService {
 
     @Transactional
     public Long updateObtainOrder(Long id, ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
-        ObtainOrder updatedObtainOrder = obtainOrderRepository.findById(id)
-                .orElseThrow(() -> new ObtainOrderNotFoundException(id));
+        ObtainOrder updatedObtainOrder = getObtainOrder(id);
 
         updatedObtainOrder.update(
                 obtainOrder.getName(),
@@ -43,7 +42,20 @@ public class ObtainOrderService {
         return updatedObtainOrder.getId();
     }
 
-    public ObtainOrderResponse getObtainOrder(Long id) {
-        return null;
+    public ObtainOrderResponse findObtainOrder(Long id) {
+        ObtainOrder obtainOrder = getObtainOrder(id);
+
+        return ObtainOrderResponse.builder()
+                .id(obtainOrder.getId())
+                .name(obtainOrder.getName())
+                .date(obtainOrder.getDate())
+                .obtainOrderDetails(obtainOrderDetailService.getObtainOrderDetails(id))
+                .build();
     }
+
+    private ObtainOrder getObtainOrder(Long id) {
+        return obtainOrderRepository.findById(id)
+                .orElseThrow(() -> new ObtainOrderNotFoundException(id));
+    }
+
 }
