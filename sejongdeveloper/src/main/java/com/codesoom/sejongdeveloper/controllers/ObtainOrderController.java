@@ -6,9 +6,11 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ItemNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -64,5 +66,10 @@ public class ObtainOrderController {
     @GetMapping("{id}")
     public ObtainOrderResponse detail(@PathVariable Long id) {
         return obtainOrderService.findObtainOrder(id);
+    }
+
+    @GetMapping
+    public List<ObtainOrderResponse> list(ObtainOrderSearchCondition condition) {
+        return null;
     }
 }
