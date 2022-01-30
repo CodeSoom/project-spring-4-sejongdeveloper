@@ -5,16 +5,17 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -44,6 +45,7 @@ class ObtainOrderServiceTest {
         given(obtainOrderRepository.findById(OBTAIN_ORDER_ID)).willReturn(Optional.of(obtainOrder));
     }
 
+    @DisplayName("수주를 저장한다.")
     @Test
     void createObtainOrder() {
         ObtainOrder obtainOrder = ObtainOrder.builder().build();
@@ -52,9 +54,10 @@ class ObtainOrderServiceTest {
         obtainOrderService.createObtainOrder(obtainOrder, obtainOrderDetails);
 
         verify(obtainOrderRepository).save(any(ObtainOrder.class));
-        verify(obtainOrderDetailService).createObtainOrderDetails(any(List.class));
+        verify(obtainOrderDetailService).createObtainOrderDetails(anyList());
     }
 
+    @DisplayName("수주를 수정한다.")
     @Test
     void updateObtainOrder() {
         Item item = Item.builder().build();
@@ -69,9 +72,10 @@ class ObtainOrderServiceTest {
 
         obtainOrderService.updateObtainOrder(OBTAIN_ORDER_ID, obtainOrder, List.of(obtainOrderDetail));
 
-        verify(obtainOrderDetailService).updateObtainOrderDetails(any(List.class));
+        verify(obtainOrderDetailService).updateObtainOrderDetails(anyList());
     }
 
+    @DisplayName("존재하지 않는 아이디의 수주를 수정한다.")
     @Test
     void updateWithoutObtainOrder() {
         ObtainOrder obtainOrder = ObtainOrder.builder().build();
