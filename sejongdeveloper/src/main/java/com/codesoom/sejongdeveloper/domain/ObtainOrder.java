@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class ObtainOrder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "obtain_order_id")
     private Long id;    //수주 일련번호
 
