@@ -6,7 +6,6 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderRequest;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
-import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -46,7 +43,6 @@ class ObtainOrderControllerTest {
     private static final Long INVALID_ITEM_ID = 2L;
     private static final String UPDATE_OBTAIN_ORDER_NAME = "수정한 수주명 테스트";
     private static final Long INVALID_OBTAIN_ORDER_ID = 2L;
-    private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -181,24 +177,6 @@ class ObtainOrderControllerTest {
     void getObtainOrderInvalidId() throws Exception {
         mockMvc.perform(get("/obtain-orders/" + INVALID_OBTAIN_ORDER_ID))
                 .andExpect(status().isBadRequest());
-    }
-
-    @DisplayName("주어진 검색조건의 수주 목록을 리턴한다.")
-    @Test
-    void list() throws Exception {
-        Pageable pageable = PageRequest.of(0, 10);
-
-        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder()
-                .pageable(pageable)
-                .build();
-
-        String json = objectMapper.writeValueAsString(condition);
-
-        mockMvc.perform(get("/obtain-orders")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":" + OBTAIN_ORDER_DETAIL_ID)));
     }
 
     private ObtainOrderRequest getObtainOrderWithInvalidItemId() {
