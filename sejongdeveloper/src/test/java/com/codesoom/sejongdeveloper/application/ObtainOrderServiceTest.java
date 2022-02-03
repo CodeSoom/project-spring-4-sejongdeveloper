@@ -5,8 +5,8 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
-import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -119,5 +119,15 @@ class ObtainOrderServiceTest {
 
         assertThat(obtainOrder.getId()).isEqualTo(OBTAIN_ORDER_ID);
         assertThat(obtainOrder.getObtainOrderDetails()).hasSize(OBTAIN_ORDER_DETAIL_SIZE);
+    }
+
+    @DisplayName("주어진 조건의 수주를 목록조회한다.")
+    @Test
+    void getObtainOrders() {
+        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder().build();
+
+        List<ObtainOrderResponse> obtainOrders = obtainOrderService.findObtainOrders(condition);
+
+        assertThat(obtainOrders.size()).isEqualTo(1);
     }
 }

@@ -59,7 +59,7 @@ public class ObtainOrderService {
                 .orElseThrow(() -> new ObtainOrderNotFoundException(id));
     }
 
-    public List<ObtainOrderResponse> findAll(ObtainOrderSearchCondition condition) {
+    public List<ObtainOrderResponse> findObtainOrders(ObtainOrderSearchCondition condition) {
         return null;
     }
 }
