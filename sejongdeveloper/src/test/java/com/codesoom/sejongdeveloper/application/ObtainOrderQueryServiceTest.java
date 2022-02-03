@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,13 +35,16 @@ class ObtainOrderQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        for (int i = 0; i < 10; i++) {
+        List<ObtainOrder> obtainOrders = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
             String name = OBTAIN_ORDER_NAME + i;
             LocalDate date = LocalDate.now().plusDays(i);
 
-            ObtainOrder obtainOrder = getObtainOrder(name, date);
-            obtainOrderRepository.save(obtainOrder);
+            obtainOrders.add(getObtainOrder(name, date)) ;
         }
+
+        obtainOrderRepository.saveAll(obtainOrders);
     }
 
     @DisplayName("수주 목록을 리턴한다.")
@@ -51,9 +56,9 @@ class ObtainOrderQueryServiceTest {
                 .pageable(pageable)
                 .build();
 
-        Page<ObtainOrderResponse> page = obtainOrderQueryService.findAll(condition);
+        Page<ObtainOrderResponse> page = obtainOrderQueryService.findObtainOrders(condition);
 
-        assertThat(page.getTotalPages()).isEqualTo(1);
+        assertThat(page.getContent().size()).isEqualTo(10);
     }
 
     private ObtainOrder getObtainOrder(String name, LocalDate date) {

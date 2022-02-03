@@ -131,17 +131,4 @@ class ObtainOrderServiceTest {
         assertThat(obtainOrder.getObtainOrderDetails()).hasSize(OBTAIN_ORDER_DETAIL_SIZE);
     }
 
-    @DisplayName("주어진 조건의 수주를 목록조회한다.")
-    @Test
-    void getObtainOrders() {
-        Pageable pageable = PageRequest.of(0, 10);
-
-        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder()
-                .pageable(pageable)
-                .build();
-
-        Page<ObtainOrderResponse> page = obtainOrderService.findObtainOrders(condition);
-
-        assertThat(page.getTotalPages()).isEqualTo(1);
-    }
 }
