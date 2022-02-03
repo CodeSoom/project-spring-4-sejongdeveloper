@@ -1,7 +1,5 @@
 package com.codesoom.sejongdeveloper.dto;
 
-import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ObtainOrderResponse {
 
     private Long id;    //수주 일련번호
@@ -25,4 +21,11 @@ public class ObtainOrderResponse {
 
     private List<ObtainOrderDetailResponse> obtainOrderDetails; //수주상세 목록
 
+    @Builder
+    public ObtainOrderResponse(Long id, String name, LocalDate date, List<ObtainOrderDetailResponse> obtainOrderDetails) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.obtainOrderDetails = obtainOrderDetails;
+    }
 }

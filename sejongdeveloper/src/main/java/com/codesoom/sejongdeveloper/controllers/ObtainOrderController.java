@@ -70,6 +70,6 @@ public class ObtainOrderController {
 
     @GetMapping
     public List<ObtainOrderResponse> list(ObtainOrderSearchCondition condition) {
-        return null;
+        return obtainOrderService.findAll(condition);
     }
 }

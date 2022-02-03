@@ -1,8 +1,6 @@
 package com.codesoom.sejongdeveloper.dto;
 
 import com.codesoom.sejongdeveloper.domain.Item;
-import com.codesoom.sejongdeveloper.domain.ObtainOrder;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +11,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ObtainOrderDetailResponse {
 
     private Long id;    //수주 상세 일련번호
@@ -25,4 +21,11 @@ public class ObtainOrderDetailResponse {
 
     private BigDecimal quantity;    //수주 수량
 
+    @Builder
+    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, Item item, BigDecimal quantity) {
+        this.id = id;
+        this.obtainOrder = obtainOrder;
+        this.item = item;
+        this.quantity = quantity;
+    }
 }

@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
+import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,4 +59,7 @@ public class ObtainOrderService {
                 .orElseThrow(() -> new ObtainOrderNotFoundException(id));
     }
 
+    public List<ObtainOrderResponse> findAll(ObtainOrderSearchCondition condition) {
+        return null;
+    }
 }

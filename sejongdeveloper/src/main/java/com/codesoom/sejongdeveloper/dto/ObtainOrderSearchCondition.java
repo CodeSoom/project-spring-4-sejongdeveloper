@@ -1,6 +1,5 @@
 package com.codesoom.sejongdeveloper.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ObtainOrderSearchCondition {
     private String name;    //수주명
 
@@ -22,4 +19,12 @@ public class ObtainOrderSearchCondition {
     private LocalDate endDate;  //마지막수주날짜
 
     private Pageable pageable;  //페이징
+
+    @Builder
+    public ObtainOrderSearchCondition(String name, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.pageable = pageable;
+    }
 }
