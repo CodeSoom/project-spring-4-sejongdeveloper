@@ -6,11 +6,15 @@ import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
+import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +63,13 @@ public class ObtainOrderService {
                 .orElseThrow(() -> new ObtainOrderNotFoundException(id));
     }
 
-    public List<ObtainOrderResponse> findObtainOrders(ObtainOrderSearchCondition condition) {
-        return null;
+    public Page<ObtainOrderResponse> findObtainOrders(ObtainOrderSearchCondition condition) {
+        QueryResults<ObtainOrder> queryResults = obtainOrderRepository.findAll(condition);
+
+        List<ObtainOrderResponse> content = queryResults.getResults().stream()
+                .map(obtainOrder -> ObtainOrderResponse.builder().build())
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(content, condition.getPageable(), queryResults.getTotal());
     }
 }

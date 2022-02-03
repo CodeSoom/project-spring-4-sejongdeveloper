@@ -8,9 +8,13 @@ import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
+import com.querydsl.core.QueryResults;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +71,12 @@ class ObtainOrderServiceTest {
                 .willReturn(List.of(obtainOrderDetailResponse));
 
         given(obtainOrderRepository.findById(OBTAIN_ORDER_ID)).willReturn(Optional.of(obtainOrder));
+
+        List<ObtainOrder> obtainOrders = new ArrayList<>();
+        obtainOrders.add(obtainOrder);
+
+        given(obtainOrderRepository.findAll(any(ObtainOrderSearchCondition.class)))
+                .willReturn(new QueryResults<>(obtainOrders, 10L, 0L, 1L));
     }
 
     @DisplayName("수주를 저장한다.")
@@ -124,10 +134,14 @@ class ObtainOrderServiceTest {
     @DisplayName("주어진 조건의 수주를 목록조회한다.")
     @Test
     void getObtainOrders() {
-        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder().build();
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<ObtainOrderResponse> obtainOrders = obtainOrderService.findObtainOrders(condition);
+        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder()
+                .pageable(pageable)
+                .build();
 
-        assertThat(obtainOrders.size()).isEqualTo(1);
+        Page<ObtainOrderResponse> page = obtainOrderService.findObtainOrders(condition);
+
+        assertThat(page.getTotalPages()).isEqualTo(1);
     }
 }
