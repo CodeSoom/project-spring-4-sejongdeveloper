@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.ObtainOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
@@ -16,12 +17,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +56,9 @@ class ObtainOrderControllerTest {
 
     @MockBean
     private ObtainOrderService obtainOrderService;
+
+    @MockBean
+    private ObtainOrderQueryService obtainOrderQueryService;
 
     @MockBean
     private ItemRepository itemRepository;
@@ -88,6 +94,12 @@ class ObtainOrderControllerTest {
                 .build();
 
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
+
+        List<ObtainOrderResponse> list = new ArrayList<>();
+        list.add(obtainOrderResponse);
+
+        given(obtainOrderQueryService.findObtainOrders(any(ObtainOrderSearchCondition.class)))
+                .willReturn(new PageImpl<>(list, PageRequest.of(0, 10), 1L));
     }
 
     @DisplayName("수주를 저장한다.")
