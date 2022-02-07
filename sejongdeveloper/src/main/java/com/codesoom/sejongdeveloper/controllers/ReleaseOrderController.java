@@ -1,5 +1,7 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
+import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,12 @@ import javax.validation.Valid;
 @RequestMapping("/release-orders")
 public class ReleaseOrderController {
 
+    private final ReleaseOrderService releaseOrderService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long save(@RequestBody @Valid ReleaseOrderSaveRequest request) {
-        return null;
+        return releaseOrderService.saveReleaseOrder(request);
     }
 
 }
