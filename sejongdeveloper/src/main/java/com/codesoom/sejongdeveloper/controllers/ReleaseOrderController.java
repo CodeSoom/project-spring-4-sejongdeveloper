@@ -23,6 +23,12 @@ public class ReleaseOrderController {
 
     private final ReleaseOrderService releaseOrderService;
 
+    /**
+     * 출고를 저장하고 저장된 출고 일련번호를 리턴한다.
+     *
+     * @param request 저장할 출고
+     * @return 저장된 출고 일련번호
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long save(@RequestBody @Valid ReleaseOrderSaveRequest request) {
