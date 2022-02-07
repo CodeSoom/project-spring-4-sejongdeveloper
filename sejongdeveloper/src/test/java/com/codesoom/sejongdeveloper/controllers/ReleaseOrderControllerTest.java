@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ class ReleaseOrderControllerTest {
     }
 
     @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class 출고저장_요청을_처리하는_핸들러는 {
         @Nested
         class 유효성_검사를_통과한_경우 {
@@ -61,6 +64,7 @@ class ReleaseOrderControllerTest {
             }
 
             @Test
+            @DisplayName("회원을 저장한다")
             void 회원을_저장한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -70,6 +74,7 @@ class ReleaseOrderControllerTest {
         }
 
         @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 출고명을_입력_못한_경우 {
             private String invalidName = null;  //유효하지 않는 출고명
 
@@ -90,6 +95,7 @@ class ReleaseOrderControllerTest {
             }
 
             @Test
+            @DisplayName("에러코드로 응답한다")
             void 에러코드로_응답한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
