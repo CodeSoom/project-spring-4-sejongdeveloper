@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
@@ -24,8 +24,8 @@ class ReleaseOrderControllerTest {
         class 유효성_검사를_통과한_경우 {
             @Test
             void 회원을_저장한다() throws Exception {
-                mockMvc.perform(get("/release-orders"))
-                        .andExpect(status().isOk());
+                mockMvc.perform(post("/release-orders"))
+                        .andExpect(status().isCreated());
             }
         }
     }
