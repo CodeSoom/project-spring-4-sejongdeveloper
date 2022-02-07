@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +30,7 @@ class ReleaseOrderControllerTest {
 
     private static final String RELEASE_ORDER_NAME = "출고명";
     private static final LocalDate RELEASE_ORDER_DATE = LocalDate.of(2022,2,7);
+    private static final Long OBTAIN_ORDER__DETAIL_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,7 +63,15 @@ class ReleaseOrderControllerTest {
             private ReleaseOrderSaveRequest getParam() {
                 return ReleaseOrderSaveRequest.builder()
                         .name(RELEASE_ORDER_NAME)
+                        .releaseOrderDetails(List.of(getReleaseOrderDetail()))
                         .date(RELEASE_ORDER_DATE)
+                        .build();
+            }
+
+            private ReleaseOrderDetailSaveRequest getReleaseOrderDetail() {
+                return ReleaseOrderDetailSaveRequest.builder()
+                        .obtainOrderDetailId(OBTAIN_ORDER__DETAIL_ID)
+                        .quantity(new BigDecimal(1_000))
                         .build();
             }
 
