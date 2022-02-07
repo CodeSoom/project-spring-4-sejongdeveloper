@@ -1,11 +1,15 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * 출고에 대한 요청을 관리한다.
@@ -17,7 +21,7 @@ public class ReleaseOrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long save() {
+    public Long save(@RequestBody @Valid ReleaseOrderSaveRequest request) {
         return null;
     }
 
