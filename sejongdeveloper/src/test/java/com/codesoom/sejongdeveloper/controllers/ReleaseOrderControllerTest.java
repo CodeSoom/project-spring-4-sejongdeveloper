@@ -115,6 +115,39 @@ class ReleaseOrderControllerTest {
                         .andExpect(status().isBadRequest());
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 출고상세를_입력_못한_경우 {
+
+            private String invalidDetail = null;    //출고상세를 입력 못한 요청
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                invalidDetail = getJson();
+            }
+
+            private String getJson() throws JsonProcessingException {
+                ReleaseOrderSaveRequest request = getParam();
+                return objectMapper.writeValueAsString(request);
+            }
+
+            private ReleaseOrderSaveRequest getParam() {
+                return ReleaseOrderSaveRequest.builder()
+                        .name(RELEASE_ORDER_NAME)
+                        .date(RELEASE_ORDER_DATE)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("에러코드로 응답한다")
+            void 에러코드로_응답한다() throws Exception {
+                mockMvc.perform(post("/release-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(invalidDetail))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
 }
