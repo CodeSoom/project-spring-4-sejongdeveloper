@@ -46,12 +46,18 @@ class ReleaseOrderControllerTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                ReleaseOrderSaveRequest request = ReleaseOrderSaveRequest.builder()
+                validParam = getJson();
+            }
+
+            private String getJson() throws JsonProcessingException {
+                return objectMapper.writeValueAsString(getParam());
+            }
+
+            private ReleaseOrderSaveRequest getParam() {
+                return ReleaseOrderSaveRequest.builder()
                         .name(RELEASE_ORDER_NAME)
                         .date(RELEASE_ORDER_DATE)
                         .build();
-
-                validParam = objectMapper.writeValueAsString(request);
             }
 
             @Test
@@ -64,23 +70,30 @@ class ReleaseOrderControllerTest {
         }
 
         @Nested
-        class 유효성_검사를_통과하지_못한_경우 {
-            private String invalidParam = null;
+        class 출고명을_입력_못한_경우 {
+            private String invalidName = null;  //유효하지 않는 출고명
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                ReleaseOrderSaveRequest request = ReleaseOrderSaveRequest.builder()
+                invalidName = getJson();
+            }
+
+            private String getJson() throws JsonProcessingException {
+                ReleaseOrderSaveRequest request = getParam();
+                return objectMapper.writeValueAsString(request);
+            }
+
+            private ReleaseOrderSaveRequest getParam() {
+                return ReleaseOrderSaveRequest.builder()
                         .date(RELEASE_ORDER_DATE)
                         .build();
-
-                invalidParam = objectMapper.writeValueAsString(request);
             }
 
             @Test
             void 에러코드로_응답한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(invalidParam))
+                                .content(invalidName))
                         .andExpect(status().isBadRequest());
             }
         }
