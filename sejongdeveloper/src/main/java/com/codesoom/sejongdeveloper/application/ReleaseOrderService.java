@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 출고를 관리한다.
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -15,6 +18,12 @@ public class ReleaseOrderService {
     private final ReleaseOrderRepository releaseOrderRepository;
     private final ReleaseOrderDetailService releaseOrderDetailService;
 
+    /**
+     * 출고를 저장하고 저장된 출고의 일련번호를 리턴한다.
+     *
+     * @param source 저장할 출고
+     * @return 저장된 출고의 일련번호
+     */
     @Transactional
     public Long saveReleaseOrder(ReleaseOrderSaveRequest source) {
         ReleaseOrder releaseOrder = ReleaseOrder.builder()
