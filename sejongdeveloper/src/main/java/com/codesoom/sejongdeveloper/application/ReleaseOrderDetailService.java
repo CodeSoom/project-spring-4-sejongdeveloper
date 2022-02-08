@@ -22,19 +22,26 @@ public class ReleaseOrderDetailService {
     private final ReleaseOrderDetailRepository releaseOrderDetailRepository;
     private final ObtainOrderDetailRepository obtainOrderDetailRepository;
 
-    public void saveReleaseOrderDetails(ReleaseOrder releaseOrder, List<ReleaseOrderDetailSaveRequest> releaseOrderDetails) {
-        List<ReleaseOrderDetail> list = releaseOrderDetails.stream()
-                .map(source -> {
-                    ObtainOrderDetail obtainOrderDetail = obtainOrderDetailRepository.findById(source.getObtainOrderDetailId())
-                            .orElseThrow(() -> new ObtainOrderDetailNotFoundException(source.getObtainOrderDetailId()));
+    public void saveReleaseOrderDetails(ReleaseOrder releaseOrder,
+                                        List<ReleaseOrderDetailSaveRequest> releaseOrderDetails) {
 
-                    return ReleaseOrderDetail.builder()
-                            .releaseOrder(releaseOrder)
-                            .obtainOrderDetail(obtainOrderDetail)
-                            .quantity(source.getQuantity())
-                            .build();
-                }).collect(Collectors.toList());
+        List<ReleaseOrderDetail> list = releaseOrderDetails.stream()
+                .map(source -> getReleaseOrderDetail(releaseOrder, source))
+                .collect(Collectors.toList());
 
         releaseOrderDetailRepository.saveAll(list);
+    }
+
+    private ReleaseOrderDetail getReleaseOrderDetail(ReleaseOrder releaseOrder, ReleaseOrderDetailSaveRequest source) {
+        return ReleaseOrderDetail.builder()
+                .releaseOrder(releaseOrder)
+                .obtainOrderDetail(getObtainOrderDetail(source.getObtainOrderDetailId()))
+                .quantity(source.getQuantity())
+                .build();
+    }
+
+    private ObtainOrderDetail getObtainOrderDetail(Long id) {
+        return obtainOrderDetailRepository.findById(id)
+                .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
     }
 }
