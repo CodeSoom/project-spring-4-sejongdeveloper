@@ -32,6 +32,7 @@ public class ReleaseOrderDetailService {
      * @param releaseOrder 주어진 출고상세의 출고
      * @param releaseOrderDetails 저장할 출고상세
      */
+    @Transactional
     public void saveReleaseOrderDetails(ReleaseOrder releaseOrder,
                                         List<ReleaseOrderDetailSaveRequest> releaseOrderDetails) {
 
