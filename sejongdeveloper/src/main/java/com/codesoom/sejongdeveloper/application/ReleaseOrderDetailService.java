@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 출고상세를 관리한다.
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -22,6 +26,12 @@ public class ReleaseOrderDetailService {
     private final ReleaseOrderDetailRepository releaseOrderDetailRepository;
     private final ObtainOrderDetailRepository obtainOrderDetailRepository;
 
+    /**
+     * 주어진 출고상세 목록을 저장한다.
+     *
+     * @param releaseOrder 주어진 출고상세의 출고
+     * @param releaseOrderDetails 저장할 출고상세
+     */
     public void saveReleaseOrderDetails(ReleaseOrder releaseOrder,
                                         List<ReleaseOrderDetailSaveRequest> releaseOrderDetails) {
 
@@ -32,6 +42,14 @@ public class ReleaseOrderDetailService {
         releaseOrderDetailRepository.saveAll(list);
     }
 
+    /**
+     * 출고상세 엔티티를 리턴한다.
+     *
+     * @param releaseOrder 출고상세의 출고
+     * @param source 저장할 출고상세
+     * @return 저장할 출고상세 엔티티
+     * @throws ItemNotEnoughException 출고수량이 품목수량보다 많은 경우
+     */
     private ReleaseOrderDetail getReleaseOrderDetail(ReleaseOrder releaseOrder, ReleaseOrderDetailSaveRequest source) {
         return ReleaseOrderDetail.builder()
                 .releaseOrder(releaseOrder)
@@ -40,6 +58,12 @@ public class ReleaseOrderDetailService {
                 .build();
     }
 
+    /**
+     * 주어진 id의 수주상세 엔티티를 리턴한다.
+     *
+     * @param id 수주상세 일련번호
+     * @return 주어진 id의 수주상세 엔티티
+     */
     private ObtainOrderDetail getObtainOrderDetail(Long id) {
         return obtainOrderDetailRepository.findById(id)
                 .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
