@@ -37,6 +37,10 @@ dependencies {
 
 	//querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
+
+	//Object Mapper 사용할 때 LocalDate 이슈 해결
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
+
 }
 
 tasks.named('test') {

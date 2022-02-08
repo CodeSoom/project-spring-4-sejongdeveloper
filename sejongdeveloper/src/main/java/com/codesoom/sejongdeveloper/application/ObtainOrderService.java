@@ -63,13 +63,4 @@ public class ObtainOrderService {
                 .orElseThrow(() -> new ObtainOrderNotFoundException(id));
     }
 
-    public Page<ObtainOrderResponse> findObtainOrders(ObtainOrderSearchCondition condition) {
-        QueryResults<ObtainOrder> queryResults = obtainOrderRepository.findAll(condition);
-
-        List<ObtainOrderResponse> content = queryResults.getResults().stream()
-                .map(obtainOrder -> ObtainOrderResponse.builder().build())
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(content, condition.getPageable(), queryResults.getTotal());
-    }
 }

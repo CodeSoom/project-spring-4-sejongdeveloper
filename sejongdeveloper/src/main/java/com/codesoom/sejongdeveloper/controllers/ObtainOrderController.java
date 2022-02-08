@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.ObtainOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
@@ -33,6 +34,7 @@ public class ObtainOrderController {
 
     private final ObtainOrderService obtainOrderService;
     private final ItemRepository itemRepository;
+    private final ObtainOrderQueryService obtainOrderQueryService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -70,6 +72,6 @@ public class ObtainOrderController {
 
     @GetMapping
     public Page<ObtainOrderResponse> list(ObtainOrderSearchCondition condition) {
-        return obtainOrderService.findObtainOrders(condition);
+        return obtainOrderQueryService.findObtainOrders(condition);
     }
 }
