@@ -62,17 +62,17 @@ class ReleaseOrderDetailServiceTest {
 
             @BeforeEach
             void setUp() {
-                ReleaseOrderDetailSaveRequest detail1 = ReleaseOrderDetailSaveRequest.builder()
-                        .obtainOrderDetailId(VALID_OBTAIN_ORDER_DETAIL_ID)
-                        .quantity(ITEM_QUANTITY)
-                        .build();
-
-                ReleaseOrderDetailSaveRequest detail2 = ReleaseOrderDetailSaveRequest.builder()
-                        .obtainOrderDetailId(VALID_OBTAIN_ORDER_DETAIL_ID)
-                        .quantity(ITEM_QUANTITY.subtract(new BigDecimal(1)))
-                        .build();
+                ReleaseOrderDetailSaveRequest detail1 = getDetail(ITEM_QUANTITY);
+                ReleaseOrderDetailSaveRequest detail2 = getDetail(ITEM_QUANTITY.subtract(new BigDecimal(1)));
 
                 validParam = List.of(detail1, detail2);
+            }
+
+            private ReleaseOrderDetailSaveRequest getDetail(BigDecimal quantity) {
+                return ReleaseOrderDetailSaveRequest.builder()
+                        .obtainOrderDetailId(VALID_OBTAIN_ORDER_DETAIL_ID)
+                        .quantity(quantity)
+                        .build();
             }
 
             @Test
