@@ -1,4 +1,4 @@
 # project-spring-4-sejongdeveloper
 
 #ERD(수정중)
-![erd](https://user-images.githubusercontent.com/51711799/150993382-1e41f2c8-ff27-4152-9086-b7aa9a0d5ac9.png)
+![sejongdeveloper_erd](https://user-images.githubusercontent.com/51711799/153002712-2381c9d9-272e-48c7-8828-db97ab4e23b0.png)
