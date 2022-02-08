@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -24,7 +26,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("ReleaseOrderDetailService 클래스")
 class ReleaseOrderDetailServiceTest {
 
-    private static final Long VALID_OBTAIN_ORDER_DETAIL_ID = 1L;    //유효한 수주상세 일련번호
+    private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;    //수주상세 일련번호
     private static final BigDecimal ITEM_QUANTITY = new BigDecimal(1_000);   //품목수량
 
     private ReleaseOrderDetailService releaseOrderDetailService;
@@ -45,11 +47,11 @@ class ReleaseOrderDetailServiceTest {
                 .build();
 
         ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
-                .id(VALID_OBTAIN_ORDER_DETAIL_ID)
+                .id(OBTAIN_ORDER_DETAIL_ID)
                 .item(item)
                 .build();
 
-        given(obtainOrderDetailRepository.findById(VALID_OBTAIN_ORDER_DETAIL_ID)).willReturn(Optional.of(obtainOrderDetail));
+        given(obtainOrderDetailRepository.findById(OBTAIN_ORDER_DETAIL_ID)).willReturn(Optional.of(obtainOrderDetail));
     }
 
     @Nested
@@ -68,18 +70,38 @@ class ReleaseOrderDetailServiceTest {
                 validParam = List.of(detail1, detail2);
             }
 
-            private ReleaseOrderDetailSaveRequest getDetail(BigDecimal quantity) {
-                return ReleaseOrderDetailSaveRequest.builder()
-                        .obtainOrderDetailId(VALID_OBTAIN_ORDER_DETAIL_ID)
-                        .quantity(quantity)
-                        .build();
-            }
-
             @Test
             @DisplayName("출고상세를 저장한다")
             void 출고상세를_저장한다() {
                 releaseOrderDetailService.saveReleaseOrderDetails(releaseOrder, validParam);
             }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 품목수량이_출고수량_보다_적은_경우 {
+            private List<ReleaseOrderDetailSaveRequest> invalidParam;
+
+            @BeforeEach
+            void setUp() {
+                ReleaseOrderDetailSaveRequest detail = getDetail(ITEM_QUANTITY.add(new BigDecimal(1)));
+
+                invalidParam = List.of(detail);
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> releaseOrderDetailService.saveReleaseOrderDetails(releaseOrder, invalidParam))
+                        .isInstanceOf(ItemNotEnoughException.class);
+            }
+        }
+
+        private ReleaseOrderDetailSaveRequest getDetail(BigDecimal quantity) {
+            return ReleaseOrderDetailSaveRequest.builder()
+                    .obtainOrderDetailId(OBTAIN_ORDER_DETAIL_ID)
+                    .quantity(quantity)
+                    .build();
         }
     }
 }
