@@ -23,7 +23,7 @@ public class ReleaseOrderService {
                 .build();
 
         ReleaseOrder savedReleaseOrder = releaseOrderRepository.save(releaseOrder);
-        releaseOrderDetailService.saveReleaseOrderDetails(source.getReleaseOrderDetails());
+        releaseOrderDetailService.saveReleaseOrderDetails(savedReleaseOrder, source.getReleaseOrderDetails());
 
         return savedReleaseOrder.getId();
     }
