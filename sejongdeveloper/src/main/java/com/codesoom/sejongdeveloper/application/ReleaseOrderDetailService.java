@@ -6,6 +6,7 @@ import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,10 @@ public class ReleaseOrderDetailService {
     @Transactional
     public void saveReleaseOrderDetails(ReleaseOrder releaseOrder,
                                         List<ReleaseOrderDetailSaveRequest> releaseOrderDetails) {
+
+        if (releaseOrderDetails.size() > 1_000) {
+            throw new ReleaseOrderDetailOverSize(1_000, releaseOrderDetails.size());
+        }
 
         List<ReleaseOrderDetail> list = releaseOrderDetails.stream()
                 .map(source -> getReleaseOrderDetail(releaseOrder, source))

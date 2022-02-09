@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +96,31 @@ class ReleaseOrderDetailServiceTest {
             void 예외를_던진다() {
                 assertThatThrownBy(() -> releaseOrderDetailService.saveReleaseOrderDetails(releaseOrder, invalidParam))
                         .isInstanceOf(ItemNotEnoughException.class);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 출고상세_개수가_최고개수를_초과한_경우 {
+
+            private static final int OVER_SIZE = 1_000 + 1;
+
+            private List<ReleaseOrderDetailSaveRequest> invalidParam;
+
+            @BeforeEach
+            void setUp() {
+                invalidParam = new ArrayList<>();
+
+                for (int i=0; i<OVER_SIZE; i++) {
+                    invalidParam.add(getDetail(new BigDecimal(i)));
+                }
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> releaseOrderDetailService.saveReleaseOrderDetails(releaseOrder, invalidParam))
+                        .isInstanceOf(ReleaseOrderDetailOverSize.class);
             }
         }
 
