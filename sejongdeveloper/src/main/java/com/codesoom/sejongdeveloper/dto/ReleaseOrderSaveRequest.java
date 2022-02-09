@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.dto;
 
+import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,8 +15,10 @@ import java.util.List;
 public class ReleaseOrderSaveRequest {
 
     @NotBlank(message = "출고명을 입력하세요.")
+    @Mapping
     private String name;    //출고명
 
+    @Mapping
     private LocalDate date; //출고날짜
 
     @Size(min = 1, message = "출고상품이 존재하지 않습니다.")
