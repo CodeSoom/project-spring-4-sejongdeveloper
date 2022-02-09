@@ -47,7 +47,7 @@ public class ReleaseOrderDetail extends BaseEntity {
         BigDecimal itemQuantity = obtainOrderDetail.getItem().getQuantity();
 
         if (itemQuantity.compareTo(quantity) < 0) {
-            throw new ItemNotEnoughException("출고수량");
+            throw new ItemNotEnoughException("출고수량", quantity);
         }
 
         this.id = id;
