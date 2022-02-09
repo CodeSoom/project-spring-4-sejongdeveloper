@@ -1,6 +1,8 @@
 package com.codesoom.sejongdeveloper.domain;
 
+import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,4 +38,21 @@ public class ReleaseOrderDetail extends BaseEntity {
 
     private BigDecimal quantity;    //출고수량
 
+    @Builder
+    public ReleaseOrderDetail(Long id,
+                              ReleaseOrder releaseOrder,
+                              ObtainOrderDetail obtainOrderDetail,
+                              BigDecimal quantity) {
+
+        BigDecimal itemQuantity = obtainOrderDetail.getItem().getQuantity();
+
+        if (itemQuantity.compareTo(quantity) < 0) {
+            throw new ItemNotEnoughException("출고수량", quantity);
+        }
+
+        this.id = id;
+        this.releaseOrder = releaseOrder;
+        this.obtainOrderDetail = obtainOrderDetail;
+        this.quantity = quantity;
+    }
 }
