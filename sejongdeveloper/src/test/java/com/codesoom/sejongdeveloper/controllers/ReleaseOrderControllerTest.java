@@ -201,19 +201,4 @@ class ReleaseOrderControllerTest {
             }
         }
     }
-
-    @Nested
-    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 출고상세조회_요청을_처리하는_핸들러는 {
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 주어진_아이디의_출고상세가_있는_경우 {
-            @Test
-            @DisplayName("출고상세를 리턴한다")
-            void 출고상세를_리턴한다() throws Exception {
-                mockMvc.perform(get("/release-order/" + VALID_RELEASE_ORDER_ID + "/release-order-details"))
-                        .andExpect(status().isOk());
-            }
-        }
-    }
 }
