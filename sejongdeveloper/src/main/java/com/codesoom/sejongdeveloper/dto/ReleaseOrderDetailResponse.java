@@ -11,15 +11,12 @@ public class ReleaseOrderDetailResponse {
 
     private Long id;    //출고 상세 일련번호
 
-    private ReleaseOrderResponse releaseOrder;  //출고
-
     private ObtainOrderDetailResponse obtainOrderDetail;    //수주 상세
 
     private BigDecimal quantity;    //출고수량
 
     public ReleaseOrderDetailResponse(ReleaseOrderDetail releaseOrderDetail) {
         this.id = releaseOrderDetail.getId();
-        this.releaseOrder = new ReleaseOrderResponse(releaseOrderDetail.getReleaseOrder());
         this.obtainOrderDetail = getObtainOrderDetailResponse(releaseOrderDetail.getObtainOrderDetail());
         this.quantity = releaseOrderDetail.getQuantity();
     }

@@ -38,6 +38,10 @@ public class ReleaseOrderDetail extends BaseEntity {
 
     private BigDecimal quantity;    //출고수량
 
+    public ReleaseOrderDetail(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public ReleaseOrderDetail(Long id,
                               ReleaseOrder releaseOrder,

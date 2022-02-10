@@ -1,5 +1,8 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
+import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -7,9 +10,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +32,18 @@ class ReleaseOrderDetailControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private ReleaseOrderDetailRepository releaseOrderDetailRepository;
+
+    @BeforeEach
+    void setUp() {
+        ReleaseOrderDetail releaseOrderDetail = new ReleaseOrderDetail(VALID_RELEASE_ORDER_DETAIL_ID);
+
+        List<ReleaseOrderDetail> list = List.of(releaseOrderDetail);
+
+        given(releaseOrderDetailRepository.findAllByReleaseOrderId(eq(VALID_RELEASE_ORDER_ID))).willReturn(list);
+    }
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
