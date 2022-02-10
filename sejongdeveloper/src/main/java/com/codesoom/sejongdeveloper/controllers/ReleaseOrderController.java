@@ -41,6 +41,12 @@ public class ReleaseOrderController {
         return releaseOrderService.saveReleaseOrder(request);
     }
 
+    /**
+     * 주어진 아이디의 출고상세를 리턴한다.
+     *
+     * @param id 출고상세의 아이디
+     * @return 주어진 아이디의 출고상세
+     */
     @GetMapping("{id}")
     public ReleaseOrderResponse detail(@PathVariable Long id) {
         return new ReleaseOrderResponse(getReleaseOrder(id));
