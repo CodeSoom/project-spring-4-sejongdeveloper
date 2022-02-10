@@ -177,12 +177,12 @@ class ReleaseOrderControllerTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 출고상세_조회요청을_처리하는_핸들러는 {
+    class 출고조회_요청을_처리하는_핸들러는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 주어진_아이디의_출고상세가_있는_경우 {
+        class 주어진_아이디의_출고가_있는_경우 {
             @Test
-            @DisplayName("주어진 아이디의 출고상세를 리턴한다")
+            @DisplayName("주어진 아이디의 출고를 리턴한다")
             void 주어진_아이디의_출고상세를_리턴한다() throws Exception {
                 mockMvc.perform(get("/release-orders/" + VALID_RELEASE_ORDER_ID))
                         .andExpect(status().isOk())
@@ -192,7 +192,7 @@ class ReleaseOrderControllerTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 주어진_아이디의_출고상세가_없는_경우 {
+        class 주어진_아이디의_출고가_없는_경우 {
             @Test
             @DisplayName("에러코드로 응답한다")
             void 에러코드로_응답한다() throws Exception {

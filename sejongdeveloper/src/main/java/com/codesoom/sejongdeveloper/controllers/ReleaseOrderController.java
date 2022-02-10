@@ -42,10 +42,10 @@ public class ReleaseOrderController {
     }
 
     /**
-     * 주어진 아이디의 출고상세를 리턴한다.
+     * 주어진 아이디의 출고를 리턴한다.
      *
-     * @param id 출고상세의 아이디
-     * @return 주어진 아이디의 출고상세
+     * @param id 출고의 아이디
+     * @return 주어진 아이디의 출고
      */
     @GetMapping("{id}")
     public ReleaseOrderResponse detail(@PathVariable Long id) {
