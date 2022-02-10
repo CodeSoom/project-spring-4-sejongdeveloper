@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -41,6 +42,7 @@ class ReleaseOrderControllerTest {
     private static final String RELEASE_ORDER_NAME = "출고명";
     private static final LocalDate RELEASE_ORDER_DATE = LocalDate.of(2022,2,7);
     private static final Long OBTAIN_ORDER__DETAIL_ID = 1L;
+    private static final Long INVALID_RELEASE_ORDER_ID = 2L;
     private Long VALID_RELEASE_ORDER_ID = 1L;
 
     @Autowired
@@ -185,6 +187,17 @@ class ReleaseOrderControllerTest {
                 mockMvc.perform(get("/release-orders/" + VALID_RELEASE_ORDER_ID))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("\"id\":" + VALID_RELEASE_ORDER_ID)));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고상세가_없는_경우 {
+            @Test
+            @DisplayName("에러코드로 응답한다")
+            void 에러코드로_응답한다() throws Exception {
+                mockMvc.perform(get("/release-orders/" + INVALID_RELEASE_ORDER_ID))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
