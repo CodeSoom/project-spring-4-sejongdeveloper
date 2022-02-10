@@ -1,15 +1,9 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
-import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
-import com.codesoom.sejongdeveloper.dto.ReleaseOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
-import com.codesoom.sejongdeveloper.errors.ReleaseOrderNoutFoundException;
-import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +21,6 @@ import javax.validation.Valid;
 public class ReleaseOrderController {
 
     private final ReleaseOrderService releaseOrderService;
-    private final ReleaseOrderRepository releaseOrderRepository;
 
     /**
      * 출고를 저장하고 저장된 출고 일련번호를 리턴한다.
@@ -41,19 +34,4 @@ public class ReleaseOrderController {
         return releaseOrderService.saveReleaseOrder(request);
     }
 
-    /**
-     * 주어진 아이디의 출고상세를 리턴한다.
-     *
-     * @param id 출고상세의 아이디
-     * @return 주어진 아이디의 출고상세
-     */
-    @GetMapping("{id}")
-    public ReleaseOrderResponse detail(@PathVariable Long id) {
-        return new ReleaseOrderResponse(getReleaseOrder(id));
-    }
-
-    private ReleaseOrder getReleaseOrder(Long id) {
-        return releaseOrderRepository.findById(id)
-                .orElseThrow(() -> new ReleaseOrderNoutFoundException(id));
-    }
 }
