@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,6 +42,7 @@ class ReleaseOrderControllerTest {
 
     @MockBean
     private ReleaseOrderService releaseOrderService;
+    private Long VALID_ID = 1L;
 
     @BeforeEach
     void setUp() {
@@ -151,6 +153,21 @@ class ReleaseOrderControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(invalidDetail))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 출고상세_조회요청을_처리하는_핸들러는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고상세가_있는_경우 {
+            @Test
+            @DisplayName("주어진 아이디의 출고상세를 리턴한다")
+            void 주어진_아이디의_출고상세를_리턴한다() throws Exception {
+                mockMvc.perform(get("/release-orders/" + VALID_ID))
+                        .andExpect(status().isOk());
             }
         }
     }
