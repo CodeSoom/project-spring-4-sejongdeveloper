@@ -1,9 +1,16 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
+import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderNoutFoundException;
+import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +28,7 @@ import javax.validation.Valid;
 public class ReleaseOrderController {
 
     private final ReleaseOrderService releaseOrderService;
+    private final ReleaseOrderRepository releaseOrderRepository;
 
     /**
      * 출고를 저장하고 저장된 출고 일련번호를 리턴한다.
