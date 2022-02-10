@@ -41,6 +41,13 @@ dependencies {
 	//Object Mapper 사용할 때 LocalDate 이슈 해결
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
 
+	//Dozer
+	implementation 'com.github.dozermapper:dozer-core:6.5.2'
+
+	//log4j 취약점 이슈 해결
+	implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+	implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.17.1'
 }
 
 tasks.named('test') {
