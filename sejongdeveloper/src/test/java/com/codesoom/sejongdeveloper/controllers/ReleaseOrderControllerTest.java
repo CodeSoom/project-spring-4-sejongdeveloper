@@ -1,8 +1,10 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
+import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -18,11 +20,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
@@ -33,6 +42,8 @@ class ReleaseOrderControllerTest {
     private static final String RELEASE_ORDER_NAME = "출고명";
     private static final LocalDate RELEASE_ORDER_DATE = LocalDate.of(2022,2,7);
     private static final Long OBTAIN_ORDER__DETAIL_ID = 1L;
+    private static final Long INVALID_RELEASE_ORDER_ID = 2L;
+    private Long VALID_RELEASE_ORDER_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,10 +53,19 @@ class ReleaseOrderControllerTest {
     @MockBean
     private ReleaseOrderService releaseOrderService;
 
+    @MockBean
+    private ReleaseOrderRepository releaseOrderRepository;
+
     @BeforeEach
     void setUp() {
         //Object Mapper 사용할 때 LocalDate 이슈 해결
         objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ReleaseOrder releaseOrder = ReleaseOrder.builder()
+                .id(VALID_RELEASE_ORDER_ID)
+                .build();
+
+        given(releaseOrderRepository.findById(eq(VALID_RELEASE_ORDER_ID))).willReturn(Optional.of(releaseOrder));
     }
 
     @Nested
@@ -162,8 +182,8 @@ class ReleaseOrderControllerTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고가_있는_경우 {
             @Test
-            @DisplayName("주어진 아이디의 출고를 리턴한다")
-            void 주어진_아이디의_출고상세를_리턴한다() throws Exception {
+            @DisplayName("출고를 리턴한다")
+            void 출고를_리턴한다() throws Exception {
                 mockMvc.perform(get("/release-orders/" + VALID_RELEASE_ORDER_ID))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("\"id\":" + VALID_RELEASE_ORDER_ID)));
@@ -178,6 +198,21 @@ class ReleaseOrderControllerTest {
             void 에러코드로_응답한다() throws Exception {
                 mockMvc.perform(get("/release-orders/" + INVALID_RELEASE_ORDER_ID))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 출고상세조회_요청을_처리하는_핸들러는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고상세가_있는_경우 {
+            @Test
+            @DisplayName("출고상세를 리턴한다")
+            void 출고상세를_리턴한다() throws Exception {
+                mockMvc.perform(get("/release-order/" + VALID_RELEASE_ORDER_ID + "/release-order-details"))
+                        .andExpect(status().isOk());
             }
         }
     }
