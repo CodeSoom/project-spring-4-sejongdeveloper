@@ -100,12 +100,18 @@ class ReleaseOrderServiceTest {
         class 주어진_아이디의_출고가_존재하는_경우 {
             private ReleaseOrderUpdateRequest request;
 
+            @BeforeEach
+            void setUp() {
+                request = new ReleaseOrderUpdateRequest();
+                request.setName(RELEASE_ORDER_NAME + "수정");
+            }
+
             @Test
             @DisplayName("출고를 수정한다")
             void 수주를_수정한다() {
-                Long updatedId = releaseOrderService.updateReleaseOrder(RELEASE_ORDER_ID, request);
+                ReleaseOrder releaseOrder = releaseOrderService.updateReleaseOrder(RELEASE_ORDER_ID, request);
 
-                assertThat(updatedId).isEqualTo(RELEASE_ORDER_ID);
+                assertThat(releaseOrder.getName()).isEqualTo(request.getName());
             }
         }
     }

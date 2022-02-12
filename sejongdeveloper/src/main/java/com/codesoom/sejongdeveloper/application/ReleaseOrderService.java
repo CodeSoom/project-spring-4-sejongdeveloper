@@ -39,12 +39,12 @@ public class ReleaseOrderService {
         return savedReleaseOrder.getId();
     }
 
-    public Long updateReleaseOrder(Long id, ReleaseOrderUpdateRequest request) {
+    public ReleaseOrder updateReleaseOrder(Long id, ReleaseOrderUpdateRequest request) {
         ReleaseOrder releaseOrder = releaseOrderRepository.findById(id)
                 .orElseThrow(() -> new ReleaseOrderNotFoundException(id));
 
         releaseOrder.update(request);
 
-        return releaseOrder.getId();
+        return releaseOrder;
     }
 }
