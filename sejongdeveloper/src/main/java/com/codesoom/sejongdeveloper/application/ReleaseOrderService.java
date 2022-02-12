@@ -38,7 +38,8 @@ public class ReleaseOrderService {
         return savedReleaseOrder.getId();
     }
 
-    public void updateReleaseOrder(ReleaseOrderUpdateRequest request) {
+    public Long updateReleaseOrder(Long releaseOrderId, ReleaseOrderUpdateRequest request) {
 
+        return releaseOrderId;
     }
 }

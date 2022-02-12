@@ -99,7 +99,9 @@ class ReleaseOrderServiceTest {
             @Test
             @DisplayName("출고를 수정한다")
             void 수주를_수정한다() {
-                releaseOrderService.updateReleaseOrder(request);
+                Long updatedId = releaseOrderService.updateReleaseOrder(RELEASE_ORDER_ID, request);
+
+                assertThat(updatedId).isEqualTo(RELEASE_ORDER_ID);
             }
         }
     }
