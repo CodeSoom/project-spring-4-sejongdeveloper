@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -83,6 +84,22 @@ class ReleaseOrderServiceTest {
                 Long savedId = releaseOrderService.saveReleaseOrder(validRequest);
 
                 assertThat(savedId).isNotNull();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class updateReleaseOrder_메소드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고가_존재하는_경우 {
+            private ReleaseOrderUpdateRequest request;
+
+            @Test
+            @DisplayName("출고를 수정한다")
+            void 수주를_수정한다() {
+                releaseOrderService.updateReleaseOrder(request);
             }
         }
     }

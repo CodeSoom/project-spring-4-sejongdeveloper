@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -35,5 +36,9 @@ public class ReleaseOrderService {
         releaseOrderDetailService.saveReleaseOrderDetails(savedReleaseOrder, source.getReleaseOrderDetails());
 
         return savedReleaseOrder.getId();
+    }
+
+    public void updateReleaseOrder(ReleaseOrderUpdateRequest request) {
+
     }
 }
