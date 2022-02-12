@@ -15,9 +15,11 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -47,6 +49,8 @@ class ReleaseOrderServiceTest {
                 .build();
 
         given(releaseOrderRepository.save(any(ReleaseOrder.class))).willReturn(releaseOrder);
+
+        given(releaseOrderRepository.findById(eq(RELEASE_ORDER_ID))).willReturn(Optional.of(releaseOrder));
     }
 
     @Nested
