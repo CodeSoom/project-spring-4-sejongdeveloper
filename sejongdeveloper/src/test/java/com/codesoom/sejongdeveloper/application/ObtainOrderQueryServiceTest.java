@@ -63,7 +63,6 @@ class ObtainOrderQueryServiceTest {
 
     private ObtainOrder getObtainOrder(String name, LocalDate date) {
         return ObtainOrder.builder()
-                .id(1L)
                 .name(name)
                 .date(date)
                 .build();
