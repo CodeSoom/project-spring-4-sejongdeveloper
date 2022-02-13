@@ -114,5 +114,15 @@ class ReleaseOrderServiceTest {
                 assertThat(releaseOrder.getName()).isEqualTo(request.getName());
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고가_존재하지_않는_경우 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+
+            }
+        }
     }
 }
