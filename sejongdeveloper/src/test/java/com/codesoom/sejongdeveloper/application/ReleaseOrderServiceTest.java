@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -30,7 +32,8 @@ class ReleaseOrderServiceTest {
     private static final String RELEASE_ORDER_NAME = "출고명"; //출고명
     private static final LocalDate RELEASE_ORDER_DATE = LocalDate.of(2022, 2, 8);   //출고날짜
     private static final Long OBTAIN_ORDER__DETAIL_ID = 1L; //출고상세 일련번호
-    private static final Long RELEASE_ORDER_ID = 1L;    //출고 일련번호
+    private static final Long VALID_RELEASE_ORDER_ID = 1L;    //출고 일련번호
+    private static final Long INVALID_RELEASE_ORDER_ID = 2L;
 
     private ReleaseOrderService releaseOrderService;
     private ReleaseOrderRepository releaseOrderRepository;
@@ -43,14 +46,14 @@ class ReleaseOrderServiceTest {
         releaseOrderService = new ReleaseOrderService(releaseOrderRepository, releaseOrderDetailService);
 
         ReleaseOrder releaseOrder = ReleaseOrder.builder()
-                .id(RELEASE_ORDER_ID)
+                .id(VALID_RELEASE_ORDER_ID)
                 .name(RELEASE_ORDER_NAME)
                 .date(RELEASE_ORDER_DATE)
                 .build();
 
         given(releaseOrderRepository.save(any(ReleaseOrder.class))).willReturn(releaseOrder);
 
-        given(releaseOrderRepository.findById(eq(RELEASE_ORDER_ID))).willReturn(Optional.of(releaseOrder));
+        given(releaseOrderRepository.findById(eq(VALID_RELEASE_ORDER_ID))).willReturn(Optional.of(releaseOrder));
     }
 
     @Nested
@@ -109,7 +112,7 @@ class ReleaseOrderServiceTest {
             @Test
             @DisplayName("출고를 수정한다")
             void 수주를_수정한다() {
-                ReleaseOrder releaseOrder = releaseOrderService.updateReleaseOrder(RELEASE_ORDER_ID, request);
+                ReleaseOrder releaseOrder = releaseOrderService.updateReleaseOrder(VALID_RELEASE_ORDER_ID, request);
 
                 assertThat(releaseOrder.getName()).isEqualTo(request.getName());
             }
@@ -118,10 +121,13 @@ class ReleaseOrderServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고가_존재하지_않는_경우 {
+            private ReleaseOrderUpdateRequest request;
+
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-
+                assertThatThrownBy(() -> releaseOrderService.updateReleaseOrder(INVALID_RELEASE_ORDER_ID, request))
+                        .isInstanceOf(ReleaseOrderNotFoundException.class);
             }
         }
     }
