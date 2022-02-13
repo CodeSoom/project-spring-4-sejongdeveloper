@@ -79,16 +79,33 @@ public class ReleaseOrderDetailService {
                 .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
     }
 
+    /**
+     * 주어진 출고상세 목록을 수정하고 수정된 출고상세 목록을 리턴한다.
+     *
+     * @param list 수정할 출고상세 목록
+     * @return 수정된 출고상세 목록
+     */
     @Transactional
     public List<ReleaseOrderDetail> update(List<ReleaseOrderDetailUpdateRequest> list) {
         return list.stream()
                 .map(request -> {
-                    ReleaseOrderDetail entity = releaseOrderDetailRepository.findById(request.getId())
-                            .orElseThrow(() -> new ReleaseOrderDetailNotFoundException(request.getId()));
+                    ReleaseOrderDetail entity = getReleaseOrderDetail(request.getId());
 
                     entity.update(request);
 
                     return entity;
                 }).collect(Collectors.toList());
+    }
+
+    /**
+     * 주어진 id의 출고상세를 리턴한다.
+     *
+     * @param id 출고상세의 id
+     * @return 주어진 id의 출고상세
+     * @throws ReleaseOrderDetailNotFoundException 주어진 id의 출고상세를 찾지 못한 경우
+     */
+    private ReleaseOrderDetail getReleaseOrderDetail(Long id) {
+        return releaseOrderDetailRepository.findById(id)
+                .orElseThrow(() -> new ReleaseOrderDetailNotFoundException(id));
     }
 }
