@@ -130,5 +130,4 @@ class ObtainOrderServiceTest {
         assertThat(obtainOrder.getId()).isEqualTo(OBTAIN_ORDER_ID);
         assertThat(obtainOrder.getObtainOrderDetails()).hasSize(OBTAIN_ORDER_DETAIL_SIZE);
     }
-
 }

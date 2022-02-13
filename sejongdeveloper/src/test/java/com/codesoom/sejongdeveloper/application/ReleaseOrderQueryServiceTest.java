@@ -1,6 +1,5 @@
 package com.codesoom.sejongdeveloper.application;
 
-import com.codesoom.sejongdeveloper.controllers.ReleaseOrderController;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
@@ -96,5 +95,4 @@ class ReleaseOrderQueryServiceTest {
             }
         }
     }
-
 }

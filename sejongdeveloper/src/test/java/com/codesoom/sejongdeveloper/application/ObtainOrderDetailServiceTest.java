@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -46,7 +47,7 @@ class ObtainOrderDetailServiceTest {
 
         obtainOrderDetailService.createObtainOrderDetails(obtainOrderDetails);
 
-        verify(obtainOrderDetailRepository).saveAll(any(List.class));
+        verify(obtainOrderDetailRepository).saveAll(anyList());
     }
 
     @Test
@@ -74,5 +75,4 @@ class ObtainOrderDetailServiceTest {
                 () -> obtainOrderDetailService.updateObtainOrderDetails(List.of(obtainOrderDetail))
         ).isInstanceOf(ObtainOrderDetailNotFoundException.class);
     }
-
 }

@@ -67,5 +67,4 @@ class ObtainOrderQueryServiceTest {
                 .date(date)
                 .build();
     }
-
 }
