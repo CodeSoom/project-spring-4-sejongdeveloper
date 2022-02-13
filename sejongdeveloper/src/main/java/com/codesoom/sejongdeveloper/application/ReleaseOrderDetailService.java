@@ -86,7 +86,7 @@ public class ReleaseOrderDetailService {
      * @return 수정된 출고상세 목록
      */
     @Transactional
-    public List<ReleaseOrderDetail> update(List<ReleaseOrderDetailUpdateRequest> list) {
+    public List<ReleaseOrderDetail> updateReleaseOrderDetails(List<ReleaseOrderDetailUpdateRequest> list) {
         return list.stream()
                 .map(request -> {
                     ReleaseOrderDetail entity = getReleaseOrderDetail(request.getId());

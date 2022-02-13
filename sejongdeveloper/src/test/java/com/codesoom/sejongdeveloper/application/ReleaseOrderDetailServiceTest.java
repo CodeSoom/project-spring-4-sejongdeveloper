@@ -173,7 +173,7 @@ class ReleaseOrderDetailServiceTest {
             @Test
             @DisplayName("출고상세를 수정한다")
             void 출고상세를_수정한다() {
-                List<ReleaseOrderDetail> result = releaseOrderDetailService.update(list);
+                List<ReleaseOrderDetail> result = releaseOrderDetailService.updateReleaseOrderDetails(list);
 
                 assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
             }
@@ -195,7 +195,7 @@ class ReleaseOrderDetailServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-                assertThatThrownBy(() -> releaseOrderDetailService.update(list))
+                assertThatThrownBy(() -> releaseOrderDetailService.updateReleaseOrderDetails(list))
                         .isInstanceOf(ReleaseOrderDetailNotFoundException.class);
             }
         }
