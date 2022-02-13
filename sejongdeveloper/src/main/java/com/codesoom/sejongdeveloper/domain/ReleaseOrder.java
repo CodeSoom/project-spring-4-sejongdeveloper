@@ -37,6 +37,7 @@ public class ReleaseOrder extends BaseEntity {
     }
 
     public void update(ReleaseOrderUpdateRequest request) {
-
+        this.name = request.getName();
+        this.date = request.getDate();
     }
 }
