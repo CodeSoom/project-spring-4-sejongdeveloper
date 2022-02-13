@@ -131,4 +131,18 @@ class ReleaseOrderDetailServiceTest {
                     .build();
         }
     }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class updateReleaseOrderDetails_메소드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고상세가_있는_경우 {
+            @Test
+            @DisplayName("출고상세를 수정한다")
+            void 출고상세를_수정한다() {
+
+            }
+        }
+    }
 }
