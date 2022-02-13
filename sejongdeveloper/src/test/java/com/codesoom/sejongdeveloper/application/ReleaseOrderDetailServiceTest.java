@@ -7,6 +7,7 @@ import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
@@ -35,6 +36,7 @@ class ReleaseOrderDetailServiceTest {
     private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;    //수주상세 일련번호
     private static final BigDecimal ITEM_QUANTITY = new BigDecimal(1_000);   //품목수량
     private static final Long VALID_RELEASE_ORDER_DETAIL_ID = 1L;
+    private static final Long INVALID_RELEASE_ORDER_DETAIL_ID = 2L;
 
     private ReleaseOrderDetailService releaseOrderDetailService;
     private ReleaseOrder releaseOrder;
@@ -180,10 +182,21 @@ class ReleaseOrderDetailServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고상세가_없는_경우 {
+            private List<ReleaseOrderDetailUpdateRequest> list;
+
+            @BeforeEach
+            void setUp() {
+                ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
+                request.setId(INVALID_RELEASE_ORDER_DETAIL_ID);
+
+                list = List.of(request);
+            }
+
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-
+                assertThatThrownBy(() -> releaseOrderDetailService.update(list))
+                        .isInstanceOf(ReleaseOrderDetailNotFoundException.class);
             }
         }
     }
