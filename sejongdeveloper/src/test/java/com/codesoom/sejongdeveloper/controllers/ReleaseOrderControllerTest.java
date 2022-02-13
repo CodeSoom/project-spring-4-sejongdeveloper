@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -208,10 +210,26 @@ class ReleaseOrderControllerTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고가_있는_경우 {
+            ReleaseOrderUpdateRequest request;
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                request = new ReleaseOrderUpdateRequest();
+                request.setName(RELEASE_ORDER_NAME + "수정");
+
+                json = objectMapper.writeValueAsString(request);
+            }
+
+
             @Test
             @DisplayName("출고를 리턴한다")
-            void 출고를_리턴한다() {
-
+            void 출고를_리턴한다() throws Exception {
+                mockMvc.perform(patch("/release-orders/" + VALID_RELEASE_ORDER_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(request.getName())));
             }
         }
     }
