@@ -40,7 +40,7 @@ class ReleaseOrderQueryServiceTest {
     class search_메소드는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 유효한_파라미터인_경우 {
+        class 일치하는_검색조건이_있는_경우 {
             private ReleaseOrderSearchCondition condition;
             private Pageable pageable;
 
