@@ -70,10 +70,29 @@ class ReleaseOrderQueryServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 일치하는_검색조건이_없는_경우 {
+            private ReleaseOrderSearchCondition condition;
+            private Pageable pageable;
+
+            @BeforeEach
+            void setUp() {
+                ReleaseOrder releaseOrder = ReleaseOrder.builder()
+                        .name(RELEASE_ORDER_NAME)
+                        .build();
+
+                releaseOrderRepository.save(releaseOrder);
+
+                condition = new ReleaseOrderSearchCondition();
+                condition.setName(releaseOrder.getName() + 1004);
+
+                pageable = PageRequest.of(0, 10);
+            }
+
             @Test
             @DisplayName("비어있는 목록을 리턴한다")
             void 비어있는_목록을_리턴한다() {
+                Page<ReleaseOrderResponse> page = releaseOrderQueryService.search(condition, pageable);
 
+                assertThat(page.getContent().size()).isEqualTo(0);
             }
         }
     }
