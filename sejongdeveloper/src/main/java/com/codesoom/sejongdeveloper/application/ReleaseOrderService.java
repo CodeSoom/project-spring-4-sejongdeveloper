@@ -39,6 +39,7 @@ public class ReleaseOrderService {
         return savedReleaseOrder.getId();
     }
 
+    @Transactional
     public ReleaseOrder updateReleaseOrder(Long id, ReleaseOrderUpdateRequest request) {
         ReleaseOrder releaseOrder = releaseOrderRepository.findById(id)
                 .orElseThrow(() -> new ReleaseOrderNotFoundException(id));

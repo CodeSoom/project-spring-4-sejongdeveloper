@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.ReleaseOrderDetailService;
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -68,6 +70,9 @@ class ReleaseOrderControllerTest {
                 .build();
 
         given(releaseOrderRepository.findById(eq(VALID_RELEASE_ORDER_ID))).willReturn(Optional.of(releaseOrder));
+
+        given(releaseOrderService.updateReleaseOrder(eq(VALID_RELEASE_ORDER_ID), any(ReleaseOrderUpdateRequest.class)))
+                .willReturn(releaseOrder);
     }
 
     @Nested
@@ -228,8 +233,7 @@ class ReleaseOrderControllerTest {
                 mockMvc.perform(patch("/release-orders/" + VALID_RELEASE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(request.getName())));
+                        .andExpect(status().isOk());
             }
         }
     }

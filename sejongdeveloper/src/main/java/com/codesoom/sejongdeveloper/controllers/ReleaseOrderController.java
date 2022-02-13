@@ -4,11 +4,13 @@ import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,5 +64,15 @@ public class ReleaseOrderController {
     private ReleaseOrder getReleaseOrder(Long id) {
         return releaseOrderRepository.findById(id)
                 .orElseThrow(() -> new ReleaseOrderNotFoundException(id));
+    }
+
+    @PatchMapping("{id}")
+    public ReleaseOrderResponse update(@PathVariable Long id, @RequestBody ReleaseOrderUpdateRequest request) {
+        System.out.println("result name:" + request.getName());
+        ReleaseOrder releaseOrder = releaseOrderService.updateReleaseOrder(id, request);
+        System.out.println("releaseOrder:" + releaseOrder);
+        System.out.println("releaseOrder name:" + releaseOrder.getName());
+
+        return new ReleaseOrderResponse(releaseOrder);
     }
 }
