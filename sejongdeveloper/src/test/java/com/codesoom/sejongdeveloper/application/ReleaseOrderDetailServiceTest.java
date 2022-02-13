@@ -176,5 +176,15 @@ class ReleaseOrderDetailServiceTest {
                 assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고상세가_없는_경우 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+
+            }
+        }
     }
 }
