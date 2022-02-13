@@ -66,6 +66,16 @@ class ReleaseOrderQueryServiceTest {
                 assertThat(page.getContent().size()).isEqualTo(1);
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 일치하는_검색조건이_없는_경우 {
+            @Test
+            @DisplayName("비어있는 목록을 리턴한다")
+            void 비어있는_목록을_리턴한다() {
+
+            }
+        }
     }
 
 }
