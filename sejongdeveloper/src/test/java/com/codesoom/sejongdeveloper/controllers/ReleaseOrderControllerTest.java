@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -269,8 +270,11 @@ class ReleaseOrderControllerTest {
             private String json;
 
             @BeforeEach
-            void setUp() {
-                json = "";
+            void setUp() throws JsonProcessingException {
+                ReleaseOrderSearchCondition condition = new ReleaseOrderSearchCondition();
+                condition.setName(RELEASE_ORDER_NAME);
+
+                json = objectMapper.writeValueAsString(condition);
             }
 
             @Test
