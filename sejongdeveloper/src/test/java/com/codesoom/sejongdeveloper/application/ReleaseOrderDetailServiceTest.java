@@ -3,7 +3,9 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
+import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
@@ -20,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("ReleaseOrderDetailService 클래스")
@@ -138,10 +142,19 @@ class ReleaseOrderDetailServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고상세가_있는_경우 {
+            private List<ReleaseOrderDetailUpdateRequest> list;
+
+            @BeforeEach
+            void setUp() {
+                list = new ArrayList<>();
+            }
+
             @Test
             @DisplayName("출고상세를 수정한다")
             void 출고상세를_수정한다() {
+                List<ReleaseOrderDetail> result = releaseOrderDetailService.update(releaseOrder, list);
 
+                assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
             }
         }
     }

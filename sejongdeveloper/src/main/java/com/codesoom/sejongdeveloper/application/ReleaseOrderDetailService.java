@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
@@ -73,5 +74,10 @@ public class ReleaseOrderDetailService {
     private ObtainOrderDetail getObtainOrderDetail(Long id) {
         return obtainOrderDetailRepository.findById(id)
                 .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
+    }
+
+    @Transactional
+    public List<ReleaseOrderDetail> update(ReleaseOrder releaseOrder, List<ReleaseOrderDetailUpdateRequest> list) {
+        return null;
     }
 }
