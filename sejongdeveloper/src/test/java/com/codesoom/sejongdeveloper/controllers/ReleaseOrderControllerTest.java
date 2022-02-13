@@ -240,10 +240,20 @@ class ReleaseOrderControllerTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고가_없는_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() {
+                json = "";
+            }
+
             @Test
             @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() {
-
+            void 에러코드로_응답한다() throws Exception {
+                mockMvc.perform(patch("/release-orders/" + INVALID_RELEASE_ORDER_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
