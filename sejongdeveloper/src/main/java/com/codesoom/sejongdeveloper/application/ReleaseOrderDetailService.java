@@ -7,6 +7,7 @@ import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +80,15 @@ public class ReleaseOrderDetailService {
     }
 
     @Transactional
-    public List<ReleaseOrderDetail> update(ReleaseOrder releaseOrder, List<ReleaseOrderDetailUpdateRequest> list) {
-        return null;
+    public List<ReleaseOrderDetail> update(List<ReleaseOrderDetailUpdateRequest> list) {
+        return list.stream()
+                .map(request -> {
+                    ReleaseOrderDetail entity = releaseOrderDetailRepository.findById(request.getId())
+                            .orElseThrow(() -> new ReleaseOrderDetailNotFoundException(request.getId()));
+
+                    entity.update(request);
+
+                    return entity;
+                }).collect(Collectors.toList());
     }
 }

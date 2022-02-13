@@ -34,6 +34,7 @@ class ReleaseOrderDetailServiceTest {
 
     private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;    //수주상세 일련번호
     private static final BigDecimal ITEM_QUANTITY = new BigDecimal(1_000);   //품목수량
+    private static final Long VALID_RELEASE_ORDER_DETAIL_ID = 1L;
 
     private ReleaseOrderDetailService releaseOrderDetailService;
     private ReleaseOrder releaseOrder;
@@ -44,7 +45,10 @@ class ReleaseOrderDetailServiceTest {
     void setUp() {
         releaseOrderDetailRepository = mock(ReleaseOrderDetailRepository.class);
         obtainOrderDetailRepository = mock(ObtainOrderDetailRepository.class);
-        releaseOrderDetailService = new ReleaseOrderDetailService(releaseOrderDetailRepository, obtainOrderDetailRepository);
+        releaseOrderDetailService = new ReleaseOrderDetailService(
+                releaseOrderDetailRepository,
+                obtainOrderDetailRepository
+        );
 
         releaseOrder = ReleaseOrder.builder().build();
 
@@ -57,7 +61,18 @@ class ReleaseOrderDetailServiceTest {
                 .item(item)
                 .build();
 
-        given(obtainOrderDetailRepository.findById(OBTAIN_ORDER_DETAIL_ID)).willReturn(Optional.of(obtainOrderDetail));
+        given(obtainOrderDetailRepository.findById(OBTAIN_ORDER_DETAIL_ID))
+                .willReturn(Optional.of(obtainOrderDetail));
+
+        ReleaseOrderDetail releaseOrderDetail = ReleaseOrderDetail.builder()
+                .id(VALID_RELEASE_ORDER_DETAIL_ID)
+                .releaseOrder(releaseOrder)
+                .obtainOrderDetail(obtainOrderDetail)
+                .quantity(new BigDecimal(1_000))
+                .build();
+
+        given(releaseOrderDetailRepository.findById(VALID_RELEASE_ORDER_DETAIL_ID))
+                .willReturn(Optional.of(releaseOrderDetail));
     }
 
     @Nested
@@ -146,13 +161,17 @@ class ReleaseOrderDetailServiceTest {
 
             @BeforeEach
             void setUp() {
-                list = new ArrayList<>();
+                ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
+                request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
+                request.setQuantity(new BigDecimal(1_004));
+
+                list = List.of(request);
             }
 
             @Test
             @DisplayName("출고상세를 수정한다")
             void 출고상세를_수정한다() {
-                List<ReleaseOrderDetail> result = releaseOrderDetailService.update(releaseOrder, list);
+                List<ReleaseOrderDetail> result = releaseOrderDetailService.update(list);
 
                 assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
             }
