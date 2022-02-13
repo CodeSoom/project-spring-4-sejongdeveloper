@@ -4,8 +4,10 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
+import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderDetailOverSize;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,5 +77,35 @@ public class ReleaseOrderDetailService {
     private ObtainOrderDetail getObtainOrderDetail(Long id) {
         return obtainOrderDetailRepository.findById(id)
                 .orElseThrow(() -> new ObtainOrderDetailNotFoundException(id));
+    }
+
+    /**
+     * 주어진 출고상세 목록을 수정하고 수정된 출고상세 목록을 리턴한다.
+     *
+     * @param list 수정할 출고상세 목록
+     * @return 수정된 출고상세 목록
+     */
+    @Transactional
+    public List<ReleaseOrderDetail> updateReleaseOrderDetails(List<ReleaseOrderDetailUpdateRequest> list) {
+        return list.stream()
+                .map(request -> {
+                    ReleaseOrderDetail entity = getReleaseOrderDetail(request.getId());
+
+                    entity.update(request);
+
+                    return entity;
+                }).collect(Collectors.toList());
+    }
+
+    /**
+     * 주어진 id의 출고상세를 리턴한다.
+     *
+     * @param id 출고상세의 id
+     * @return 주어진 id의 출고상세
+     * @throws ReleaseOrderDetailNotFoundException 주어진 id의 출고상세를 찾지 못한 경우
+     */
+    private ReleaseOrderDetail getReleaseOrderDetail(Long id) {
+        return releaseOrderDetailRepository.findById(id)
+                .orElseThrow(() -> new ReleaseOrderDetailNotFoundException(id));
     }
 }

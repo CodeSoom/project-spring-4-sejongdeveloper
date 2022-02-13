@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.domain;
 
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -58,5 +59,9 @@ public class ReleaseOrderDetail extends BaseEntity {
         this.releaseOrder = releaseOrder;
         this.obtainOrderDetail = obtainOrderDetail;
         this.quantity = quantity;
+    }
+
+    public void update(ReleaseOrderDetailUpdateRequest request) {
+        this.quantity = request.getQuantity();
     }
 }

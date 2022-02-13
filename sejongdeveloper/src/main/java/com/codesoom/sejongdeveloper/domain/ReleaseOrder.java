@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.domain;
 
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,5 +34,10 @@ public class ReleaseOrder extends BaseEntity {
         this.id = id;
         this.name = name;
         this.date = date;
+    }
+
+    public void update(ReleaseOrderUpdateRequest request) {
+        this.name = request.getName();
+        this.date = request.getDate();
     }
 }
