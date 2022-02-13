@@ -201,4 +201,18 @@ class ReleaseOrderControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 출고수정_요청을_처리하는_핸들러는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고가_있는_경우 {
+            @Test
+            @DisplayName("출고를 리턴한다")
+            void 출고를_리턴한다() {
+
+            }
+        }
+    }
 }
