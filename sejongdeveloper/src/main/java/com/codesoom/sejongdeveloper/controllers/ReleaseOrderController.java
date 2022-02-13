@@ -85,11 +85,10 @@ public class ReleaseOrderController {
      * 주어진 검색조건과 일치하는 출고목록 페이지를 리턴한다.
      *
      * @param condition 검색조건
-     * @param pageable 페이지
      * @return 주어진 검색조건과 일치하는 출고목록 페이지
      */
     @GetMapping
-    public Page<ReleaseOrderResponse> search(ReleaseOrderSearchCondition condition, Pageable pageable) {
-        return releaseOrderQueryService.search(condition, pageable);
+    public Page<ReleaseOrderResponse> search(ReleaseOrderSearchCondition condition) {
+        return releaseOrderQueryService.search(condition);
     }
 }

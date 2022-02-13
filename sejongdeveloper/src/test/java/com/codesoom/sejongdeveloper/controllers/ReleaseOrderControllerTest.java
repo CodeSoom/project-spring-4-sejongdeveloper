@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -273,6 +274,7 @@ class ReleaseOrderControllerTest {
             void setUp() throws JsonProcessingException {
                 ReleaseOrderSearchCondition condition = new ReleaseOrderSearchCondition();
                 condition.setName(RELEASE_ORDER_NAME);
+                condition.setPageable(PageRequest.of(0, 10));
 
                 json = objectMapper.writeValueAsString(condition);
             }
