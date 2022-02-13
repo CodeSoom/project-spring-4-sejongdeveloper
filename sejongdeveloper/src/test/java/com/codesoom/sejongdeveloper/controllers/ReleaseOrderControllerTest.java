@@ -236,5 +236,15 @@ class ReleaseOrderControllerTest {
                         .andExpect(status().isOk());
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_출고가_없는_경우 {
+            @Test
+            @DisplayName("에러코드로 응답한다")
+            void 에러코드로_응답한다() {
+
+            }
+        }
     }
 }
