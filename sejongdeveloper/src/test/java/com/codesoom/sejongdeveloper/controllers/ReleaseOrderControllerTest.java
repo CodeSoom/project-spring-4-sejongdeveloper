@@ -262,10 +262,20 @@ class ReleaseOrderControllerTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 유효한_파라미터인_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() {
+                json = "";
+            }
+
             @Test
             @DisplayName("출고목록을 리턴한다")
-            void 출고목록을_리턴한다() {
-
+            void 출고목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/release-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk());
             }
         }
     }
