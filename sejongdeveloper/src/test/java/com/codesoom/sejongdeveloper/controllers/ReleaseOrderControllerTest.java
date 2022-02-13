@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.ReleaseOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
@@ -57,6 +58,9 @@ class ReleaseOrderControllerTest {
 
     @MockBean
     private ReleaseOrderRepository releaseOrderRepository;
+
+    @MockBean
+    private ReleaseOrderQueryService releaseOrderQueryService;
 
     @BeforeEach
     void setUp() {
