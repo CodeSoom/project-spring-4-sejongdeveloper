@@ -1,6 +1,8 @@
 package com.codesoom.sejongdeveloper.application;
 
+import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -9,7 +11,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("PlaceOrderService 클래스")
@@ -20,10 +27,20 @@ class PlaceOrderServiceTest {
     private static final Long PLACE_ORDER_ID = 1L;
 
     private PlaceOrderService placeOrderService;
+    private PlaceOrderRepository placeOrderRepository;
 
     @BeforeEach
     void setUp() {
-        placeOrderService = new PlaceOrderService();
+        placeOrderRepository = mock(PlaceOrderRepository.class);
+
+        placeOrderService = new PlaceOrderService(placeOrderRepository);
+
+        PlaceOrder placeOrder = PlaceOrder.builder()
+                .id(PLACE_ORDER_ID)
+                .name(PLACE_ORDER_NAME)
+                .build();
+
+        given(placeOrderRepository.save(any(PlaceOrder.class))).willReturn(placeOrder);
     }
 
     @Nested

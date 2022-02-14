@@ -1,6 +1,8 @@
 package com.codesoom.sejongdeveloper.domain;
 
+import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +27,16 @@ public class PlaceOrder {
 
     private LocalDate date; //발주일
 
+    @Builder
+    public PlaceOrder(Long id, String name, LocalDate date) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+    }
+
+    public PlaceOrder(PlaceOrderSaveRequest request) {
+        this.id = request.getId();
+        this.name = request.getName();
+        this.date = request.getDate();
+    }
 }
