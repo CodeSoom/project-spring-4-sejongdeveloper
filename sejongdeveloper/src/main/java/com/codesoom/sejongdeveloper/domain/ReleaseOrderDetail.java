@@ -62,6 +62,12 @@ public class ReleaseOrderDetail extends BaseEntity {
     }
 
     public void update(ReleaseOrderDetailUpdateRequest request) {
+        BigDecimal quantity = obtainOrderDetail.getItem().getQuantity();
+
+        if (quantity.compareTo(request.getQuantity()) < 0) {
+            throw new ItemNotEnoughException("출고수정", request.getQuantity());
+        }
+
         this.quantity = request.getQuantity();
     }
 }

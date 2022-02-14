@@ -41,11 +41,17 @@ public class ReleaseOrderService {
 
     @Transactional
     public ReleaseOrder updateReleaseOrder(Long id, ReleaseOrderUpdateRequest request) {
-        ReleaseOrder releaseOrder = releaseOrderRepository.findById(id)
-                .orElseThrow(() -> new ReleaseOrderNotFoundException(id));
+        ReleaseOrder releaseOrder = getReleaseOrder(id);
 
         releaseOrder.update(request);
 
+        releaseOrderDetailService.updateReleaseOrderDetails(request.getReleaseOrderDetails());
+
         return releaseOrder;
+    }
+
+    private ReleaseOrder getReleaseOrder(Long id) {
+        return releaseOrderRepository.findById(id)
+                .orElseThrow(() -> new ReleaseOrderNotFoundException(id));
     }
 }
