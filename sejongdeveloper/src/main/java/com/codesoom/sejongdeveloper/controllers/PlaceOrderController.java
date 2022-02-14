@@ -1,7 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
-import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import lombok.RequiredArgsConstructor;
