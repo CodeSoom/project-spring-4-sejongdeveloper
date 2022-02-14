@@ -14,7 +14,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PlaceOrderController.class)
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PlaceOrderControllerTest {
 
     private static final String PLACE_ORDER_NAME = "발주명";
+    private static final Long PLACE_ORDER_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,7 +59,8 @@ class PlaceOrderControllerTest {
                 mockMvc.perform(post("/place-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("\"id\":" + PLACE_ORDER_ID)));
             }
         }
     }
