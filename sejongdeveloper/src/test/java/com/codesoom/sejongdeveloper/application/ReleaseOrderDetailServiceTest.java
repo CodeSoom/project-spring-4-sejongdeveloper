@@ -210,7 +210,7 @@ class ReleaseOrderDetailServiceTest {
             void setUp() {
                 ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
                 request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
-                request.setQuantity(new BigDecimal(1_000));
+                request.setQuantity(new BigDecimal(1_004));
 
                 list = List.of(request);
             }
