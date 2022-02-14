@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -197,6 +198,28 @@ class ReleaseOrderDetailServiceTest {
             void 예외를_던진다() {
                 assertThatThrownBy(() -> releaseOrderDetailService.updateReleaseOrderDetails(list))
                         .isInstanceOf(ReleaseOrderDetailNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_출고개수가_품목개수보다_많은_경우 {
+            private List<ReleaseOrderDetailUpdateRequest> list;
+
+            @BeforeEach
+            void setUp() {
+                ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
+                request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
+                request.setQuantity(new BigDecimal(1_000));
+
+                list = List.of(request);
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> releaseOrderDetailService.updateReleaseOrderDetails(list))
+                        .isInstanceOf(ItemNotEnoughException.class);
             }
         }
     }
