@@ -12,6 +12,6 @@ public class PlaceOrderService {
 
 
     public Long savePlaceOrder(PlaceOrderSaveRequest request) {
-        return null;
+        return 1L;
     }
 }
