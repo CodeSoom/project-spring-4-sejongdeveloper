@@ -1,13 +1,17 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.ReleaseOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +34,7 @@ public class ReleaseOrderController {
 
     private final ReleaseOrderService releaseOrderService;
     private final ReleaseOrderRepository releaseOrderRepository;
+    private final ReleaseOrderQueryService releaseOrderQueryService;
 
     /**
      * 출고를 저장하고 저장된 출고 일련번호를 리턴한다.
@@ -74,5 +79,16 @@ public class ReleaseOrderController {
         System.out.println("releaseOrder name:" + releaseOrder.getName());
 
         return new ReleaseOrderResponse(releaseOrder);
+    }
+
+    /**
+     * 주어진 검색조건과 일치하는 출고목록 페이지를 리턴한다.
+     *
+     * @param condition 검색조건
+     * @return 주어진 검색조건과 일치하는 출고목록 페이지
+     */
+    @GetMapping
+    public Page<ReleaseOrderResponse> search(ReleaseOrderSearchCondition condition) {
+        return releaseOrderQueryService.search(condition);
     }
 }

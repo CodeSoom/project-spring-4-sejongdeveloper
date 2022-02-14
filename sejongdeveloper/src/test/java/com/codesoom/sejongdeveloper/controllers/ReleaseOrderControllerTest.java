@@ -1,10 +1,11 @@
 package com.codesoom.sejongdeveloper.controllers;
 
-import com.codesoom.sejongdeveloper.application.ReleaseOrderDetailService;
+import com.codesoom.sejongdeveloper.application.ReleaseOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,10 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -44,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ReleaseOrderControllerTest {
 
     private static final String RELEASE_ORDER_NAME = "출고명";
-    private static final LocalDate RELEASE_ORDER_DATE = LocalDate.of(2022,2,7);
+    private static final LocalDate RELEASE_ORDER_DATE = LocalDate.of(2022, 2, 7);
     private static final Long OBTAIN_ORDER__DETAIL_ID = 1L;
     private static final Long INVALID_RELEASE_ORDER_ID = 2L;
     private Long VALID_RELEASE_ORDER_ID = 1L;
@@ -59,6 +60,9 @@ class ReleaseOrderControllerTest {
 
     @MockBean
     private ReleaseOrderRepository releaseOrderRepository;
+
+    @MockBean
+    private ReleaseOrderQueryService releaseOrderQueryService;
 
     @BeforeEach
     void setUp() {
@@ -254,6 +258,34 @@ class ReleaseOrderControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 출고목록조회_요청을_처리하는_핸들러는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 유효한_파라미터인_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                ReleaseOrderSearchCondition condition = new ReleaseOrderSearchCondition();
+                condition.setName(RELEASE_ORDER_NAME);
+                condition.setPageable(PageRequest.of(0, 10));
+
+                json = objectMapper.writeValueAsString(condition);
+            }
+
+            @Test
+            @DisplayName("출고목록을 리턴한다")
+            void 출고목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/release-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk());
             }
         }
     }
