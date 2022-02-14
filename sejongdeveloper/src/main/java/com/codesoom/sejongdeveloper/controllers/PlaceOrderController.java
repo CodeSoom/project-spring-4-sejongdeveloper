@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * 발주에 대한 요청을 관리한다.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/place-orders")
@@ -19,11 +22,15 @@ public class PlaceOrderController {
 
     private final PlaceOrderService placeOrderService;
 
+    /**
+     * 주어진 발주를 저장하고 저장된 발주를 리턴한다.
+     *
+     * @param request 저장할 발주
+     * @return 저장된 발주
+     */
     @PostMapping
     public PlaceOrderResponse save(@RequestBody @Valid PlaceOrderSaveRequest request) {
-        PlaceOrder placeOrder = placeOrderService.savePlaceOrder(request);
-
-        return new PlaceOrderResponse(placeOrder);
+        return new PlaceOrderResponse(placeOrderService.savePlaceOrder(request));
     }
 
 }
