@@ -23,11 +23,9 @@ public class PlaceOrderService {
      * @param request 저장할 발주
      * @return 저장된 발주
      */
-    public Long savePlaceOrder(PlaceOrderSaveRequest request) {
+    public PlaceOrder savePlaceOrder(PlaceOrderSaveRequest request) {
         PlaceOrder placeOrder = new PlaceOrder(request);
 
-        PlaceOrder savedPlaceOrder = placeOrderRepository.save(placeOrder);
-
-        return savedPlaceOrder.getId();
+        return placeOrderRepository.save(placeOrder);
     }
 }

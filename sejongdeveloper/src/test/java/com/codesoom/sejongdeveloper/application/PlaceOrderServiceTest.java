@@ -58,9 +58,9 @@ class PlaceOrderServiceTest {
             @Test
             @DisplayName("발주를 저장한다")
             void 발주를_저장한다() {
-                Long savedId = placeOrderService.savePlaceOrder(request);
+                PlaceOrder placeOrder = placeOrderService.savePlaceOrder(request);
 
-                assertThat(savedId).isEqualTo(PLACE_ORDER_ID);
+                assertThat(placeOrder.getId()).isEqualTo(PLACE_ORDER_ID);
             }
         }
     }

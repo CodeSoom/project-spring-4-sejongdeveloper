@@ -1,6 +1,8 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +17,13 @@ import javax.validation.Valid;
 @RequestMapping("/place-orders")
 public class PlaceOrderController {
 
+    private final PlaceOrderService placeOrderService;
+
     @PostMapping
-    public PlaceOrder save(@RequestBody @Valid PlaceOrderSaveRequest request) {
-        return PlaceOrder.builder()
-                .id(1L)
-                .build();
+    public PlaceOrderResponse save(@RequestBody @Valid PlaceOrderSaveRequest request) {
+        PlaceOrder placeOrder = placeOrderService.savePlaceOrder(request);
+
+        return new PlaceOrderResponse(placeOrder);
     }
 
 }
