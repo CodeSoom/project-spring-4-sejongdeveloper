@@ -44,11 +44,7 @@ class PlaceOrderControllerTest {
     void setUp() {
         objectMapper = new ObjectMapper();
 
-        PlaceOrder placeOrder = PlaceOrder.builder()
-                .id(PLACE_ORDER_ID)
-                .build();
-
-        given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(placeOrder);
+        given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(PLACE_ORDER_ID);
     }
 
     @Nested
@@ -74,7 +70,7 @@ class PlaceOrderControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("\"id\":" + PLACE_ORDER_ID)));
+                        .andExpect(content().string(containsString("" + PLACE_ORDER_ID)));
             }
         }
     }

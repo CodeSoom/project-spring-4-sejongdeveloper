@@ -28,8 +28,8 @@ public class PlaceOrderController {
      * @return 저장된 발주
      */
     @PostMapping
-    public PlaceOrderResponse save(@RequestBody @Valid PlaceOrderSaveRequest request) {
-        return new PlaceOrderResponse(placeOrderService.savePlaceOrder(request));
+    public Long save(@RequestBody @Valid PlaceOrderSaveRequest request) {
+        return placeOrderService.savePlaceOrder(request);
     }
 
 }
