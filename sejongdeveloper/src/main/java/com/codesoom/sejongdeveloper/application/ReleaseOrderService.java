@@ -45,6 +45,8 @@ public class ReleaseOrderService {
 
         releaseOrder.update(request);
 
+        releaseOrderDetailService.updateReleaseOrderDetails(request.getReleaseOrderDetails());
+
         return releaseOrder;
     }
 
