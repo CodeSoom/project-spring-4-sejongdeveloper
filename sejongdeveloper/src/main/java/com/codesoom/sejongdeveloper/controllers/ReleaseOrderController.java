@@ -73,10 +73,7 @@ public class ReleaseOrderController {
 
     @PatchMapping("{id}")
     public ReleaseOrderResponse update(@PathVariable Long id, @RequestBody ReleaseOrderUpdateRequest request) {
-        System.out.println("result name:" + request.getName());
         ReleaseOrder releaseOrder = releaseOrderService.updateReleaseOrder(id, request);
-        System.out.println("releaseOrder:" + releaseOrder);
-        System.out.println("releaseOrder name:" + releaseOrder.getName());
 
         return new ReleaseOrderResponse(releaseOrder);
     }
