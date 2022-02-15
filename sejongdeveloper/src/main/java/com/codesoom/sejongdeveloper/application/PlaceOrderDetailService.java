@@ -22,12 +22,18 @@ public class PlaceOrderDetailService {
     private final PlaceOrderDetailRepository placeOrderDetailRepository;
     private final ItemRepository itemRepository;
 
-    public void savePlaceOrderDetails(PlaceOrder placeOrder, List<PlaceOrderDetailSaveRequest> placeOrderDetails) {
-        List<PlaceOrderDetail> list = placeOrderDetails.stream()
-                .map(request -> getPlaceOrderDetail(placeOrder, request))
-                .collect(Collectors.toList());
+    @Transactional
+    public void savePlaceOrderDetails(PlaceOrder placeOrder, List<PlaceOrderDetailSaveRequest> requests) {
+        List<PlaceOrderDetail> list = getPlaceOrderDetails(placeOrder, requests);
 
         placeOrderDetailRepository.saveAll(list);
+    }
+
+    private List<PlaceOrderDetail> getPlaceOrderDetails(PlaceOrder placeOrder,
+                                                        List<PlaceOrderDetailSaveRequest> placeOrderDetails) {
+        return placeOrderDetails.stream()
+                .map(request -> getPlaceOrderDetail(placeOrder, request))
+                .collect(Collectors.toList());
     }
 
     private PlaceOrderDetail getPlaceOrderDetail(PlaceOrder placeOrder, PlaceOrderDetailSaveRequest request) {
