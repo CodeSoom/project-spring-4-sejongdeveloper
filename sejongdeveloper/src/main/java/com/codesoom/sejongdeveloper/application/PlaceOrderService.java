@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceOrderService {
 
     private final PlaceOrderRepository placeOrderRepository;
+    private final PlaceOrderDetailService placeOrderDetailService;
 
     /**
      * 주어진 발주를 저장하고 저장된 발주 아이디 번호를 리턴한다.
@@ -27,6 +28,8 @@ public class PlaceOrderService {
         PlaceOrder placeOrder = new PlaceOrder(request);
 
         PlaceOrder savedPlaceOrder = placeOrderRepository.save(placeOrder);
+
+        placeOrderDetailService.savePlaceOrderDetails(savedPlaceOrder, request.getPlaceOrderDetails());
 
         return savedPlaceOrder.getId();
     }

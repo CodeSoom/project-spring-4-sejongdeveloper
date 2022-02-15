@@ -25,13 +25,12 @@ class PlaceOrderServiceTest {
     private static final Long PLACE_ORDER_ID = 1L;
 
     private PlaceOrderService placeOrderService;
-    private PlaceOrderRepository placeOrderRepository;
+    private PlaceOrderRepository placeOrderRepository = mock(PlaceOrderRepository.class);
+    private PlaceOrderDetailService placeOrderDetailService = mock(PlaceOrderDetailService.class);
 
     @BeforeEach
     void setUp() {
-        placeOrderRepository = mock(PlaceOrderRepository.class);
-
-        placeOrderService = new PlaceOrderService(placeOrderRepository);
+        placeOrderService = new PlaceOrderService(placeOrderRepository, placeOrderDetailService);
 
         PlaceOrder placeOrder = PlaceOrder.builder()
                 .id(PLACE_ORDER_ID)
