@@ -1,7 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
-import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class PlaceOrderController {
     private final PlaceOrderService placeOrderService;
 
     /**
-     * 주어진 발주를 저장하고 저장된 발주를 리턴한다.
+     * 주어진 발주를 저장하고 저장된 발주 아이디 번호를 리턴한다.
      *
      * @param request 저장할 발주
      * @return 저장된 발주

@@ -18,7 +18,7 @@ public class PlaceOrderService {
     private final PlaceOrderRepository placeOrderRepository;
 
     /**
-     * 주어진 발주를 저장하고 저장된 발주를 리턴한다.
+     * 주어진 발주를 저장하고 저장된 발주 아이디 번호를 리턴한다.
      *
      * @param request 저장할 발주
      * @return 저장된 발주
