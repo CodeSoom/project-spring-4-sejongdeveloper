@@ -4,8 +4,6 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import lombok.Getter;
 
-import java.math.BigDecimal;
-
 @Getter
 public class ReleaseOrderDetailResponse {
 
@@ -13,7 +11,7 @@ public class ReleaseOrderDetailResponse {
 
     private ObtainOrderDetailResponse obtainOrderDetail;    //수주 상세
 
-    private BigDecimal quantity;    //출고수량
+    private Double quantity;    //출고수량
 
     public ReleaseOrderDetailResponse(ReleaseOrderDetail releaseOrderDetail) {
         this.id = releaseOrderDetail.getId();

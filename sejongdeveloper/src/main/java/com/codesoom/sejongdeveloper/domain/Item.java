@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,12 +27,12 @@ public class Item extends BaseEntity {
 
     private String name;    //상품명
 
-    private BigDecimal quantity;    //상품수량
+    private Double quantity;    //상품수량
 
     private Boolean useYn;  //사용여부
 
     @Builder
-    public Item(Long id, String code, String name, BigDecimal quantity, Boolean useYn) {
+    public Item(Long id, String code, String name, Double quantity, Boolean useYn) {
         this.id = id;
         this.code = code;
         this.name = name;
