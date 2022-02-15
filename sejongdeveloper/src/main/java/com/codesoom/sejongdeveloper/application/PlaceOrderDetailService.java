@@ -25,12 +25,16 @@ public class PlaceOrderDetailService {
     public void savePlaceOrderDetails(PlaceOrder placeOrder, List<PlaceOrderDetailSaveRequest> placeOrderDetails) {
         List<PlaceOrderDetail> list = placeOrderDetails.stream()
                 .map(request -> {
-                    Item item = itemRepository.findById(request.getItemId())
-                            .orElseThrow(() -> new ItemNotFoundException(request.getItemId()));
+                    Item item = getItem(request.getItemId());
 
                     return new PlaceOrderDetail(request, placeOrder, item);
                 }).collect(Collectors.toList());
 
         placeOrderDetailRepository.saveAll(list);
+    }
+
+    private Item getItem(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(id));
     }
 }
