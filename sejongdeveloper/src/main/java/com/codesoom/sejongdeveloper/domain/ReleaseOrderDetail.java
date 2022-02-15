@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,7 +36,7 @@ public class ReleaseOrderDetail extends BaseEntity {
     @JoinColumn(name = "obtain_order_detail_id")
     private ObtainOrderDetail obtainOrderDetail;    //수주 상세
 
-    private BigDecimal quantity;    //출고수량
+    private Double quantity;    //출고수량
 
     public ReleaseOrderDetail(Long id) {
         this.id = id;
@@ -47,25 +46,25 @@ public class ReleaseOrderDetail extends BaseEntity {
     public ReleaseOrderDetail(Long id,
                               ReleaseOrder releaseOrder,
                               ObtainOrderDetail obtainOrderDetail,
-                              BigDecimal quantity) {
+                              Double quantity) {
 
-        BigDecimal itemQuantity = obtainOrderDetail.getItem().getQuantity();
+        Double itemQuantity = obtainOrderDetail.getItem().getQuantity();
 
-        if (itemQuantity.compareTo(quantity) < 0) {
+        if (quantity > itemQuantity) {
             throw new ItemNotEnoughException("출고수량", quantity);
         }
 
+        this.obtainOrderDetail = obtainOrderDetail;
         this.id = id;
         this.releaseOrder = releaseOrder;
-        this.obtainOrderDetail = obtainOrderDetail;
         this.quantity = quantity;
     }
 
     public void update(ReleaseOrderDetailUpdateRequest request) {
-        BigDecimal quantity = obtainOrderDetail.getItem().getQuantity();
+        Double itemQuantity = obtainOrderDetail.getItem().getQuantity();
 
-        if (quantity.compareTo(request.getQuantity()) < 0) {
-            throw new ItemNotEnoughException("출고수정", request.getQuantity());
+        if (request.getQuantity() > itemQuantity) {
+            throw new ItemNotEnoughException("출고수량", quantity);
         }
 
         this.quantity = request.getQuantity();

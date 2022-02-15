@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,10 +17,10 @@ public class ObtainOrderDetailResponse {
 
     private Item item;  //상품
 
-    private BigDecimal quantity;    //수주 수량
+    private Double quantity;    //수주 수량
 
     @Builder
-    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, Item item, BigDecimal quantity) {
+    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, Item item, Double quantity) {
         this.id = id;
         this.obtainOrder = obtainOrder;
         this.item = item;

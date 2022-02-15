@@ -8,12 +8,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -57,7 +55,7 @@ class ObtainOrderDetailServiceTest {
         ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
                 .id(OBTAIN_ORDER_DETAIL_ID)
                 .item(item)
-                .quantity(new BigDecimal(2_000))
+                .quantity(2_000.0)
                 .build();
 
         obtainOrderDetailService.updateObtainOrderDetails(List.of(obtainOrderDetail));

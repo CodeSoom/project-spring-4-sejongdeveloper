@@ -24,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -107,7 +106,7 @@ class ReleaseOrderControllerTest {
             private ReleaseOrderDetailSaveRequest getReleaseOrderDetail() {
                 return ReleaseOrderDetailSaveRequest.builder()
                         .obtainOrderDetailId(OBTAIN_ORDER__DETAIL_ID)
-                        .quantity(new BigDecimal(1_000))
+                        .quantity(1_000.0)
                         .build();
             }
 

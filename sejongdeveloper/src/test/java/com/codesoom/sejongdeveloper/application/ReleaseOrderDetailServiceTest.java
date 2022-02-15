@@ -18,24 +18,21 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("ReleaseOrderDetailService 클래스")
 class ReleaseOrderDetailServiceTest {
 
     private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;    //수주상세 일련번호
-    private static final BigDecimal ITEM_QUANTITY = new BigDecimal(1_000);   //품목수량
+    private static final Double ITEM_QUANTITY = 1_000.0;   //품목수량
     private static final Long VALID_RELEASE_ORDER_DETAIL_ID = 1L;
     private static final Long INVALID_RELEASE_ORDER_DETAIL_ID = 2L;
 
@@ -71,7 +68,7 @@ class ReleaseOrderDetailServiceTest {
                 .id(VALID_RELEASE_ORDER_DETAIL_ID)
                 .releaseOrder(releaseOrder)
                 .obtainOrderDetail(obtainOrderDetail)
-                .quantity(new BigDecimal(1_000))
+                .quantity(1_000.0)
                 .build();
 
         given(releaseOrderDetailRepository.findById(VALID_RELEASE_ORDER_DETAIL_ID))
@@ -89,7 +86,7 @@ class ReleaseOrderDetailServiceTest {
             @BeforeEach
             void setUp() {
                 ReleaseOrderDetailSaveRequest detail1 = getDetail(ITEM_QUANTITY);
-                ReleaseOrderDetailSaveRequest detail2 = getDetail(ITEM_QUANTITY.subtract(new BigDecimal(1)));
+                ReleaseOrderDetailSaveRequest detail2 = getDetail(ITEM_QUANTITY - 1);
 
                 validParam = List.of(detail1, detail2);
             }
@@ -108,7 +105,7 @@ class ReleaseOrderDetailServiceTest {
 
             @BeforeEach
             void setUp() {
-                ReleaseOrderDetailSaveRequest detail = getDetail(ITEM_QUANTITY.add(new BigDecimal(1)));
+                ReleaseOrderDetailSaveRequest detail = getDetail(ITEM_QUANTITY + 1);
 
                 invalidParam = List.of(detail);
             }
@@ -134,7 +131,7 @@ class ReleaseOrderDetailServiceTest {
                 invalidParam = new ArrayList<>();
 
                 for (int i=0; i<OVER_SIZE; i++) {
-                    invalidParam.add(getDetail(new BigDecimal(i)));
+                    invalidParam.add(getDetail((double) i));
                 }
             }
 
@@ -146,7 +143,7 @@ class ReleaseOrderDetailServiceTest {
             }
         }
 
-        private ReleaseOrderDetailSaveRequest getDetail(BigDecimal quantity) {
+        private ReleaseOrderDetailSaveRequest getDetail(Double quantity) {
             return ReleaseOrderDetailSaveRequest.builder()
                     .obtainOrderDetailId(OBTAIN_ORDER_DETAIL_ID)
                     .quantity(quantity)
@@ -166,7 +163,7 @@ class ReleaseOrderDetailServiceTest {
             void setUp() {
                 ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
                 request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
-                request.setQuantity(new BigDecimal(1_000));
+                request.setQuantity(1_000.0);
 
                 list = List.of(request);
             }
@@ -210,7 +207,7 @@ class ReleaseOrderDetailServiceTest {
             void setUp() {
                 ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
                 request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
-                request.setQuantity(new BigDecimal(1_004));
+                request.setQuantity(1_004.0);
 
                 list = List.of(request);
             }

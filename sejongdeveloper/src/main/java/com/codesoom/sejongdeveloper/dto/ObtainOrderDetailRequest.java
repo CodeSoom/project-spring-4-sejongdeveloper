@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Getter
 public class ObtainOrderDetailRequest {
@@ -15,10 +14,10 @@ public class ObtainOrderDetailRequest {
     private Long itemId;
 
     @NotNull
-    private BigDecimal quantity;
+    private Double quantity;
 
     @Builder
-    public ObtainOrderDetailRequest(Long itemId, BigDecimal quantity) {
+    public ObtainOrderDetailRequest(Long itemId, Double quantity) {
         this.itemId = itemId;
         this.quantity = quantity;
     }

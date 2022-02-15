@@ -13,7 +13,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +80,7 @@ class ReleaseOrderServiceTest {
             private ReleaseOrderDetailSaveRequest getReleaseOrderDetail() {
                 return ReleaseOrderDetailSaveRequest.builder()
                         .obtainOrderDetailId(OBTAIN_ORDER__DETAIL_ID)
-                        .quantity(new BigDecimal(1_000))
+                        .quantity(1_000.0)
                         .build();
             }
 
