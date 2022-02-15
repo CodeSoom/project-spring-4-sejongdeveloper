@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,17 +34,17 @@ public class ObtainOrderDetail extends BaseEntity {
     @JoinColumn(name = "item_id")
     private Item item;  //상품
 
-    private BigDecimal quantity;    //수주 수량
+    private Double quantity;    //수주 수량
 
     @Builder
-    public ObtainOrderDetail(Long id, ObtainOrder obtainOrder, Item item, BigDecimal quantity) {
+    public ObtainOrderDetail(Long id, ObtainOrder obtainOrder, Item item, Double quantity) {
         this.id = id;
         this.obtainOrder = obtainOrder;
         this.item = item;
         this.quantity = quantity;
     }
 
-    public void update(Item item, BigDecimal quantity) {
+    public void update(Item item, Double quantity) {
         this.item = item;
         this.quantity = quantity;
     }

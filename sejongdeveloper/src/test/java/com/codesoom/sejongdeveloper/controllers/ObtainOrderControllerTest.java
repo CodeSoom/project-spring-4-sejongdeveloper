@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -216,7 +215,7 @@ class ObtainOrderControllerTest {
     private ObtainOrderRequest getObtainOrderWithInvalidItemId() {
         ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
                 .itemId(INVALID_ITEM_ID)
-                .quantity(new BigDecimal(1_000))
+                .quantity(1_000.0)
                 .build();
 
         return ObtainOrderRequest.builder()
@@ -227,7 +226,7 @@ class ObtainOrderControllerTest {
 
     private ObtainOrderRequest getInvalidItem() {
         ObtainOrderDetailRequest obtainOrderDetailRequest = ObtainOrderDetailRequest.builder()
-                .quantity(new BigDecimal(1_000))
+                .quantity(1_000.0)
                 .build();
 
         return ObtainOrderRequest.builder()
@@ -260,7 +259,7 @@ class ObtainOrderControllerTest {
     private ObtainOrderDetailRequest getObtainOrderDetailRequest() {
         return ObtainOrderDetailRequest.builder()
                 .itemId(1L)
-                .quantity(new BigDecimal(1_000))
+                .quantity(1_000.0)
                 .build();
     }
 }
