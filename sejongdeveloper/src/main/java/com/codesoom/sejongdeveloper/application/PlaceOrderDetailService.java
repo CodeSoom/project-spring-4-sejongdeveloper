@@ -24,13 +24,16 @@ public class PlaceOrderDetailService {
 
     public void savePlaceOrderDetails(PlaceOrder placeOrder, List<PlaceOrderDetailSaveRequest> placeOrderDetails) {
         List<PlaceOrderDetail> list = placeOrderDetails.stream()
-                .map(request -> {
-                    Item item = getItem(request.getItemId());
-
-                    return new PlaceOrderDetail(request, placeOrder, item);
-                }).collect(Collectors.toList());
+                .map(request -> getPlaceOrderDetail(placeOrder, request))
+                .collect(Collectors.toList());
 
         placeOrderDetailRepository.saveAll(list);
+    }
+
+    private PlaceOrderDetail getPlaceOrderDetail(PlaceOrder placeOrder, PlaceOrderDetailSaveRequest request) {
+        Item item = getItem(request.getItemId());
+
+        return new PlaceOrderDetail(request, placeOrder, item);
     }
 
     private Item getItem(Long id) {
