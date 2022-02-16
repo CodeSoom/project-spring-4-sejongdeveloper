@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,7 +50,7 @@ class PlaceOrderControllerTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 출고등록_요청을_처리하는_핸들러는 {
+    class 발주등록_요청을_처리하는_핸들러는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_파라미터가_유효성_검사를_통과한_경우 {
@@ -71,6 +72,22 @@ class PlaceOrderControllerTest {
                                 .content(json))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("" + PLACE_ORDER_ID)));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 발주조회_요청을_처리하는_핸들러는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주를_찾은_경우 {
+            @Test
+            @DisplayName("발주를 리턴한다")
+            void 발주를_리턴한다() throws Exception {
+                mockMvc.perform(get("/place-orders/" + PLACE_ORDER_ID))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("\"id:\"" + PLACE_ORDER_ID)));
             }
         }
     }
