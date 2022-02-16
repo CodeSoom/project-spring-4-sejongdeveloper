@@ -42,6 +42,14 @@ public class PlaceOrderDetail extends BaseEntity {
         this.item = item;
         this.quantity = request.getQuantity();
 
+        plusItemQuantity();
+    }
+
+    private void plusItemQuantity() {
+        if (quantity == null) {
+            return;
+        }
+
         item.plusQuantity(quantity);
     }
 
