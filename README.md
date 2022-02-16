@@ -6,4 +6,4 @@
 3. 발주
 
 # ERD
-![erd](https://user-images.githubusercontent.com/51711799/154278796-5ffe90ba-602e-4696-a3d7-5a52c975a2fe.png)
+![erd2](https://user-images.githubusercontent.com/51711799/154278930-c0efaeaa-2669-4dac-a5ed-7b748cb1231f.png)
