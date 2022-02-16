@@ -34,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PlaceOrderControllerTest {
 
     private static final String PLACE_ORDER_NAME = "발주명";
-    private static final Long PLACE_ORDER_ID = 1L;
+    private static final Long VALID_PLACE_ORDER_ID = 1L;
+    private static final Long INVALID_PLACE_ORDER_ID = 2L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,13 +52,13 @@ class PlaceOrderControllerTest {
     void setUp() {
         objectMapper = new ObjectMapper();
 
-        given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(PLACE_ORDER_ID);
+        given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(VALID_PLACE_ORDER_ID);
 
         PlaceOrder placeOrder = PlaceOrder.builder()
-                .id(PLACE_ORDER_ID)
+                .id(VALID_PLACE_ORDER_ID)
                 .build();
 
-        given(placeOrderRepository.findById(PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
+        given(placeOrderRepository.findById(VALID_PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
     }
 
     @Nested
@@ -83,7 +84,7 @@ class PlaceOrderControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("" + PLACE_ORDER_ID)));
+                        .andExpect(content().string(containsString("" + VALID_PLACE_ORDER_ID)));
             }
         }
     }
@@ -97,9 +98,20 @@ class PlaceOrderControllerTest {
             @Test
             @DisplayName("발주를 리턴한다")
             void 발주를_리턴한다() throws Exception {
-                mockMvc.perform(get("/place-orders/" + PLACE_ORDER_ID))
+                mockMvc.perform(get("/place-orders/" + VALID_PLACE_ORDER_ID))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("\"id\":" + PLACE_ORDER_ID)));
+                        .andExpect(content().string(containsString("\"id\":" + VALID_PLACE_ORDER_ID)));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주를_찾지_못한_경우 {
+            @Test
+            @DisplayName("에러코드로 응답한다")
+            void 에러코드로_응답한다() throws Exception {
+                mockMvc.perform(get("/place-orders/" + INVALID_PLACE_ORDER_ID))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
