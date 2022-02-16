@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -31,7 +32,10 @@ class PlaceOrderDetailServiceTest {
     void setUp() {
         placeOrderDetailService = new PlaceOrderDetailService(placeOrderDetailRepository, itemRepository);
 
-        Item item = Item.builder().build();
+        Item item = Item.builder()
+                .id(ITEM_ID)
+                .quantity(1_000.0)
+                .build();
 
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
     }
@@ -44,6 +48,7 @@ class PlaceOrderDetailServiceTest {
         class 유효한_파라미터인_경우 {
             private PlaceOrder placeOrder;
             private List<PlaceOrderDetailSaveRequest> placeOrderDetails;
+            private final Double QUANTITY = 1_000.0;
 
             @BeforeEach
             void setUp() {
@@ -51,7 +56,7 @@ class PlaceOrderDetailServiceTest {
 
                 PlaceOrderDetailSaveRequest request = PlaceOrderDetailSaveRequest.builder()
                         .itemId(ITEM_ID)
-                        .quantity(1_000.0)
+                        .quantity(QUANTITY)
                         .build();
 
                 placeOrderDetails = List.of(request);
@@ -60,7 +65,13 @@ class PlaceOrderDetailServiceTest {
             @Test
             @DisplayName("발주상세를 저장한다")
             void 발주상세를_저장한다() {
+                Double beforeQuantity = itemRepository.findById(ITEM_ID).get().getQuantity();
+
                 placeOrderDetailService.savePlaceOrderDetails(placeOrder, placeOrderDetails);
+
+                Double afterQuantity = itemRepository.findById(ITEM_ID).get().getQuantity();
+
+                assertThat(afterQuantity - beforeQuantity).isEqualTo(QUANTITY);
             }
         }
     }
