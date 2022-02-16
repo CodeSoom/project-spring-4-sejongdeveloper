@@ -24,6 +24,7 @@ public class PlaceOrderService {
      * @param request 저장할 발주
      * @return 저장된 발주
      */
+    @Transactional
     public Long savePlaceOrder(PlaceOrderSaveRequest request) {
         PlaceOrder placeOrder = new PlaceOrder(request);
 
