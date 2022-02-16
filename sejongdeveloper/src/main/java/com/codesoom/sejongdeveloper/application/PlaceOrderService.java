@@ -33,4 +33,8 @@ public class PlaceOrderService {
 
         return savedPlaceOrder.getId();
     }
+
+    public Long completePlaceOrder(Long id) {
+        return null;
+    }
 }
