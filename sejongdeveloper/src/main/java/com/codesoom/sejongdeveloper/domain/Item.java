@@ -39,4 +39,8 @@ public class Item extends BaseEntity {
         this.quantity = quantity;
         this.useYn = useYn;
     }
+
+    public void plusQuantity(Double quantity) {
+        this.quantity += quantity;
+    }
 }
