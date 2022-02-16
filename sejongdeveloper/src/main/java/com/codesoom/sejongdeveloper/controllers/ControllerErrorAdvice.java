@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.controllers;
 import com.codesoom.sejongdeveloper.dto.ErrorResponse;
 import com.codesoom.sejongdeveloper.errors.ItemNotFoundException;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.errors.ReleaseOrderNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +32,13 @@ public class ControllerErrorAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResponse handleObtainOrderNotFoundException(ReleaseOrderNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResponse handlePlaceOrderNotFoundException(PlaceOrderNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 }
