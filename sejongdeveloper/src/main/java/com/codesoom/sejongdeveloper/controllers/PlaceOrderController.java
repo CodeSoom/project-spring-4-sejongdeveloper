@@ -38,15 +38,32 @@ public class PlaceOrderController {
         return placeOrderService.savePlaceOrder(request);
     }
 
+    /**
+     * 주어진 아이디의 발주를 리턴한다.
+     *
+     * @param id 발주의 아이디
+     * @return 주어진 아이디의 발주
+     */
     @GetMapping("{id}")
     public PlaceOrderResponse detail(@PathVariable Long id) {
-        PlaceOrder placeOrder = placeOrderRepository.findById(id)
-                .orElseThrow(() -> new PlaceOrderNotFoundException(id));
+        PlaceOrder placeOrder = getPlaceOrder(id);
 
         return PlaceOrderResponse.builder()
                 .id(placeOrder.getId())
                 .name(placeOrder.getName())
                 .date(placeOrder.getDate())
                 .build();
+    }
+
+    /**
+     * 주어진 아이디의 발주를 리턴한다.
+     *
+     * @param id 발주의 아이디
+     * @return 주어진 아이디의 발주
+     * @throws PlaceOrderNotFoundException 주어진 아이디의 발주를 찾지 못한 경우
+     */
+    private PlaceOrder getPlaceOrder(Long id) {
+        return placeOrderRepository.findById(id)
+                .orElseThrow(() -> new PlaceOrderNotFoundException(id));
     }
 }
