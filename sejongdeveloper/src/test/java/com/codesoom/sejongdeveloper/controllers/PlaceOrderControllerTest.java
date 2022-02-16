@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.controllers;
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,11 +44,20 @@ class PlaceOrderControllerTest {
     @MockBean
     private PlaceOrderService placeOrderService;
 
+    @MockBean
+    private PlaceOrderRepository placeOrderRepository;
+
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
 
         given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(PLACE_ORDER_ID);
+
+        PlaceOrder placeOrder = PlaceOrder.builder()
+                .id(PLACE_ORDER_ID)
+                .build();
+
+        given(placeOrderRepository.findById(PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
     }
 
     @Nested
@@ -87,7 +99,7 @@ class PlaceOrderControllerTest {
             void 발주를_리턴한다() throws Exception {
                 mockMvc.perform(get("/place-orders/" + PLACE_ORDER_ID))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("\"id:\"" + PLACE_ORDER_ID)));
+                        .andExpect(content().string(containsString("\"id\":" + PLACE_ORDER_ID)));
             }
         }
     }
