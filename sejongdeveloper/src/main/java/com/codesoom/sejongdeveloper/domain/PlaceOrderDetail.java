@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.domain;
 
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,14 @@ public class PlaceOrderDetail extends BaseEntity {
     private Double quantity;    //발주수량
 
     @Builder
+    public PlaceOrderDetail(Long id, PlaceOrder placeOrder, Item item, Double quantity) {
+        this.id = id;
+        this.placeOrder = placeOrder;
+        this.item = item;
+        this.quantity = quantity;
+    }
+
+    @Builder
     public PlaceOrderDetail(PlaceOrderDetailSaveRequest request, PlaceOrder placeOrder, Item item) {
         this.id = request.getId();
         this.placeOrder = placeOrder;
@@ -55,4 +64,11 @@ public class PlaceOrderDetail extends BaseEntity {
         item.plusQuantity(quantity);
     }
 
+    public void update(PlaceOrderDetailUpdateRequest request) {
+        Double beforeQuantity = quantity;
+
+        quantity = request.getQuantity();
+
+        item.plusQuantity(quantity - beforeQuantity);
+    }
 }

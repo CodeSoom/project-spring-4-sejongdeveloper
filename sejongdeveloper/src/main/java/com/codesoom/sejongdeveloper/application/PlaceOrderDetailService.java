@@ -4,7 +4,9 @@ import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotFoundException;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -75,5 +77,31 @@ public class PlaceOrderDetailService {
     private Item getItem(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
+    }
+
+    /**
+     * 주어진 발주상세 목록을 수정한다.
+     *
+     * @param requests 수정할 발주상세 목록
+     */
+    @Transactional
+    public void update(List<PlaceOrderDetailUpdateRequest> requests) {
+        requests.forEach(request -> {
+            PlaceOrderDetail placeOrderDetail = getPlaceOrderDetail(request.getId());
+
+            placeOrderDetail.update(request);
+        });
+    }
+
+    /**
+     * 주어진 아이디의 발주상세를 리턴한다.
+     *
+     * @param id 발주상세의 아이디
+     * @return 주어진 아이디의 발주상세
+     * @throws PlaceOrderDetailNotFoundException 주어진 아이디의 발주상세를 찾지 못한 경우
+     */
+    private PlaceOrderDetail getPlaceOrderDetail(Long id) {
+        return placeOrderDetailRepository.findById(id)
+                .orElseThrow(() -> new PlaceOrderDetailNotFoundException(id));
     }
 }
