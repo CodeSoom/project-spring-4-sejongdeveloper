@@ -80,12 +80,16 @@ public class PlaceOrderDetailService {
     }
 
     @Transactional
-    public void update(PlaceOrder placeOrder, List<PlaceOrderDetailUpdateRequest> requests) {
+    public void update(List<PlaceOrderDetailUpdateRequest> requests) {
         requests.forEach(request -> {
-            PlaceOrderDetail placeOrderDetail = placeOrderDetailRepository.findById(request.getId())
-                    .orElseThrow(() -> new PlaceOrderDetailNotFoundException(request.getId()));
+            PlaceOrderDetail placeOrderDetail = getPlaceOrderDetail(request.getId());
 
             placeOrderDetail.update(request);
         });
+    }
+
+    private PlaceOrderDetail getPlaceOrderDetail(Long id) {
+        return placeOrderDetailRepository.findById(id)
+                .orElseThrow(() -> new PlaceOrderDetailNotFoundException(id));
     }
 }
