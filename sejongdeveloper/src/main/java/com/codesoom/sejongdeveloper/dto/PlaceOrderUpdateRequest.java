@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +18,7 @@ public class PlaceOrderUpdateRequest {
 
     private LocalDate date; //발주일
 
+    @Valid
     List<PlaceOrderDetailUpdateRequest> placeOrderDetails;  //발주상세 목록
 
     @Builder
