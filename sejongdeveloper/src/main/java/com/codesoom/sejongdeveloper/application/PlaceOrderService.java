@@ -49,6 +49,8 @@ public class PlaceOrderService {
         PlaceOrder placeOrder = getPlaceOrder(id);
 
         placeOrder.update(request);
+
+        placeOrderDetailService.update(request.getPlaceOrderDetails());
     }
 
     /**
