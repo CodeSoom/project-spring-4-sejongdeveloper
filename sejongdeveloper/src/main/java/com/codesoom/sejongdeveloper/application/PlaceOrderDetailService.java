@@ -6,6 +6,7 @@ import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotFoundException;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +80,12 @@ public class PlaceOrderDetailService {
     }
 
     @Transactional
-    public void update(PlaceOrder placeOrder, List<PlaceOrderDetailUpdateRequest> request) {
+    public void update(PlaceOrder placeOrder, List<PlaceOrderDetailUpdateRequest> requests) {
+        requests.forEach(request -> {
+            PlaceOrderDetail placeOrderDetail = placeOrderDetailRepository.findById(request.getId())
+                    .orElseThrow(() -> new PlaceOrderDetailNotFoundException(request.getId()));
+
+            placeOrderDetail.update(request);
+        });
     }
 }
