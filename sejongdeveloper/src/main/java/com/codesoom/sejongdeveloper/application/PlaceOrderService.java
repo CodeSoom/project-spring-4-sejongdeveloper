@@ -45,7 +45,7 @@ public class PlaceOrderService {
      * @param request 수정할 발주
      */
     @Transactional
-    public void update(Long id, PlaceOrderUpdateRequest request) {
+    public void updatePlaceOrder(Long id, PlaceOrderUpdateRequest request) {
         PlaceOrder placeOrder = getPlaceOrder(id);
 
         placeOrder.update(request);

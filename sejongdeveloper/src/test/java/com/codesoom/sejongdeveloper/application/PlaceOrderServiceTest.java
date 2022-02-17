@@ -27,7 +27,7 @@ import static org.mockito.Mockito.mock;
 class PlaceOrderServiceTest {
 
     private static final String PLACE_ORDER_NAME = "발주명";
-    private static final Long PLACE_ORDER_ID = 1L;
+    private static final Long VALID_PLACE_ORDER_ID = 1L;
     private static final Long INVALID_PLACE_ORDER_ID = 2L;
 
     private PlaceOrderService placeOrderService;
@@ -39,13 +39,13 @@ class PlaceOrderServiceTest {
         placeOrderService = new PlaceOrderService(placeOrderRepository, placeOrderDetailService);
 
         PlaceOrder placeOrder = PlaceOrder.builder()
-                .id(PLACE_ORDER_ID)
+                .id(VALID_PLACE_ORDER_ID)
                 .name(PLACE_ORDER_NAME)
                 .build();
 
         given(placeOrderRepository.save(any(PlaceOrder.class))).willReturn(placeOrder);
 
-        given(placeOrderRepository.findById(PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
+        given(placeOrderRepository.findById(VALID_PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
     }
 
     @Nested
@@ -67,7 +67,7 @@ class PlaceOrderServiceTest {
             void 발주를_저장한다() {
                 Long savedId = placeOrderService.savePlaceOrder(request);
 
-                assertThat(savedId).isEqualTo(PLACE_ORDER_ID);
+                assertThat(savedId).isEqualTo(VALID_PLACE_ORDER_ID);
             }
         }
     }
@@ -91,9 +91,9 @@ class PlaceOrderServiceTest {
             @Test
             @DisplayName("발주를 수정한다")
             void 발주를_수정한다() {
-                placeOrderService.update(PLACE_ORDER_ID, request);
+                placeOrderService.updatePlaceOrder(VALID_PLACE_ORDER_ID, request);
 
-                PlaceOrder placeOrder = placeOrderRepository.findById(PLACE_ORDER_ID).get( );
+                PlaceOrder placeOrder = placeOrderRepository.findById(VALID_PLACE_ORDER_ID).get( );
                 assertThat(placeOrder.getName()).isEqualTo(UPDATE_PLACE_ORDER_NAME);
             }
         }
@@ -104,7 +104,7 @@ class PlaceOrderServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-                assertThatThrownBy(() -> placeOrderService.update(INVALID_PLACE_ORDER_ID, request))
+                assertThatThrownBy(() -> placeOrderService.updatePlaceOrder(INVALID_PLACE_ORDER_ID, request))
                         .isInstanceOf(PlaceOrderNotFoundException.class);
             }
         }
