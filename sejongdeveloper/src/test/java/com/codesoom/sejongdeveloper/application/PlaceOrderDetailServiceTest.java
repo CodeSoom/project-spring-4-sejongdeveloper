@@ -2,7 +2,9 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
+import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +26,8 @@ import static org.mockito.Mockito.mock;
 class PlaceOrderDetailServiceTest {
 
     private static final Long ITEM_ID = 1L;
+    private static final Long PLACE_ORDER_DETAIL_ID = 1L;
+    private static final Double QUANTITY = 1_000.0;
     private PlaceOrderDetailService placeOrderDetailService;
     private PlaceOrderDetailRepository placeOrderDetailRepository = mock(PlaceOrderDetailRepository.class);
     private ItemRepository itemRepository = mock(ItemRepository.class);
@@ -38,6 +42,17 @@ class PlaceOrderDetailServiceTest {
                 .build();
 
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
+
+        PlaceOrder placeOrder = PlaceOrder.builder().build();
+
+        PlaceOrderDetail placeOrderDetail = PlaceOrderDetail.builder()
+                .id(PLACE_ORDER_DETAIL_ID)
+                .item(item)
+                .quantity(QUANTITY)
+                .placeOrder(placeOrder)
+                .build();
+
+        given(placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID)).willReturn(Optional.of(placeOrderDetail));
     }
 
     @Nested
@@ -72,6 +87,40 @@ class PlaceOrderDetailServiceTest {
                 Double afterQuantity = itemRepository.findById(ITEM_ID).get().getQuantity();
 
                 assertThat(afterQuantity - beforeQuantity).isEqualTo(QUANTITY);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class updatePlaceOrderDetails_메소드는 {
+        private static final double UPDATE_QUANTITY = 1_004.0;
+        private PlaceOrder placeOrder;
+        private List<PlaceOrderDetailUpdateRequest> placeOrderDetails;
+
+        @BeforeEach
+        void setUp() {
+            placeOrder = PlaceOrder.builder().build();
+
+            PlaceOrderDetailUpdateRequest request = PlaceOrderDetailUpdateRequest.builder()
+                    .id(PLACE_ORDER_DETAIL_ID)
+                    .itemId(ITEM_ID)
+                    .quantity(UPDATE_QUANTITY)
+                    .build();
+
+            placeOrderDetails = List.of(request);
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주상세를_찾은_경우 {
+            @Test
+            @DisplayName("발주상세를 수정한다")
+            void 발주상세를_수정한다() {
+                placeOrderDetailService.update(placeOrder, placeOrderDetails);
+
+                PlaceOrderDetail result = placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID).get();
+                assertThat(result.getQuantity()).isEqualTo(UPDATE_QUANTITY);
             }
         }
     }

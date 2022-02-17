@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
@@ -75,5 +76,9 @@ public class PlaceOrderDetailService {
     private Item getItem(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
+    }
+
+    @Transactional
+    public void update(PlaceOrder placeOrder, List<PlaceOrderDetailUpdateRequest> request) {
     }
 }

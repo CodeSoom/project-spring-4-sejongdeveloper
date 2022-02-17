@@ -38,6 +38,14 @@ public class PlaceOrderDetail extends BaseEntity {
     private Double quantity;    //발주수량
 
     @Builder
+    public PlaceOrderDetail(Long id, PlaceOrder placeOrder, Item item, Double quantity) {
+        this.id = id;
+        this.placeOrder = placeOrder;
+        this.item = item;
+        this.quantity = quantity;
+    }
+
+    @Builder
     public PlaceOrderDetail(PlaceOrderDetailSaveRequest request, PlaceOrder placeOrder, Item item) {
         this.id = request.getId();
         this.placeOrder = placeOrder;
