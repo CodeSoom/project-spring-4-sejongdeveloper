@@ -38,11 +38,28 @@ public class PlaceOrderService {
         return savedPlaceOrder.getId();
     }
 
+    /**
+     * 주어진 아이디의 발주를 수정한다.
+     *
+     * @param id 발주의 아이디
+     * @param request 수정할 발주
+     */
     @Transactional
     public void update(Long id, PlaceOrderUpdateRequest request) {
-        PlaceOrder placeOrder = placeOrderRepository.findById(id)
-                .orElseThrow(() -> new PlaceOrderNotFoundException(id));
+        PlaceOrder placeOrder = getPlaceOrder(id);
 
         placeOrder.update(request);
+    }
+
+    /**
+     * 주어진 아이디의 발주를 리턴한다.
+     *
+     * @param id 발주의 아이디
+     * @return 주어진 아이디의 발주
+     * @throws PlaceOrderNotFoundException 주어진 아이디의 발주를 찾지 못한 경우
+     */
+    private PlaceOrder getPlaceOrder(Long id) {
+        return placeOrderRepository.findById(id)
+                .orElseThrow(() -> new PlaceOrderNotFoundException(id));
     }
 }
