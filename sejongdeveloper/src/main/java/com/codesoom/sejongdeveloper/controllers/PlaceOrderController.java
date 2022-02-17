@@ -2,12 +2,15 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
+import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,5 +68,10 @@ public class PlaceOrderController {
     private PlaceOrder getPlaceOrder(Long id) {
         return placeOrderRepository.findById(id)
                 .orElseThrow(() -> new PlaceOrderNotFoundException(id));
+    }
+
+    @PatchMapping("{id}")
+    public void update(@PathVariable Long id, @RequestBody @Valid PlaceOrderUpdateRequest request) {
+        placeOrderService.updatePlaceOrder(id, request);
     }
 }
