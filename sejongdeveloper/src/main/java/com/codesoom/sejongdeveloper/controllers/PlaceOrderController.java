@@ -70,6 +70,12 @@ public class PlaceOrderController {
                 .orElseThrow(() -> new PlaceOrderNotFoundException(id));
     }
 
+    /**
+     * 주어진 아이디의 발주를 수정한다.
+     *
+     * @param id 발주의 아이디
+     * @param request 수정할 발주
+     */
     @PatchMapping("{id}")
     public void update(@PathVariable Long id, @RequestBody @Valid PlaceOrderUpdateRequest request) {
         placeOrderService.updatePlaceOrder(id, request);
