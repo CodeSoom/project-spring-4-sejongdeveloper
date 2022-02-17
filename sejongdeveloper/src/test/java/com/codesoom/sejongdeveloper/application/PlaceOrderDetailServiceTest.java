@@ -117,10 +117,14 @@ class PlaceOrderDetailServiceTest {
             @Test
             @DisplayName("발주상세를 수정한다")
             void 발주상세를_수정한다() {
+                PlaceOrderDetail result = placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID).get();
+                Double beforeQuantity = result.getItem().getQuantity();
+
                 placeOrderDetailService.update(placeOrder, placeOrderDetails);
 
-                PlaceOrderDetail result = placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID).get();
+                Double afterQuantity = result.getItem().getQuantity();
                 assertThat(result.getQuantity()).isEqualTo(UPDATE_QUANTITY);
+                assertThat(afterQuantity - beforeQuantity).isEqualTo(UPDATE_QUANTITY - QUANTITY);
             }
         }
     }
