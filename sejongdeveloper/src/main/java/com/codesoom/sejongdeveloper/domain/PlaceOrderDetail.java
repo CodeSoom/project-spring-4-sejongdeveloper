@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class PlaceOrderDetail extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "place_order_detail_id")
     private Long id;    //발주상세 일련번호
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +35,7 @@ public class PlaceOrderDetail extends BaseEntity {
     @JoinColumn(name = "item_id")
     private Item item;  //상품
 
-    private Double quantity;    //발주개수
+    private Double quantity;    //발주수량
 
     @Builder
     public PlaceOrderDetail(PlaceOrderDetailSaveRequest request, PlaceOrder placeOrder, Item item) {

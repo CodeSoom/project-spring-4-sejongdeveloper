@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.controllers;
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +18,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PlaceOrderControllerTest {
 
     private static final String PLACE_ORDER_NAME = "발주명";
-    private static final Long PLACE_ORDER_ID = 1L;
+    private static final Long VALID_PLACE_ORDER_ID = 1L;
+    private static final Long INVALID_PLACE_ORDER_ID = 2L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,16 +45,25 @@ class PlaceOrderControllerTest {
     @MockBean
     private PlaceOrderService placeOrderService;
 
+    @MockBean
+    private PlaceOrderRepository placeOrderRepository;
+
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
 
-        given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(PLACE_ORDER_ID);
+        given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(VALID_PLACE_ORDER_ID);
+
+        PlaceOrder placeOrder = PlaceOrder.builder()
+                .id(VALID_PLACE_ORDER_ID)
+                .build();
+
+        given(placeOrderRepository.findById(VALID_PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
     }
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 출고등록_요청을_처리하는_핸들러는 {
+    class 발주등록_요청을_처리하는_핸들러는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_파라미터가_유효성_검사를_통과한_경우 {
@@ -70,7 +84,34 @@ class PlaceOrderControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("" + PLACE_ORDER_ID)));
+                        .andExpect(content().string(containsString("" + VALID_PLACE_ORDER_ID)));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 발주조회_요청을_처리하는_핸들러는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주를_찾은_경우 {
+            @Test
+            @DisplayName("발주를 리턴한다")
+            void 발주를_리턴한다() throws Exception {
+                mockMvc.perform(get("/place-orders/" + VALID_PLACE_ORDER_ID))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("\"id\":" + VALID_PLACE_ORDER_ID)));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주를_찾지_못한_경우 {
+            @Test
+            @DisplayName("에러코드로 응답한다")
+            void 에러코드로_응답한다() throws Exception {
+                mockMvc.perform(get("/place-orders/" + INVALID_PLACE_ORDER_ID))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
