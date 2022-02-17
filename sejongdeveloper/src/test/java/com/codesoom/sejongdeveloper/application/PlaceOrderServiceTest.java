@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +41,8 @@ class PlaceOrderServiceTest {
                 .build();
 
         given(placeOrderRepository.save(any(PlaceOrder.class))).willReturn(placeOrder);
+
+        given(placeOrderRepository.findById(PLACE_ORDER_ID)).willReturn(Optional.of(placeOrder));
     }
 
     @Nested
@@ -64,4 +69,30 @@ class PlaceOrderServiceTest {
         }
     }
 
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class updatePlaceOrder_메소드는 {
+        private static final String UPDATE_PLACE_ORDER_NAME = "수정된 발주명";
+        private PlaceOrderUpdateRequest request;
+
+        @BeforeEach
+        void setUp() {
+            request = PlaceOrderUpdateRequest.builder()
+                    .name(UPDATE_PLACE_ORDER_NAME)
+                    .build();
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주를_찾은_경우 {
+            @Test
+            @DisplayName("발주를 수정한다")
+            void 발주를_수정한다() {
+                placeOrderService.update(PLACE_ORDER_ID, request);
+
+                PlaceOrder placeOrder = placeOrderRepository.findById(PLACE_ORDER_ID).get();
+                assertThat(placeOrder.getName()).isEqualTo(UPDATE_PLACE_ORDER_NAME);
+            }
+        }
+    }
 }
