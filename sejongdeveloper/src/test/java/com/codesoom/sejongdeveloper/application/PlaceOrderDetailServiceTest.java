@@ -146,5 +146,38 @@ class PlaceOrderDetailServiceTest {
                         .isInstanceOf(PlaceOrderDetailNotFoundException.class);
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 이미_발주상세를_수정한_경우 {
+            private final Double SECOND_UPDATE_QUANTITY = 2_000.0;
+            private List<PlaceOrderDetailUpdateRequest> secondPlaceOrderDetails;
+
+
+            @BeforeEach
+            void setUp() {
+                PlaceOrderDetailUpdateRequest request = PlaceOrderDetailUpdateRequest.builder()
+                        .id(VALID_PLACE_ORDER_DETAIL_ID)
+                        .itemId(ITEM_ID)
+                        .quantity(SECOND_UPDATE_QUANTITY )
+                        .build();
+
+                secondPlaceOrderDetails = List.of(request);
+            }
+
+            @Test
+            @DisplayName("이전 발주수량 차이만큼 상품수량을 반영한다")
+            void 이전_발주수량_차이만큼_상품수량을_반영한다() {
+                PlaceOrderDetail result = placeOrderDetailRepository.findById(VALID_PLACE_ORDER_DETAIL_ID).get();
+
+                placeOrderDetailService.update(placeOrderDetails);
+                Double beforeQuantity = result.getItem().getQuantity();
+
+                placeOrderDetailService.update(secondPlaceOrderDetails);
+                Double afterQuantity = result.getItem().getQuantity();
+
+                assertThat(afterQuantity - beforeQuantity).isEqualTo(SECOND_UPDATE_QUANTITY - UPDATE_QUANTITY);
+            }
+        }
     }
 }
