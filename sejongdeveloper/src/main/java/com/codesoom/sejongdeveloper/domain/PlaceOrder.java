@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.domain;
 
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,11 @@ public class PlaceOrder extends BaseEntity {
 
     public PlaceOrder(PlaceOrderSaveRequest request) {
         this.id = request.getId();
+        this.name = request.getName();
+        this.date = request.getDate();
+    }
+
+    public void update(PlaceOrderUpdateRequest request) {
         this.name = request.getName();
         this.date = request.getDate();
     }
