@@ -180,5 +180,36 @@ class PlaceOrderControllerTest {
                         .andExpect(status().isBadRequest());
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품의_아이디가_없는_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                PlaceOrderDetailUpdateRequest detailRequest = PlaceOrderDetailUpdateRequest.builder()
+                        .id(PLACE_ORDER_DETAIL_ID)
+                        .build();
+
+                List<PlaceOrderDetailUpdateRequest> detailRequests = List.of(detailRequest);
+
+                PlaceOrderUpdateRequest request = PlaceOrderUpdateRequest.builder()
+                        .name(UPDATE_PLACE_ORDER_NAME)
+                        .placeOrderDetails(detailRequests)
+                        .build();
+
+                json = objectMapper.writeValueAsString(request);
+            }
+
+            @Test
+            @DisplayName("에러코드로 응답한다")
+            void 에러코드로_응답한다() throws Exception {
+                mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 }
