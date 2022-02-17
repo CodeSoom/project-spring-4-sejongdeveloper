@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -28,6 +30,7 @@ class PlaceOrderDetailServiceTest {
     private static final Long ITEM_ID = 1L;
     private static final Long PLACE_ORDER_DETAIL_ID = 1L;
     private static final Double QUANTITY = 1_000.0;
+    private static final Long INVALID_PLACE_ORDER_DETAIL_ID = 2L;
     private PlaceOrderDetailService placeOrderDetailService;
     private PlaceOrderDetailRepository placeOrderDetailRepository = mock(PlaceOrderDetailRepository.class);
     private ItemRepository itemRepository = mock(ItemRepository.class);
@@ -119,6 +122,28 @@ class PlaceOrderDetailServiceTest {
                 Double afterQuantity = result.getItem().getQuantity();
                 assertThat(result.getQuantity()).isEqualTo(UPDATE_QUANTITY);
                 assertThat(afterQuantity - beforeQuantity).isEqualTo(UPDATE_QUANTITY - QUANTITY);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주상세를_찾지_못한_경우 {
+            @BeforeEach
+            void setUp() {
+                PlaceOrderDetailUpdateRequest request = PlaceOrderDetailUpdateRequest.builder()
+                        .id(INVALID_PLACE_ORDER_DETAIL_ID)
+                        .itemId(ITEM_ID)
+                        .quantity(UPDATE_QUANTITY)
+                        .build();
+
+                placeOrderDetails = List.of(request);
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> placeOrderDetailService.update(placeOrderDetails))
+                        .isInstanceOf(PlaceOrderDetailNotFoundException.class);
             }
         }
     }
