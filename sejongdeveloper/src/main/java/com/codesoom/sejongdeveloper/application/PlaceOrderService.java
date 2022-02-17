@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,9 @@ public class PlaceOrderService {
 
     @Transactional
     public void update(Long id, PlaceOrderUpdateRequest request) {
+        PlaceOrder placeOrder = placeOrderRepository.findById(id)
+                .orElseThrow(() -> new PlaceOrderNotFoundException(id));
+
+        placeOrder.update(request);
     }
 }

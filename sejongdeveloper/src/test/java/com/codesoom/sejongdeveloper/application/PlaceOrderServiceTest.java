@@ -90,7 +90,7 @@ class PlaceOrderServiceTest {
             void 발주를_수정한다() {
                 placeOrderService.update(PLACE_ORDER_ID, request);
 
-                PlaceOrder placeOrder = placeOrderRepository.findById(PLACE_ORDER_ID).get();
+                PlaceOrder placeOrder = placeOrderRepository.findById(PLACE_ORDER_ID).get( );
                 assertThat(placeOrder.getName()).isEqualTo(UPDATE_PLACE_ORDER_NAME);
             }
         }
