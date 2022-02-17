@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -26,6 +28,7 @@ class PlaceOrderServiceTest {
 
     private static final String PLACE_ORDER_NAME = "발주명";
     private static final Long PLACE_ORDER_ID = 1L;
+    private static final Long INVALID_PLACE_ORDER_ID = 2L;
 
     private PlaceOrderService placeOrderService;
     private PlaceOrderRepository placeOrderRepository = mock(PlaceOrderRepository.class);
@@ -92,6 +95,17 @@ class PlaceOrderServiceTest {
 
                 PlaceOrder placeOrder = placeOrderRepository.findById(PLACE_ORDER_ID).get( );
                 assertThat(placeOrder.getName()).isEqualTo(UPDATE_PLACE_ORDER_NAME);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_아이디의_발주를_찾지_못한_경우 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> placeOrderService.update(INVALID_PLACE_ORDER_ID, request))
+                        .isInstanceOf(PlaceOrderNotFoundException.class);
             }
         }
     }
