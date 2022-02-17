@@ -43,13 +43,10 @@ class PlaceOrderDetailServiceTest {
 
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
 
-        PlaceOrder placeOrder = PlaceOrder.builder().build();
-
         PlaceOrderDetail placeOrderDetail = PlaceOrderDetail.builder()
                 .id(PLACE_ORDER_DETAIL_ID)
                 .item(item)
                 .quantity(QUANTITY)
-                .placeOrder(placeOrder)
                 .build();
 
         given(placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID)).willReturn(Optional.of(placeOrderDetail));
@@ -95,13 +92,10 @@ class PlaceOrderDetailServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class updatePlaceOrderDetails_메소드는 {
         private static final double UPDATE_QUANTITY = 1_004.0;
-        private PlaceOrder placeOrder;
         private List<PlaceOrderDetailUpdateRequest> placeOrderDetails;
 
         @BeforeEach
         void setUp() {
-            placeOrder = PlaceOrder.builder().build();
-
             PlaceOrderDetailUpdateRequest request = PlaceOrderDetailUpdateRequest.builder()
                     .id(PLACE_ORDER_DETAIL_ID)
                     .itemId(ITEM_ID)
@@ -120,7 +114,7 @@ class PlaceOrderDetailServiceTest {
                 PlaceOrderDetail result = placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID).get();
                 Double beforeQuantity = result.getItem().getQuantity();
 
-                placeOrderDetailService.update(placeOrder, placeOrderDetails);
+                placeOrderDetailService.update(placeOrderDetails);
 
                 Double afterQuantity = result.getItem().getQuantity();
                 assertThat(result.getQuantity()).isEqualTo(UPDATE_QUANTITY);
