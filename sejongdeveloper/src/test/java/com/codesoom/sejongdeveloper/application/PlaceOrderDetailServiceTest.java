@@ -28,7 +28,7 @@ import static org.mockito.Mockito.mock;
 class PlaceOrderDetailServiceTest {
 
     private static final Long ITEM_ID = 1L;
-    private static final Long PLACE_ORDER_DETAIL_ID = 1L;
+    private static final Long VALID_PLACE_ORDER_DETAIL_ID = 1L;
     private static final Double QUANTITY = 1_000.0;
     private static final Long INVALID_PLACE_ORDER_DETAIL_ID = 2L;
     private PlaceOrderDetailService placeOrderDetailService;
@@ -47,12 +47,12 @@ class PlaceOrderDetailServiceTest {
         given(itemRepository.findById(ITEM_ID)).willReturn(Optional.of(item));
 
         PlaceOrderDetail placeOrderDetail = PlaceOrderDetail.builder()
-                .id(PLACE_ORDER_DETAIL_ID)
+                .id(VALID_PLACE_ORDER_DETAIL_ID)
                 .item(item)
                 .quantity(QUANTITY)
                 .build();
 
-        given(placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID)).willReturn(Optional.of(placeOrderDetail));
+        given(placeOrderDetailRepository.findById(VALID_PLACE_ORDER_DETAIL_ID)).willReturn(Optional.of(placeOrderDetail));
     }
 
     @Nested
@@ -100,7 +100,7 @@ class PlaceOrderDetailServiceTest {
         @BeforeEach
         void setUp() {
             PlaceOrderDetailUpdateRequest request = PlaceOrderDetailUpdateRequest.builder()
-                    .id(PLACE_ORDER_DETAIL_ID)
+                    .id(VALID_PLACE_ORDER_DETAIL_ID)
                     .itemId(ITEM_ID)
                     .quantity(UPDATE_QUANTITY)
                     .build();
@@ -114,7 +114,7 @@ class PlaceOrderDetailServiceTest {
             @Test
             @DisplayName("발주상세를 수정한다")
             void 발주상세를_수정한다() {
-                PlaceOrderDetail result = placeOrderDetailRepository.findById(PLACE_ORDER_DETAIL_ID).get();
+                PlaceOrderDetail result = placeOrderDetailRepository.findById(VALID_PLACE_ORDER_DETAIL_ID).get();
                 Double beforeQuantity = result.getItem().getQuantity();
 
                 placeOrderDetailService.update(placeOrderDetails);
