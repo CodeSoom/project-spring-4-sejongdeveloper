@@ -142,8 +142,8 @@ class ReleaseOrderControllerTest {
             }
 
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(invalidName))
@@ -175,8 +175,8 @@ class ReleaseOrderControllerTest {
             }
 
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(invalidDetail))
@@ -204,8 +204,8 @@ class ReleaseOrderControllerTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고가_없는_경우 {
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(get("/release-orders/" + INVALID_RELEASE_ORDER_ID))
                         .andExpect(status().isBadRequest());
             }
@@ -251,8 +251,8 @@ class ReleaseOrderControllerTest {
             }
 
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/release-orders/" + INVALID_RELEASE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
