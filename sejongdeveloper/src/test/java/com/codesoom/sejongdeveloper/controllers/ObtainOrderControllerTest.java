@@ -101,7 +101,7 @@ class ObtainOrderControllerTest {
                 .willReturn(new PageImpl<>(list, PageRequest.of(0, 10), 1L));
     }
 
-    @DisplayName("수주를 저장한다.")
+    @DisplayName("유효한 파라미터에 대한 수주저장 요청은 수주를 저장한다.")
     @Test
     void createValidRequest() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderRequest(OBTAIN_ORDER_NAME));
@@ -114,7 +114,7 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), anyList());
     }
 
-    @DisplayName("유효하지 않는 파라미터에 대한 수주저장 요청은 예외를 던진다.")
+    @DisplayName("유효하지 않는 파라미터에 대한 수주저장 요청은 Bad Request로 응답한다.")
     @Test
     void createInValidRequest() throws Exception {
         String json = objectMapper.writeValueAsString(getInvalidName());
@@ -140,7 +140,7 @@ class ObtainOrderControllerTest {
 
     }
 
-    @DisplayName("존재하지 않는 아이디의 품목에 대한 수주저장 요청은 예외를 던진다.")
+    @DisplayName("존재하지 않는 아이디의 품목에 대한 수주저장 요청은 Bad Request로 응답한다.")
     @Test
     void createWrongItem() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderWithInvalidItemId());
@@ -151,7 +151,7 @@ class ObtainOrderControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @DisplayName("수주를 저장한다.")
+    @DisplayName("유효한 파라미터에 대한 수주수정에 대한 요청은 수주를 저장한다.")
     @Test
     void updateValidRequest() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME));
@@ -164,7 +164,7 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
     }
 
-    @DisplayName("존재하지 않는 아이디의 수주에 대한 수주수정 요청은 예외를 던진다.")
+    @DisplayName("존재하지 않는 아이디의 수주에 대한 수주수정 요청은 Bad Request로 응답한다.")
     @Test
     void updateInvalidObtainOrder() throws Exception {
         String json = objectMapper.writeValueAsString(getObtainOrderRequest(UPDATE_OBTAIN_ORDER_NAME));
@@ -187,7 +187,7 @@ class ObtainOrderControllerTest {
         verify(obtainOrderService).findObtainOrder(OBTAIN_ORDER_ID);
     }
 
-    @DisplayName("존재하지 않는 아이디의 수주 대한 수주조회 요청은 예외를 던진다.")
+    @DisplayName("존재하지 않는 아이디의 수주 대한 수주조회 요청은 Bad Request로 응답한다.")
     @Test
     void getObtainOrderInvalidId() throws Exception {
         mockMvc.perform(get("/obtain-orders/" + INVALID_OBTAIN_ORDER_ID))

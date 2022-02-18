@@ -114,8 +114,8 @@ class PlaceOrderControllerTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_발주를_찾지_못한_경우 {
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(get("/place-orders/" + INVALID_PLACE_ORDER_ID))
                         .andExpect(status().isBadRequest());
             }
@@ -172,8 +172,8 @@ class PlaceOrderControllerTest {
             }
 
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
@@ -203,8 +203,8 @@ class PlaceOrderControllerTest {
             }
 
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
@@ -227,8 +227,8 @@ class PlaceOrderControllerTest {
             }
 
             @Test
-            @DisplayName("에러코드로 응답한다")
-            void 에러코드로_응답한다() throws Exception {
+            @DisplayName("Bad Request로 응답한다")
+            void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
