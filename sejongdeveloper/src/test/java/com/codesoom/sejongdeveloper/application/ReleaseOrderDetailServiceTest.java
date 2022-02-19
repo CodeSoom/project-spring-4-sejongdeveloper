@@ -35,6 +35,7 @@ class ReleaseOrderDetailServiceTest {
     private static final Double ITEM_QUANTITY = 1_000.0;   //품목수량
     private static final Long VALID_RELEASE_ORDER_DETAIL_ID = 1L;
     private static final Long INVALID_RELEASE_ORDER_DETAIL_ID = 2L;
+    private static final Double QUANTITY = 1_000.0;
 
     private ReleaseOrderDetailService releaseOrderDetailService;
     private ReleaseOrder releaseOrder;
@@ -68,7 +69,7 @@ class ReleaseOrderDetailServiceTest {
                 .id(VALID_RELEASE_ORDER_DETAIL_ID)
                 .releaseOrder(releaseOrder)
                 .obtainOrderDetail(obtainOrderDetail)
-                .quantity(1_000.0)
+                .quantity(QUANTITY)
                 .build();
 
         given(releaseOrderDetailRepository.findById(VALID_RELEASE_ORDER_DETAIL_ID))
@@ -158,12 +159,13 @@ class ReleaseOrderDetailServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고상세가_있는_경우 {
             private List<ReleaseOrderDetailUpdateRequest> list;
+            private final Double UPDATE_QUANTITY = 1_004.0;
 
             @BeforeEach
             void setUp() {
                 ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
                 request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
-                request.setQuantity(1_000.0);
+                request.setQuantity(UPDATE_QUANTITY);
 
                 list = List.of(request);
             }
@@ -171,9 +173,19 @@ class ReleaseOrderDetailServiceTest {
             @Test
             @DisplayName("출고상세를 수정한다")
             void 출고상세를_수정한다() {
+                Optional<ReleaseOrderDetail> releaseOrderDetail =
+                        releaseOrderDetailRepository.findById(VALID_RELEASE_ORDER_DETAIL_ID);
+
+                Item item = releaseOrderDetail.get().getObtainOrderDetail().getItem();
+
+                Double beforeQuantity = item.getQuantity();
+
                 List<ReleaseOrderDetail> result = releaseOrderDetailService.updateReleaseOrderDetails(list);
 
+                Double afterQuantity = item.getQuantity();
+
                 assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
+                assertThat(afterQuantity - beforeQuantity).isEqualTo(UPDATE_QUANTITY - QUANTITY);
             }
         }
 
