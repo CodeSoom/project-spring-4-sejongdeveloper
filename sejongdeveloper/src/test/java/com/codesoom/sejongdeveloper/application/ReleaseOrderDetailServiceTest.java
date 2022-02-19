@@ -159,7 +159,7 @@ class ReleaseOrderDetailServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고상세가_있는_경우 {
             private List<ReleaseOrderDetailUpdateRequest> list;
-            private final Double UPDATE_QUANTITY = 1_004.0;
+            private final Double UPDATE_QUANTITY = 900.0;
 
             @BeforeEach
             void setUp() {
@@ -185,7 +185,7 @@ class ReleaseOrderDetailServiceTest {
                 Double afterQuantity = item.getQuantity();
 
                 assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
-                assertThat(afterQuantity - beforeQuantity).isEqualTo(UPDATE_QUANTITY - QUANTITY);
+                assertThat(afterQuantity - beforeQuantity).isEqualTo(QUANTITY - UPDATE_QUANTITY);
             }
         }
 

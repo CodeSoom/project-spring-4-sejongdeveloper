@@ -67,6 +67,9 @@ public class ReleaseOrderDetail extends BaseEntity {
             throw new ItemNotEnoughException("출고수량", quantity);
         }
 
+        Double changeQuantity = this.quantity - request.getQuantity();
+        obtainOrderDetail.getItem().plusQuantity(changeQuantity);
+
         this.quantity = request.getQuantity();
     }
 }
