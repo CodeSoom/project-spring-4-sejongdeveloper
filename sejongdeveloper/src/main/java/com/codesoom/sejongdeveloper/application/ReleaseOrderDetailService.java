@@ -44,26 +44,13 @@ public class ReleaseOrderDetailService {
         }
 
         List<ReleaseOrderDetail> list = releaseOrderDetails.stream()
-                .map(source -> getReleaseOrderDetail(releaseOrder, source))
-                .collect(Collectors.toList());
+                .map(source -> ReleaseOrderDetail.createReleaseOrderDetail(
+                        source,
+                        releaseOrder,
+                        getObtainOrderDetail(source.getObtainOrderDetailId()))
+                ).collect(Collectors.toList());
 
         releaseOrderDetailRepository.saveAll(list);
-    }
-
-    /**
-     * 출고상세 엔티티를 리턴한다.
-     *
-     * @param releaseOrder 출고상세의 출고
-     * @param source 저장할 출고상세
-     * @return 저장할 출고상세 엔티티
-     * @throws ItemNotEnoughException 출고수량이 품목수량보다 많은 경우
-     */
-    private ReleaseOrderDetail getReleaseOrderDetail(ReleaseOrder releaseOrder, ReleaseOrderDetailSaveRequest source) {
-        return ReleaseOrderDetail.builder()
-                .releaseOrder(releaseOrder)
-                .obtainOrderDetail(getObtainOrderDetail(source.getObtainOrderDetailId()))
-                .quantity(source.getQuantity())
-                .build();
     }
 
     /**

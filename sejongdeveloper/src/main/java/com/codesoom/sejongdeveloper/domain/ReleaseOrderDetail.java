@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.domain;
 
+import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.ItemNotEnoughException;
 import lombok.AccessLevel;
@@ -47,17 +48,30 @@ public class ReleaseOrderDetail extends BaseEntity {
                               ReleaseOrder releaseOrder,
                               ObtainOrderDetail obtainOrderDetail,
                               Double quantity) {
-
-        Double itemQuantity = obtainOrderDetail.getItem().getQuantity();
-
-        if (quantity > itemQuantity) {
-            throw new ItemNotEnoughException("출고수량", quantity);
-        }
-
         this.obtainOrderDetail = obtainOrderDetail;
         this.id = id;
         this.releaseOrder = releaseOrder;
         this.quantity = quantity;
+    }
+
+    public static ReleaseOrderDetail createReleaseOrderDetail(
+            ReleaseOrderDetailSaveRequest request,
+            ReleaseOrder releaseOrder,
+            ObtainOrderDetail obtainOrderDetail
+    ) {
+        Double itemQuantity = obtainOrderDetail.getItem().getQuantity();
+
+        if (request.getQuantity() > itemQuantity) {
+            throw new ItemNotEnoughException("출고수량", request.getQuantity());
+        }
+
+        obtainOrderDetail.getItem().plusQuantity(-1 * request.getQuantity());
+
+        return ReleaseOrderDetail.builder()
+                .releaseOrder(releaseOrder)
+                .obtainOrderDetail(obtainOrderDetail)
+                .quantity(request.getQuantity())
+                .build();
     }
 
     public void update(ReleaseOrderDetailUpdateRequest request) {

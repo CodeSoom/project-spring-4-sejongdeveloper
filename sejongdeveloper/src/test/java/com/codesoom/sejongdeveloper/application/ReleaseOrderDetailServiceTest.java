@@ -82,7 +82,7 @@ class ReleaseOrderDetailServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 품목수량이_출고수량_보다_같거나_많은_경우 {
-            private final Double SAVE_QUANTITY = 1_000.0;
+            private final Double SAVE_QUANTITY = 1000.0;
             private List<ReleaseOrderDetailSaveRequest> validParam;
 
             @BeforeEach
@@ -103,7 +103,8 @@ class ReleaseOrderDetailServiceTest {
                 releaseOrderDetailService.saveReleaseOrderDetails(releaseOrder, validParam);
                 Double afterQuantity = item.getQuantity();
 
-                assertThat(afterQuantity - beforeQuantity).isEqualTo(SAVE_QUANTITY);
+                Double Difference = Math.abs(afterQuantity - beforeQuantity);
+                assertThat(Difference).isEqualTo(SAVE_QUANTITY);
             }
         }
 
