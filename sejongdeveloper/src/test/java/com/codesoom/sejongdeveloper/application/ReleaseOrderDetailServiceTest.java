@@ -82,20 +82,28 @@ class ReleaseOrderDetailServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 품목수량이_출고수량_보다_같거나_많은_경우 {
+            private final Double SAVE_QUANTITY = 1_000.0;
             private List<ReleaseOrderDetailSaveRequest> validParam;
 
             @BeforeEach
             void setUp() {
-                ReleaseOrderDetailSaveRequest detail1 = getDetail(ITEM_QUANTITY);
-                ReleaseOrderDetailSaveRequest detail2 = getDetail(ITEM_QUANTITY - 1);
+                ReleaseOrderDetailSaveRequest detail = getDetail(SAVE_QUANTITY);
 
-                validParam = List.of(detail1, detail2);
+                validParam = List.of(detail);
             }
 
             @Test
             @DisplayName("출고상세를 저장한다")
             void 출고상세를_저장한다() {
+                ObtainOrderDetail obtainOrderDetail =
+                        obtainOrderDetailRepository.findById(OBTAIN_ORDER_DETAIL_ID).get();
+                Item item = obtainOrderDetail.getItem();
+
+                Double beforeQuantity = item.getQuantity();
                 releaseOrderDetailService.saveReleaseOrderDetails(releaseOrder, validParam);
+                Double afterQuantity = item.getQuantity();
+
+                assertThat(afterQuantity - beforeQuantity).isEqualTo(SAVE_QUANTITY);
             }
         }
 
