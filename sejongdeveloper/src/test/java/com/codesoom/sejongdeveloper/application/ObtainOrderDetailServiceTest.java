@@ -6,6 +6,7 @@ import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ class ObtainOrderDetailServiceTest {
     }
 
     @Test
+    @DisplayName("수주상세를 저장한다.")
     void createObtainOrderDetails() {
         List<ObtainOrderDetail> obtainOrderDetails = new ArrayList<>();
 
@@ -49,6 +51,7 @@ class ObtainOrderDetailServiceTest {
     }
 
     @Test
+    @DisplayName("수주상세를 수정한다.")
     void updateObtainOrderDetails() {
         Item item = Item.builder().build();
 
@@ -64,6 +67,7 @@ class ObtainOrderDetailServiceTest {
     }
 
     @Test
+    @DisplayName("주어진 아이디의 수주상세를 찾지 못한 경우 예외를 던진다")
     void updateWithoutObtainOrderDetail() {
         ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
                 .id(INVALID_OBTAIN_ORDER_DETAIL_ID)
