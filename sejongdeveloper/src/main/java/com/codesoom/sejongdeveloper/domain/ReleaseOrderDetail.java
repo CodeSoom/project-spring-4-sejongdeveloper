@@ -78,6 +78,7 @@ public class ReleaseOrderDetail extends BaseEntity {
 
     private void plusItemQuantity(ReleaseOrderDetailUpdateRequest request) {
         Double changeQuantity = this.quantity - request.getQuantity();
+
         obtainOrderDetail.getItem().plusQuantity(changeQuantity);
     }
 }
