@@ -48,4 +48,5 @@ public class ObtainOrderDetail extends BaseEntity {
         this.item = item;
         this.quantity = quantity;
     }
+
 }

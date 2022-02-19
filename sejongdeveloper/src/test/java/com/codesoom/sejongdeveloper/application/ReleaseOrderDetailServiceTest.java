@@ -175,13 +175,10 @@ class ReleaseOrderDetailServiceTest {
             void 출고상세를_수정한다() {
                 Optional<ReleaseOrderDetail> releaseOrderDetail =
                         releaseOrderDetailRepository.findById(VALID_RELEASE_ORDER_DETAIL_ID);
-
                 Item item = releaseOrderDetail.get().getObtainOrderDetail().getItem();
 
                 Double beforeQuantity = item.getQuantity();
-
                 List<ReleaseOrderDetail> result = releaseOrderDetailService.updateReleaseOrderDetails(list);
-
                 Double afterQuantity = item.getQuantity();
 
                 assertThat(result.get(0).getQuantity()).isEqualTo(list.get(0).getQuantity());
