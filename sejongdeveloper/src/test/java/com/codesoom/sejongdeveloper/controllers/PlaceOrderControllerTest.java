@@ -28,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -306,6 +307,9 @@ class PlaceOrderControllerTest {
             @BeforeEach
             void setUp() throws JsonProcessingException {
                 json = objectMapper.writeValueAsString(getCondition(NOT_PLACE_ORDER_NAME, null));
+
+                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                        .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
             }
 
             @Test
