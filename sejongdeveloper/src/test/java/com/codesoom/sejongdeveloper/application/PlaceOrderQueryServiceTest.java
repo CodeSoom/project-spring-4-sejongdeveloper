@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -81,6 +80,25 @@ public class PlaceOrderQueryServiceTest {
                 Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
 
                 assertThat(page.getContent().size()).isEqualTo(0);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 검색조건이_없는_경우 {
+            private PlaceOrderSearchCondition condition;
+
+            @BeforeEach
+            void setUp() {
+                condition = getCondition(null, null);
+            }
+
+            @Test
+            @DisplayName("비어있는 발주목록 페이지를 리턴한다")
+            void 비어있는_발주목록_페이지를_리턴한다() {
+                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
+
+                assertThat(page.getContent().size()).isEqualTo(1);
             }
         }
     }
