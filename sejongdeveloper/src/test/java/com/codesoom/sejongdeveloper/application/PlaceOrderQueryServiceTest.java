@@ -27,6 +27,7 @@ public class PlaceOrderQueryServiceTest {
     private static final Long PLACE_ORDER_ID = 1L;
     private static final String PLACE_ORDER_NAME = "test name";
     private static final LocalDate PLACE_ORDER_DATE = LocalDate.now();
+    private static final int PLACE_ORDER_SIZE = 10;
 
     @Autowired
     private PlaceOrderQueryService placeOrderQueryService;
@@ -36,9 +37,15 @@ public class PlaceOrderQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        PlaceOrder placeOrder = getPlaceOrder(PLACE_ORDER_ID, PLACE_ORDER_NAME, PLACE_ORDER_DATE);
+        for (int i = 0; i < PLACE_ORDER_SIZE; i++) {
+            Long id = (long) (i + 1);
+            String name = PLACE_ORDER_NAME + i;
+            LocalDate date = PLACE_ORDER_DATE.plusDays(i - 1);
 
-        placeOrderRepository.save(placeOrder);
+            PlaceOrder placeOrder = getPlaceOrder(id, name, date);
+
+            placeOrderRepository.save(placeOrder);
+        }
     }
 
     @Nested
@@ -47,19 +54,23 @@ public class PlaceOrderQueryServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_검색조건의_발주목록이_있는_경우 {
-            private PlaceOrderSearchCondition condition;
+            private PlaceOrderSearchCondition nameCondition;
+            private PlaceOrderSearchCondition dateCondition;
 
             @BeforeEach
             void setUp() {
-                condition = getCondition(PLACE_ORDER_NAME, PLACE_ORDER_DATE);
+                nameCondition = getCondition(PLACE_ORDER_NAME, null);
+                dateCondition = getCondition(null, PLACE_ORDER_DATE);
             }
 
             @Test
             @DisplayName("발주목록 페이지를 리턴한다")
             void 발주목록_페이지를_리턴한다() {
-                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
+                Page<PlaceOrderResponse> page = placeOrderQueryService.search(nameCondition);
+                assertThat(page.getContent().size()).isEqualTo(PLACE_ORDER_SIZE);
 
-                assertThat(page.getContent().size()).isEqualTo(1);
+                page = placeOrderQueryService.search(dateCondition);
+                assertThat(page.getContent().size()).isOne();
             }
         }
 
@@ -79,7 +90,7 @@ public class PlaceOrderQueryServiceTest {
             void 비어있는_발주목록_페이지를_리턴한다() {
                 Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
 
-                assertThat(page.getContent().size()).isEqualTo(0);
+                assertThat(page.getContent().size()).isZero();
             }
         }
 
@@ -98,7 +109,7 @@ public class PlaceOrderQueryServiceTest {
             void 비어있는_발주목록_페이지를_리턴한다() {
                 Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
 
-                assertThat(page.getContent().size()).isEqualTo(1);
+                assertThat(page.getContent().size()).isEqualTo(PLACE_ORDER_SIZE);
             }
         }
     }
