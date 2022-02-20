@@ -3,11 +3,14 @@ package com.codesoom.sejongdeveloper.controllers;
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -17,13 +20,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.in;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("PlaceOrderController 클래스")
 class PlaceOrderControllerTest {
 
-    private static final String PLACE_ORDER_NAME = "발주명";
+    private static final String PLACE_ORDER_NAME = "testName";
     private static final Long VALID_PLACE_ORDER_ID = 1L;
     private static final Long INVALID_PLACE_ORDER_ID = 2L;
     private static final Long PLACE_ORDER_DETAIL_ID = 1L;
@@ -56,7 +66,7 @@ class PlaceOrderControllerTest {
 
     @BeforeEach
     void setUp() {
-        objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
         given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(VALID_PLACE_ORDER_ID);
 
@@ -234,6 +244,119 @@ class PlaceOrderControllerTest {
                                 .content(json))
                         .andExpect(status().isBadRequest());
             }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 발주목록_조회를_요청하는_핸들러는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 검색조건을_만족하는_발주목록이_있는_경우 {
+            PlaceOrderSearchCondition nameCondition;
+            PlaceOrderSearchCondition dateCondition;
+            private LocalDate PLACE_ORDER_DATE = LocalDate.now();
+
+            @BeforeEach
+            void setUp() {
+                nameCondition = getCondition(PLACE_ORDER_NAME, null);
+                dateCondition = getCondition(null, PLACE_ORDER_DATE);
+
+                List<PlaceOrderResponse> content = List.of(getPlaceOrderResponse());
+
+                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                        .willReturn(new PageImpl<>(content, getPageable(), content.size()));
+            }
+
+            private PlaceOrderResponse getPlaceOrderResponse() {
+                return PlaceOrderResponse.builder()
+                        .id(PLACE_ORDER_DETAIL_ID)
+                        .name(PLACE_ORDER_NAME)
+                        .date(PLACE_ORDER_DATE)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("발주목록을 리턴한다")
+            void 발주목록을_리턴한다() throws Exception {
+                String json = objectMapper.writeValueAsString(nameCondition);
+
+                mockMvc.perform(get("/place-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(PLACE_ORDER_NAME)));
+
+                json = objectMapper.writeValueAsString(dateCondition);
+
+                mockMvc.perform(get("/place-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(PLACE_ORDER_DATE.toString())));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 검색조건을_만족하는_발주목록이_없는_경우 {
+            private static final String NOT_PLACE_ORDER_NAME = "not name";
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                json = objectMapper.writeValueAsString(getCondition(NOT_PLACE_ORDER_NAME, null));
+
+                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                        .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
+            }
+
+            @Test
+            @DisplayName("비어있는 발주목록을 리턴한다")
+            void 비어있는_발주목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/place-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("[]")));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 검색조건_없이_발주목록을_요청한_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                json = objectMapper.writeValueAsString(getCondition(null, null));
+
+                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                        .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
+            }
+
+            @Test
+            @DisplayName("비어있는 발주목록을 리턴한다")
+            void 비어있는_발주목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/place-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("[]")));
+            }
+        }
+
+        private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
+            return PlaceOrderSearchCondition.builder()
+                    .name(name)
+                    .date(date)
+                    .pageable(getPageable())
+                    .build();
+        }
+
+        private Pageable getPageable() {
+            return PageRequest.of(0, 10);
         }
     }
 }

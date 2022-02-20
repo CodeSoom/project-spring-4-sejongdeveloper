@@ -2,13 +2,14 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
-import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 발주에 대한 요청을 관리한다.
@@ -79,5 +82,16 @@ public class PlaceOrderController {
     @PatchMapping("{id}")
     public void update(@PathVariable Long id, @RequestBody @Valid PlaceOrderUpdateRequest request) {
         placeOrderService.updatePlaceOrder(id, request);
+    }
+
+    /**
+     * 주어진 검색조건을 만족하는 발주목록 페이지를 리턴한다.
+     *
+     * @param condition 발주 검색조건
+     * @return 주어진 검색조건을 만족하는 발주목록 페이지
+     */
+    @GetMapping
+    public Page<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
+        return placeOrderService.search(condition);
     }
 }
