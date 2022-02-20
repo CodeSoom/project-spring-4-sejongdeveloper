@@ -37,11 +37,7 @@ public class PlaceOrderQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        PlaceOrder placeOrder = PlaceOrder.builder()
-                .id(PLACE_ORDER_ID)
-                .name(PLACE_ORDER_NAME)
-                .date(PLACE_ORDER_DATE)
-                .build();
+        PlaceOrder placeOrder = getPlaceOrder(PLACE_ORDER_ID, PLACE_ORDER_NAME, PLACE_ORDER_DATE);
 
         placeOrderRepository.save(placeOrder);
     }
@@ -56,13 +52,7 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                Pageable pageable = PageRequest.of(0, 10);
-
-                condition = PlaceOrderSearchCondition.builder()
-                        .name(PLACE_ORDER_NAME)
-                        .date(PLACE_ORDER_DATE)
-                        .pageable(pageable)
-                        .build();
+                condition = getCondition(PLACE_ORDER_NAME, PLACE_ORDER_DATE);
             }
 
             @Test
@@ -77,17 +67,12 @@ public class PlaceOrderQueryServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_검색조건의_발주목록이_없는_경우 {
+            private static final String NOT_PLACE_ORDER_NAME = "not name";
             private PlaceOrderSearchCondition condition;
 
             @BeforeEach
             void setUp() {
-                Pageable pageable = PageRequest.of(0, 10);
-
-                condition = PlaceOrderSearchCondition.builder()
-                        .name(PLACE_ORDER_NAME + 1234)
-                        .date(PLACE_ORDER_DATE)
-                        .pageable(pageable)
-                        .build();
+                condition = getCondition(NOT_PLACE_ORDER_NAME, PLACE_ORDER_DATE);
             }
 
             @Test
@@ -98,5 +83,25 @@ public class PlaceOrderQueryServiceTest {
                 assertThat(page.getContent().size()).isEqualTo(0);
             }
         }
+    }
+
+    private PageRequest getPageable() {
+        return PageRequest.of(0, 10);
+    }
+
+    private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
+        return PlaceOrderSearchCondition.builder()
+                .name(name)
+                .date(date)
+                .pageable(getPageable())
+                .build();
+    }
+
+    private PlaceOrder getPlaceOrder(Long id, String name, LocalDate date) {
+        return PlaceOrder.builder()
+                .id(id)
+                .name(name)
+                .date(date)
+                .build();
     }
 }
