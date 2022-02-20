@@ -73,5 +73,30 @@ public class PlaceOrderQueryServiceTest {
                 assertThat(page.getContent().size()).isEqualTo(1);
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_검색조건의_발주목록이_없는_경우 {
+            private PlaceOrderSearchCondition condition;
+
+            @BeforeEach
+            void setUp() {
+                Pageable pageable = PageRequest.of(0, 10);
+
+                condition = PlaceOrderSearchCondition.builder()
+                        .name(PLACE_ORDER_NAME + 1234)
+                        .date(PLACE_ORDER_DATE)
+                        .pageable(pageable)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("비어있는 발주목록 페이지를 리턴한다")
+            void 비어있는_발주목록_페이지를_리턴한다() {
+                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
+
+                assertThat(page.getContent().size()).isEqualTo(0);
+            }
+        }
     }
 }
