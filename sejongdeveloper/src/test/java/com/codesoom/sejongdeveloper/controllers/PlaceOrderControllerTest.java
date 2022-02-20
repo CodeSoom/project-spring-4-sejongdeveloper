@@ -252,7 +252,7 @@ class PlaceOrderControllerTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 검색조건을_만족하는_발주목록을_찾은_경우 {
+        class 검색조건을_만족하는_발주목록이_있는_경우 {
             PlaceOrderSearchCondition nameCondition;
             PlaceOrderSearchCondition dateCondition;
             private LocalDate PLACE_ORDER_DATE = LocalDate.now();
@@ -276,18 +276,6 @@ class PlaceOrderControllerTest {
                         .build();
             }
 
-            private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
-                return PlaceOrderSearchCondition.builder()
-                        .name(name)
-                        .date(date)
-                        .pageable(getPageable())
-                        .build();
-            }
-
-            private Pageable getPageable() {
-                return PageRequest.of(0, 10);
-            }
-
             @Test
             @DisplayName("발주목록을 리턴한다")
             void 발주목록을_리턴한다() throws Exception {
@@ -307,6 +295,40 @@ class PlaceOrderControllerTest {
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(PLACE_ORDER_DATE.toString())));
             }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 검색조건을_만족하는_발주목록이_없는_경우 {
+            private static final String NOT_PLACE_ORDER_NAME = "not name";
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                json = objectMapper.writeValueAsString(getCondition(NOT_PLACE_ORDER_NAME, null));
+            }
+
+            @Test
+            @DisplayName("비어있는 발주목록을 리턴한다")
+            void 비어있는_발주목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/place-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("[]")));
+            }
+        }
+
+        private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
+            return PlaceOrderSearchCondition.builder()
+                    .name(name)
+                    .date(date)
+                    .pageable(getPageable())
+                    .build();
+        }
+
+        private Pageable getPageable() {
+            return PageRequest.of(0, 10);
         }
     }
 }
