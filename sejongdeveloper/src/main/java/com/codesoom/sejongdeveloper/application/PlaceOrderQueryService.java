@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 발주의 쿼리관련에 대하여 관리한다.
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -21,6 +24,12 @@ public class PlaceOrderQueryService {
 
     private final PlaceOrderRepository placeOrderRepository;
 
+    /**
+     * 주어진 검색조건의 발주목록 페이지를 리턴한다.
+     *
+     * @param condition 발주 검색조건
+     * @return 주어진 검색조건의 발주목록 페이지
+     */
     public Page<PlaceOrderResponse> search(PlaceOrderSearchCondition condition) {
         QueryResults<PlaceOrder> queryResults = placeOrderRepository.findAll(condition);
 
