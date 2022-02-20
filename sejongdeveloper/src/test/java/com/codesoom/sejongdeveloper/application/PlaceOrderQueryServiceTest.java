@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -53,9 +55,12 @@ public class PlaceOrderQueryServiceTest {
             @Test
             @DisplayName("발주목록 페이지를 리턴한다")
             void 발주목록_페이지를_리턴한다() {
+                Pageable pageable = PageRequest.of(0, 10);
+
                 PlaceOrderSearchCondition condition = PlaceOrderSearchCondition.builder()
                         .name(PLACE_ORDER_NAME)
                         .date(PLACE_ORDER_DATE)
+                        .pageable(pageable)
                         .build();
 
                 Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
