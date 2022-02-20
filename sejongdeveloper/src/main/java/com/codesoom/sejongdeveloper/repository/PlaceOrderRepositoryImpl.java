@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.repository;
 
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -21,12 +22,14 @@ public class PlaceOrderRepositoryImpl implements PlaceOrderRepositoryCustom {
     }
 
     @Override
-    public List<PlaceOrder> findAll(PlaceOrderSearchCondition condition) {
+    public QueryResults<PlaceOrder> findAll(PlaceOrderSearchCondition condition) {
         return queryFactory
                 .selectFrom(placeOrder)
                 .where(nameLike(condition.getName()),
                         dateEq(condition.getDate()))
-                .fetch();
+                .offset(condition.getPageable().getOffset())
+                .limit(condition.getPageable().getPageSize())
+                .fetchResults();
     }
 
     private BooleanExpression nameLike(String name) {

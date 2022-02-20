@@ -2,17 +2,14 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
-import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
-import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,13 +85,7 @@ public class PlaceOrderController {
     }
 
     @GetMapping
-    public List<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
-        return placeOrderRepository.findAll(condition).stream()
-                .map(source -> PlaceOrderResponse.builder()
-                        .id(source.getId())
-                        .name(source.getName())
-                        .date(source.getDate())
-                        .build())
-                .collect(Collectors.toList());
+    public Page<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
+        return placeOrderService.search(condition);
     }
 }

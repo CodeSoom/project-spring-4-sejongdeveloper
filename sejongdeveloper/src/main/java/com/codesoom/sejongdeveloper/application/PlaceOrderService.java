@@ -3,10 +3,12 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,5 +65,9 @@ public class PlaceOrderService {
     private PlaceOrder getPlaceOrder(Long id) {
         return placeOrderRepository.findById(id)
                 .orElseThrow(() -> new PlaceOrderNotFoundException(id));
+    }
+
+    public Page<PlaceOrderResponse> search(PlaceOrderSearchCondition condition) {
+        return null;
     }
 }
