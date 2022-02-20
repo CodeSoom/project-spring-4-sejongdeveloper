@@ -9,6 +9,7 @@ import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("PlaceOrderController 클래스")
 class PlaceOrderControllerTest {
 
-    private static final String PLACE_ORDER_NAME = "발주명";
+    private static final String PLACE_ORDER_NAME = "testName";
     private static final Long VALID_PLACE_ORDER_ID = 1L;
     private static final Long INVALID_PLACE_ORDER_ID = 2L;
     private static final Long PLACE_ORDER_DETAIL_ID = 1L;
@@ -62,7 +63,7 @@ class PlaceOrderControllerTest {
 
     @BeforeEach
     void setUp() {
-        objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
         given(placeOrderService.savePlaceOrder(any(PlaceOrderSaveRequest.class))).willReturn(VALID_PLACE_ORDER_ID);
 

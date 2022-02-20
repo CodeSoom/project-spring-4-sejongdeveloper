@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
+import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
 import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * 발주에 대한 요청을 관리한다.
@@ -79,5 +82,15 @@ public class PlaceOrderController {
     @PatchMapping("{id}")
     public void update(@PathVariable Long id, @RequestBody @Valid PlaceOrderUpdateRequest request) {
         placeOrderService.updatePlaceOrder(id, request);
+    }
+
+    @GetMapping
+    public List<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
+        PlaceOrderResponse placeOrder = PlaceOrderResponse.builder()
+                .name("testName")
+                .date(LocalDate.now())
+                .build();
+
+        return List.of(placeOrder);
     }
 }
