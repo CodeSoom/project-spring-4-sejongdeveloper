@@ -323,6 +323,30 @@ class PlaceOrderControllerTest {
             }
         }
 
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 검색조건_없이_발주목록을_요청한_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                json = objectMapper.writeValueAsString(getCondition(null, null));
+
+                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                        .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
+            }
+
+            @Test
+            @DisplayName("비어있는 발주목록을 리턴한다")
+            void 비어있는_발주목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/place-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("[]")));
+            }
+        }
+
         private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
             return PlaceOrderSearchCondition.builder()
                     .name(name)
