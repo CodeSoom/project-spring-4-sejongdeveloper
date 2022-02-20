@@ -66,8 +66,4 @@ public class PlaceOrderService {
         return placeOrderRepository.findById(id)
                 .orElseThrow(() -> new PlaceOrderNotFoundException(id));
     }
-
-    public Page<PlaceOrderResponse> search(PlaceOrderSearchCondition condition) {
-        return null;
-    }
 }
