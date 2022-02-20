@@ -259,28 +259,33 @@ class PlaceOrderControllerTest {
 
             @BeforeEach
             void setUp() {
-                Pageable pageable = PageRequest.of(0, 10);
+                nameCondition = getCondition(PLACE_ORDER_NAME, null);
+                dateCondition = getCondition(null, PLACE_ORDER_DATE);
 
-                nameCondition = PlaceOrderSearchCondition.builder()
-                        .name(PLACE_ORDER_NAME)
-                        .pageable(pageable)
-                        .build();
+                List<PlaceOrderResponse> content = List.of(getPlaceOrderResponse());
 
-                dateCondition = PlaceOrderSearchCondition.builder()
-                        .date(PLACE_ORDER_DATE)
-                        .pageable(pageable)
-                        .build();
+                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                        .willReturn(new PageImpl<>(content, getPageable(), content.size()));
+            }
 
-                PlaceOrderResponse placeOrder = PlaceOrderResponse.builder()
+            private PlaceOrderResponse getPlaceOrderResponse() {
+                return PlaceOrderResponse.builder()
                         .id(PLACE_ORDER_DETAIL_ID)
                         .name(PLACE_ORDER_NAME)
                         .date(PLACE_ORDER_DATE)
                         .build();
+            }
 
-                List<PlaceOrderResponse> content = List.of(placeOrder);
+            private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
+                return PlaceOrderSearchCondition.builder()
+                        .name(name)
+                        .date(date)
+                        .pageable(getPageable())
+                        .build();
+            }
 
-                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
-                        .willReturn(new PageImpl<>(content, pageable, content.size()));
+            private Pageable getPageable() {
+                return PageRequest.of(0, 10);
             }
 
             @Test

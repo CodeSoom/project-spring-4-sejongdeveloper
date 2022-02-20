@@ -84,6 +84,12 @@ public class PlaceOrderController {
         placeOrderService.updatePlaceOrder(id, request);
     }
 
+    /**
+     * 주어진 검색조건을 만족하는 발주목록 페이지를 리턴한다.
+     *
+     * @param condition 발주 검색조건
+     * @return 주어진 검색조건을 만족하는 발주목록 페이지
+     */
     @GetMapping
     public Page<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
         return placeOrderService.search(condition);
