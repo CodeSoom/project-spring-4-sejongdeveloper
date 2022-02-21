@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.PlaceOrderQueryService;
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
@@ -32,6 +33,7 @@ public class PlaceOrderController {
 
     private final PlaceOrderService placeOrderService;
     private final PlaceOrderRepository placeOrderRepository;
+    private final PlaceOrderQueryService placeOrderQueryService;
 
     /**
      * 주어진 발주를 저장하고 저장된 발주 아이디 번호를 리턴한다.
@@ -92,6 +94,6 @@ public class PlaceOrderController {
      */
     @GetMapping
     public Page<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
-        return placeOrderService.search(condition);
+        return placeOrderQueryService.search(condition);
     }
 }

@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.PlaceOrderQueryService;
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
@@ -63,6 +64,9 @@ class PlaceOrderControllerTest {
 
     @MockBean
     private PlaceOrderRepository placeOrderRepository;
+
+    @MockBean
+    private PlaceOrderQueryService placeOrderQueryService;
 
     @BeforeEach
     void setUp() {
@@ -265,7 +269,7 @@ class PlaceOrderControllerTest {
 
                 List<PlaceOrderResponse> content = List.of(getPlaceOrderResponse());
 
-                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class)))
                         .willReturn(new PageImpl<>(content, getPageable(), content.size()));
             }
 
@@ -308,7 +312,7 @@ class PlaceOrderControllerTest {
             void setUp() throws JsonProcessingException {
                 json = objectMapper.writeValueAsString(getCondition(NOT_PLACE_ORDER_NAME, null));
 
-                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class)))
                         .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
             }
 
@@ -332,7 +336,7 @@ class PlaceOrderControllerTest {
             void setUp() throws JsonProcessingException {
                 json = objectMapper.writeValueAsString(getCondition(null, null));
 
-                given(placeOrderService.search(any(PlaceOrderSearchCondition.class)))
+                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class)))
                         .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
             }
 
