@@ -8,6 +8,7 @@ import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,11 @@ public class ObtainOrderQueryService {
      * 주어진 검색 조건의 수주에 대한 목록 조회 페이지를 리턴한다.
      *
      * @param condition 검색 조건
+     * @param pageable 페이지
      * @return 수주에 대한 목록 조회 페이지
      */
-    public Page<ObtainOrderResponse> findObtainOrders(ObtainOrderSearchCondition condition) {
-        QueryResults<ObtainOrder> queryResults = obtainOrderRepository.findAll(condition);
+    public Page<ObtainOrderResponse> findObtainOrders(ObtainOrderSearchCondition condition, Pageable pageable) {
+        QueryResults<ObtainOrder> queryResults = obtainOrderRepository.findAll(condition, pageable);
 
         List<ObtainOrderResponse> content = queryResults.getResults().stream()
                 .map(source -> ObtainOrderResponse.builder()
@@ -41,7 +43,7 @@ public class ObtainOrderQueryService {
                         .build()
                 ).collect(Collectors.toList());
 
-        return new PageImpl<>(content, condition.getPageable(), queryResults.getTotal());
+        return new PageImpl<>(content, pageable, queryResults.getTotal());
     }
 
 }
