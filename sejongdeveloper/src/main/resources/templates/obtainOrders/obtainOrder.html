@@ -21,6 +21,97 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script th:inline="javascript">
+        const items = /*[[${items}]]*/null;
+
+        window.onload = function () {
+
+        }
+
+        function addObtainOrderDetailHtml() {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <tr>
+                    <th></th>
+                    <td>${getItemsHtml()}</td>
+                    <td><input type="text" class="form-control" name="quantity"></td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">-</button>
+                    </td>
+                </tr>
+            `;
+
+            document.querySelector('#listTbody').appendChild(tr);
+        }
+
+        function getItemsHtml() {
+            if (items === null) {
+                return '';
+            }
+
+            let html = '<select name="itemId" class="custom-select">';
+
+            items.forEach(function (obj) {
+                html += `<option value="${obj.id}">${obj.name}</option>`;
+            });
+
+            html += '</select>';
+
+            return html;
+        }
+
+        function getObtainOrderParam() {
+            const obtainOrder = {};
+
+            document.querySelector('#obtainOrderDiv').querySelectorAll('input').forEach(function (elem) {
+                obtainOrder[elem.name] = elem.value;
+            });
+
+            return obtainOrder;
+        }
+
+        function getElemParam(data) {
+            const param = {};
+
+            data.querySelectorAll('input, select').forEach(function (elem) {
+                param[elem.name] = elem.value;
+            });
+
+            return param;
+        }
+
+        function getObtainOrderDetailsParam() {
+            const obtainOrderDetails = [];
+
+            document.querySelectorAll('#listTbody tr').forEach(function (tr) {
+                const obtainOrderDetail = getElemParam(tr);
+
+                obtainOrderDetails.push(obtainOrderDetail);
+            });
+
+            return obtainOrderDetails;
+        }
+
+        function getParam() {
+            const obtainOrder = getObtainOrderParam();
+
+            obtainOrder.obtainOrderDetails = getObtainOrderDetailsParam();
+
+            return obtainOrder;
+        }
+
+        function save() {
+            const url = '/obtain-orders';
+            const param = getParam();
+            console.log(param);
+
+            axios.post(url, param).then(function (response) {
+                console.log(response);
+            });
+        }
+
+        function remove(me) {
+            me.closest('tr').remove();
+        }
 
     </script>
 </head>
@@ -60,7 +151,7 @@
 
             <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">수주상세</h4>
-                <form class="needs-validation" novalidate>
+                <div id="obtainOrderDiv">
                     <div class="mb-3">
                         <label for="id">식별자</label>
                         <input type="text" class="form-control" id="id" name="id" readonly>
@@ -75,24 +166,26 @@
                         <label for="date">수주일</label>
                         <input type="date" class="form-control date" id="date" name="date" placeholder="수주명">
                     </div>
+                </div>
 
-                    <hr class="mb-4">
+                <hr class="mb-4">
 
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">식별자</th>
-                            <th scope="col">품목</th>
-                            <th scope="col">수량</th>
-                            <th scope="col">기능</th>
-                        </tr>
-                        </thead>
-                        <tbody id="listTbody"></tbody>
-                    </table>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>식별자</th>
+                        <th>품목</th>
+                        <th>수량</th>
+                        <th>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addObtainOrderDetailHtml()">+</button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="listTbody"></tbody>
+                </table>
 
-                    <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">등록</button>
-                </form>
+                <hr class="mb-4">
+                <button type="button" class="btn btn-primary" onclick="save()">등록</button>
             </div>
         </div>
 

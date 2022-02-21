@@ -1,7 +1,9 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/page")
 public class PageController {
+
+    private final ItemRepository itemRepository;
 
     /**
      * 수주목록 페이지로 이동한다.
@@ -29,7 +33,9 @@ public class PageController {
      * @return 수주상세 페이지
      */
     @GetMapping("/obtain-order")
-    public String obtainOrder() {
+    public String obtainOrder(Model model) {
+        model.addAttribute("items", itemRepository.findAll());
+
         return "obtainOrders/obtainOrder";
     }
 }

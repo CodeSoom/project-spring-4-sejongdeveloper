@@ -11,11 +11,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class BaseEntity {
 
-    protected Long saveId;  //등록자
-
     private LocalDateTime saveDateTime; //저장일시
-
-    protected Long updateId;    //수정자
 
     private LocalDateTime updateDateTime;   //수정일시
 
