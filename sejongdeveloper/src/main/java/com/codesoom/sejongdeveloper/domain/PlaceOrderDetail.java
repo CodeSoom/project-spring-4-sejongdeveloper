@@ -24,7 +24,7 @@ import javax.persistence.Table;
 public class PlaceOrderDetail extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "place_order_detail_id")
     private Long id;    //발주상세 일련번호
 

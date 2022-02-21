@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class ReleaseOrder extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "release_order_id")
     private Long id;    //출고 일련번호
 

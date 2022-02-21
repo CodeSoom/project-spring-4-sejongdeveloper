@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Item extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "item_id")
     private Long id;    //상품 일련번호
 
@@ -29,15 +29,12 @@ public class Item extends BaseEntity {
 
     private Double quantity;    //상품수량
 
-    private Boolean useYn;  //사용여부
-
     @Builder
-    public Item(Long id, String code, String name, Double quantity, Boolean useYn) {
+    public Item(Long id, String code, String name, Double quantity) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.quantity = quantity;
-        this.useYn = useYn;
     }
 
     public void plusQuantity(Double quantity) {

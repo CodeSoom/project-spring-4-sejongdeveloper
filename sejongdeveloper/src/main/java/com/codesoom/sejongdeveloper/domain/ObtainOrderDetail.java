@@ -22,7 +22,7 @@ import javax.persistence.Table;
 public class ObtainOrderDetail extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "obtain_order_detail_id")
     private Long id;    //수주 상세 일련번호
 
