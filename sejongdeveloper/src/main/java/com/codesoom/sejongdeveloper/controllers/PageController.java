@@ -22,4 +22,14 @@ public class PageController {
     public String getObtainOrders() {
         return "obtainOrders/obtainOrders";
     }
+
+    /**
+     * 수주상세 페이지로 이동한다.
+     *
+     * @return 수주상세 페이지
+     */
+    @GetMapping("/obtain-order")
+    public String obtainOrder() {
+        return "obtainOrders/obtainOrder";
+    }
 }
