@@ -33,16 +33,16 @@ public class ObtainOrderRepositoryImpl implements ObtainOrderRepositoryCustom {
                 .fetchResults();
     }
 
-    private BooleanExpression endDateLoe(LocalDate endDate) {
-        return endDate != null ? obtainOrder.date.loe(endDate) : null;
+    private BooleanExpression nameLike(String name) {
+        return hasText(name) ? obtainOrder.name.contains(name) : null;
     }
 
     private BooleanExpression startDateGoe(LocalDate startDate) {
         return startDate != null ? obtainOrder.date.goe(startDate) : null;
     }
 
-    private BooleanExpression nameLike(String name) {
-        return hasText(name) ? obtainOrder.name.contains(name) : null;
+    private BooleanExpression endDateLoe(LocalDate endDate) {
+        return endDate != null ? obtainOrder.date.loe(endDate) : null;
     }
 
 }

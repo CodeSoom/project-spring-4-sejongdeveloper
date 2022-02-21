@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -16,8 +17,10 @@ import java.time.LocalDate;
 public class ObtainOrderSearchCondition {
     private String name;    //수주명
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;    //시작수주날짜
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;  //마지막수주날짜
 
     @Builder
