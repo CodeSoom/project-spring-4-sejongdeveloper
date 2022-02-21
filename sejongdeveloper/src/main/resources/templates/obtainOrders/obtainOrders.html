@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>코드숨 개인프로젝트</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/carousel/">
+
+    <style>
+        .content {
+            margin-top: 100px;
+        }
+
+        .menu-right {
+            text-align: right;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">코드숨</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/page/obtain-orders}">수주</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/page/release-orders}">출고</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/page/place-orders}">발주</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="login">
+                <a href="javascript:logout()">로그아웃</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container marketing content">
+        <form id="searchForm">
+            <div class="row g-3">
+                <input type="hidden" id="page" name="page" value="0">
+                <input type="hidden" id="size" name="size" value="10">
+                <div class="col-sm-3">
+                    <input type="search" name="name" class="form-control" placeholder="수주명" aria-label="Search">
+                </div>
+                <div class="col-sm-2">
+                    <input type="date" name="date" class="form-control" aria-label="Search">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="menu-right">
+            <button type="button" class="btn btn-primary">등록</button>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">수주명</th>
+                <th scope="col">수주일</th>
+                <th scope="col">기능</th>
+            </tr>
+            </thead>
+            <tbody id="listTbody"></tbody>
+        </table>
+
+        <nav>
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div><!-- /.container -->
+
+    <!-- FOOTER -->
+    <footer class="container">
+        <p>&copy; sejongdeveloper Company, Inc. </p>
+    </footer>
+</main>
+
+
+
+</body>
+</html>

@@ -5,3 +5,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+  devtools:
+    livereload:
+      enabled: true
+
+  thymeleaf:
+    cache: false
