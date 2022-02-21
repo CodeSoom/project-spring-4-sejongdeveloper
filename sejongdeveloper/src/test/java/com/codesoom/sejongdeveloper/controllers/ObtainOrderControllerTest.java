@@ -24,7 +24,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
@@ -97,7 +99,7 @@ class ObtainOrderControllerTest {
         List<ObtainOrderResponse> list = new ArrayList<>();
         list.add(obtainOrderResponse);
 
-        given(obtainOrderQueryService.findObtainOrders(any(ObtainOrderSearchCondition.class)))
+        given(obtainOrderQueryService.findObtainOrders(any(ObtainOrderSearchCondition.class), any(Pageable.class)))
                 .willReturn(new PageImpl<>(list, PageRequest.of(0, 10), 1L));
     }
 
@@ -199,11 +201,13 @@ class ObtainOrderControllerTest {
     void list() throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
 
-        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder()
-                .pageable(pageable)
-                .build();
+        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder().build();
 
-        String json = objectMapper.writeValueAsString(condition);
+        Map<String, Object> map = new HashMap<>();
+        map.put("condition", condition);
+        map.put("pageable", pageable);
+
+        String json = objectMapper.writeValueAsString(map);
 
         mockMvc.perform(get("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)

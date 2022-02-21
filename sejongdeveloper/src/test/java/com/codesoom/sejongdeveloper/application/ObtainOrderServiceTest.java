@@ -75,7 +75,7 @@ class ObtainOrderServiceTest {
         List<ObtainOrder> obtainOrders = new ArrayList<>();
         obtainOrders.add(obtainOrder);
 
-        given(obtainOrderRepository.findAll(any(ObtainOrderSearchCondition.class)))
+        given(obtainOrderRepository.findAll(any(ObtainOrderSearchCondition.class), any(Pageable.class)))
                 .willReturn(new QueryResults<>(obtainOrders, 10L, 0L, 1L));
     }
 

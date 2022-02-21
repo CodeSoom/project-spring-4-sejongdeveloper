@@ -52,11 +52,9 @@ class ObtainOrderQueryServiceTest {
     void findAll() {
         Pageable pageable = PageRequest.of(0, 10);
 
-        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder()
-                .pageable(pageable)
-                .build();
+        ObtainOrderSearchCondition condition = ObtainOrderSearchCondition.builder().build();
 
-        Page<ObtainOrderResponse> page = obtainOrderQueryService.findObtainOrders(condition);
+        Page<ObtainOrderResponse> page = obtainOrderQueryService.findObtainOrders(condition, pageable);
 
         assertThat(page.getContent().size()).isEqualTo(10);
     }

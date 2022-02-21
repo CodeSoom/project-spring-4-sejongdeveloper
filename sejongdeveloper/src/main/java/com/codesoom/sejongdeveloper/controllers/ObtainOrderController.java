@@ -12,6 +12,7 @@ import com.codesoom.sejongdeveloper.errors.ItemNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -71,7 +72,7 @@ public class ObtainOrderController {
     }
 
     @GetMapping
-    public Page<ObtainOrderResponse> list(ObtainOrderSearchCondition condition) {
-        return obtainOrderQueryService.findObtainOrders(condition);
+    public Page<ObtainOrderResponse> list(ObtainOrderSearchCondition condition, Pageable pageable) {
+        return obtainOrderQueryService.findObtainOrders(condition, pageable);
     }
 }

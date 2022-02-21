@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
@@ -21,14 +22,14 @@ public class ObtainOrderRepositoryImpl implements ObtainOrderRepositoryCustom {
     }
 
     @Override
-    public QueryResults<ObtainOrder> findAll(ObtainOrderSearchCondition condition) {
+    public QueryResults<ObtainOrder> findAll(ObtainOrderSearchCondition condition, Pageable pageable) {
         return queryFactory
                 .selectFrom(obtainOrder)
                 .where(nameLike(condition.getName()),
                         startDateGoe(condition.getStartDate()),
                         endDateLoe(condition.getEndDate()))
-                .offset(condition.getPageable().getOffset())
-                .limit(condition.getPageable().getPageSize())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetchResults();
     }
 
@@ -43,6 +44,5 @@ public class ObtainOrderRepositoryImpl implements ObtainOrderRepositoryCustom {
     private BooleanExpression nameLike(String name) {
         return hasText(name) ? obtainOrder.name.contains(name) : null;
     }
-
 
 }
