@@ -190,9 +190,13 @@
             const url = `/obtain-orders/${OBTAIN_ORDER_ID}`;
             const param = getParam();
 
-            axios.patch(url, param).then(function (response) {
+            axios.patch(url, param).then(function () {
                 location.reload();
             });
+        }
+
+        function moveObtainOrder() {
+            location.href = '/page/obtain-orders';
         }
 
     </script>
@@ -269,6 +273,7 @@
                 <hr class="mb-4">
                 <button type="button" class="btn btn-primary btn-save" onclick="save()">등록</button>
                 <button type="button" class="btn btn-primary btn-update" onclick="update()">수정</button>
+                <button type="button" class="btn btn-secondary btn-update" onclick="moveObtainOrder()">목록</button>
             </div>
         </div>
 
