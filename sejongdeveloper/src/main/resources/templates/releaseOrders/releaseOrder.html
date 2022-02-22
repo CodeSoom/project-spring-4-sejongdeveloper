@@ -63,6 +63,45 @@
             location.href = '/page/release-orders';
         }
 
+        function getElemParam(data) {
+            const param = {};
+
+            data.querySelectorAll('input, select').forEach(function (elem) {
+                param[elem.name] = elem.value;
+            });
+
+            return param;
+        }
+
+        function getElemParams() {
+            const params = [];
+
+            document.querySelectorAll('#listTbody tr').forEach(function (tr) {
+                const param = getElemParam(tr);
+
+                params.push(param);
+            });
+
+            return params;
+        }
+
+        function getParam() {
+            const param = getElemParam(document.querySelector('#obtainOrderDiv'));
+
+            param.releaseOrderDetails = getElemParams();
+
+            return param;
+        }
+
+        function save() {
+            const url = '/release-orders';
+            const param = getParam();
+
+            axios.post(url, param).then(function (response) {
+                console.log(response.date);
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -139,7 +178,7 @@
                                 <input type="text" class="form-control" th:value="${obtainOrderDetail.item.name}" readonly>
                             </td>
                             <td>
-                                <input type="text" class="form-control" th:value="${obtainOrderDetail.quantity}">
+                                <input type="text" class="form-control" name="quantity" th:value="${obtainOrderDetail.quantity}">
                             </td>
                         </tr>
                     </tbody>
