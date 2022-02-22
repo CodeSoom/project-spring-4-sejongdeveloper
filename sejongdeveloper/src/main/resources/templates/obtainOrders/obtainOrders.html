@@ -51,7 +51,7 @@
                                 <td>${obj.date}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm" onclick="moveObtainOrder(${obj.id})">수정</button>
-                                    <button type="button" class="btn btn-danger btn-sm">출고</button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="moveReleaseOrder(${obj.id})">출고</button>
                                 </td>
                             </tr>
                         `;
@@ -115,6 +115,10 @@
 
         function logout() {
             alert('로그아웃되었습니다.');
+        }
+
+        function moveReleaseOrder(id) {
+            location.href = `/page/release-order?obtainOrderId=${id}`;
         }
     </script>
 </head>
