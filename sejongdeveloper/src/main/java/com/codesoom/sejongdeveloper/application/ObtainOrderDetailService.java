@@ -1,7 +1,9 @@
 package com.codesoom.sejongdeveloper.application;
 
+import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
+import com.codesoom.sejongdeveloper.dto.ItemResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
@@ -44,11 +46,19 @@ public class ObtainOrderDetailService {
         return obtainOrderDetailRepository.findAllByObtainOrderId(obtainOrderId).stream()
                 .map(source -> ObtainOrderDetailResponse.builder()
                         .id(source.getId())
-                        .obtainOrder(getObtainOrderResponse(source.getObtainOrder()))
-                        .item(source.getItem())
+                        .item(getItemResponse(source.getItem()))
                         .quantity(source.getQuantity())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private ItemResponse getItemResponse(Item source) {
+        return ItemResponse.builder()
+                .id(source.getId())
+                .code(source.getCode())
+                .name(source.getName())
+                .quantity(source.getQuantity())
+                .build();
     }
 
     private ObtainOrderResponse getObtainOrderResponse(ObtainOrder source) {

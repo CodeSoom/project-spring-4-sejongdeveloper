@@ -15,12 +15,12 @@ public class ObtainOrderDetailResponse {
 
     private ObtainOrderResponse obtainOrder;    //수주
 
-    private Item item;  //상품
+    private ItemResponse item;  //상품
 
     private Double quantity;    //수주 수량
 
     @Builder
-    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, Item item, Double quantity) {
+    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, ItemResponse item, Double quantity) {
         this.id = id;
         this.obtainOrder = obtainOrder;
         this.item = item;

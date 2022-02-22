@@ -42,18 +42,18 @@ public class ObtainOrderController {
     public Long create(@RequestBody @Valid ObtainOrderRequest obtainOrderRequest) {
         ObtainOrder obtainOrder = obtainOrderRequest.createObtainOrder();
 
-        List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrderRequest);
+        List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrder, obtainOrderRequest);
 
         return obtainOrderService.createObtainOrder(obtainOrder, obtainOrderDetails);
     }
 
-    private List<ObtainOrderDetail> getObtainOrderDetails(ObtainOrderRequest obtainOrderRequest) {
+    private List<ObtainOrderDetail> getObtainOrderDetails(ObtainOrder obtainOrder, ObtainOrderRequest obtainOrderRequest) {
         return obtainOrderRequest.getObtainOrderDetails().stream()
                 .map(obtainOrderDetailRequest -> {
                     Item item = itemRepository.findById(obtainOrderDetailRequest.getItemId())
                             .orElseThrow(() -> new ItemNotFoundException(obtainOrderDetailRequest.getItemId()));
 
-                    return obtainOrderDetailRequest.createObtainOrderDetail(item);
+                    return obtainOrderDetailRequest.createObtainOrderDetail(obtainOrder, item);
                 }).collect(Collectors.toList());
     }
 
@@ -61,7 +61,7 @@ public class ObtainOrderController {
     public Long update(@PathVariable Long id, @RequestBody @Valid ObtainOrderRequest obtainOrderRequest) {
         ObtainOrder obtainOrder = obtainOrderRequest.createObtainOrder();
 
-        List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrderRequest);
+        List<ObtainOrderDetail> obtainOrderDetails = getObtainOrderDetails(obtainOrder, obtainOrderRequest);
 
         return obtainOrderService.updateObtainOrder(id, obtainOrder, obtainOrderDetails);
     }

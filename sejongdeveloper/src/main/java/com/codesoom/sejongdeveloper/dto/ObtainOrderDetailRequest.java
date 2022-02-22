@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.dto;
 
 import com.codesoom.sejongdeveloper.domain.Item;
+import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,8 +23,9 @@ public class ObtainOrderDetailRequest {
         this.quantity = quantity;
     }
 
-    public ObtainOrderDetail createObtainOrderDetail(Item item) {
+    public ObtainOrderDetail createObtainOrderDetail(ObtainOrder obtainOrder, Item item) {
         return ObtainOrderDetail.builder()
+                .obtainOrder(obtainOrder)
                 .item(item)
                 .quantity(quantity)
                 .build();
