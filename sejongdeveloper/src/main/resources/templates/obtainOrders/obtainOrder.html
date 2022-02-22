@@ -22,18 +22,66 @@
 
     <script th:inline="javascript">
         const items = /*[[${items}]]*/null;
+        const OBTAIN_ORDER_ID = /*[[${obtainOrderId}]]*/null;
 
         window.onload = function () {
-
+            loadObtainOrder();
+            init();
         }
 
-        function addObtainOrderDetailHtml() {
+        function init() {
+            if (OBTAIN_ORDER_ID === null) {
+                document.querySelector('.btn-update').style.display = 'none';
+                addObtainOrderDetailHtml();
+                return;
+            }
+
+            document.querySelector('.btn-save').style.display = 'none';
+        }
+
+        function loadObtainOrder() {
+            if (OBTAIN_ORDER_ID === null) {
+                return;
+            }
+
+            const url = `/obtain-orders/${OBTAIN_ORDER_ID}`;
+
+            axios.get(url).then(function (response) {
+                for (const [key, value] of Object.entries(response.data)) {
+                    if (key === 'obtainOrderDetails') {
+                        loadObtainOrderDetails(value);
+                        return;
+                    }
+
+                    document.querySelector(`#${key}`).value = value;
+                }
+            });
+        }
+
+        function loadObtainOrderDetails(data) {
+            data.forEach(function (obj) {
+                addObtainOrderDetailHtml(obj);
+            });
+        }
+
+        function addObtainOrderDetailHtml(data) {
             const tr = document.createElement('tr');
+
+            let id = '';
+            let quantity = '';
+            let item = null;
+
+            if (data !== undefined) {
+                id = data.id;
+                quantity = data.quantity;
+                item = data.item;
+            }
+
             tr.innerHTML = `
                 <tr>
-                    <th></th>
-                    <td>${getItemsHtml()}</td>
-                    <td><input type="text" class="form-control" name="quantity"></td>
+                    <th><input type="text" class="form-control" name="id" value="${id}" readonly></th>
+                    <td>${getItemsHtml(item)}</td>
+                    <td><input type="text" class="form-control" name="quantity" value="${quantity}"></td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">-</button>
                     </td>
@@ -43,15 +91,27 @@
             document.querySelector('#listTbody').appendChild(tr);
         }
 
-        function getItemsHtml() {
+        function getItemsHtml(data) {
             if (items === null) {
                 return '';
+            }
+
+            let itemId = '';
+
+            if (data !== null) {
+                itemId = data.id;
             }
 
             let html = '<select name="itemId" class="custom-select">';
 
             items.forEach(function (obj) {
-                html += `<option value="${obj.id}">${obj.name}</option>`;
+                let selected = '';
+
+                if (obj.id === itemId) {
+                    selected = 'selected';
+                }
+
+                html += `<option value="${obj.id}" ${selected}>${obj.name}</option>`;
             });
 
             html += '</select>';
@@ -102,10 +162,9 @@
         function save() {
             const url = '/obtain-orders';
             const param = getParam();
-            console.log(param);
 
             axios.post(url, param).then(function (response) {
-                console.log(response);
+                location.href = `/page/obtain-order/${response.data}`;
             });
         }
 
@@ -185,7 +244,8 @@
                 </table>
 
                 <hr class="mb-4">
-                <button type="button" class="btn btn-primary" onclick="save()">등록</button>
+                <button type="button" class="btn btn-primary btn-save" onclick="save()">등록</button>
+                <button type="button" class="btn btn-primary btn-update" onclick="update()">수정</button>
             </div>
         </div>
 

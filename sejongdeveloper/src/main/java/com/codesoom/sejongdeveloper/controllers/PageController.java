@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -32,8 +33,9 @@ public class PageController {
      *
      * @return 수주상세 페이지
      */
-    @GetMapping("/obtain-order")
-    public String obtainOrder(Model model) {
+    @GetMapping({"/obtain-order", "/obtain-order/{id}"})
+    public String obtainOrder(@PathVariable(required = false) Long id, Model model) {
+        model.addAttribute("obtainOrderId", id);
         model.addAttribute("items", itemRepository.findAll());
 
         return "obtainOrders/obtainOrder";
