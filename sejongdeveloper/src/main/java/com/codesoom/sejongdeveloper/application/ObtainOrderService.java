@@ -29,7 +29,11 @@ public class ObtainOrderService {
     }
 
     @Transactional
-    public Long updateObtainOrder(Long id, ObtainOrder obtainOrder, List<ObtainOrderDetail> obtainOrderDetails) {
+    public Long updateObtainOrder(Long id,
+                                  ObtainOrder obtainOrder,
+                                  List<ObtainOrderDetail> saveObtainOrderDetails,
+                                  List<ObtainOrderDetail> updateObtainOrderDetails) {
+
         ObtainOrder updatedObtainOrder = getObtainOrder(id);
 
         updatedObtainOrder.update(
@@ -37,7 +41,8 @@ public class ObtainOrderService {
                 obtainOrder.getDate()
         );
 
-        obtainOrderDetailService.updateObtainOrderDetails(obtainOrderDetails);
+        obtainOrderDetailService.createObtainOrderDetails(saveObtainOrderDetails);
+        obtainOrderDetailService.updateObtainOrderDetails(updateObtainOrderDetails);
 
         return updatedObtainOrder.getId();
     }

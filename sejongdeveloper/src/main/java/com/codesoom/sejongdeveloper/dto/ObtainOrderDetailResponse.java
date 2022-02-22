@@ -15,15 +15,18 @@ public class ObtainOrderDetailResponse {
 
     private ObtainOrderResponse obtainOrder;    //수주
 
-    private Item item;  //상품
+    private ItemResponse item;  //상품
 
     private Double quantity;    //수주 수량
 
+    private Boolean useYn;  //사용여부
+
     @Builder
-    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, Item item, Double quantity) {
+    public ObtainOrderDetailResponse(Long id, ObtainOrderResponse obtainOrder, ItemResponse item, Double quantity, Boolean useYn) {
         this.id = id;
         this.obtainOrder = obtainOrder;
         this.item = item;
         this.quantity = quantity;
+        this.useYn = useYn;
     }
 }

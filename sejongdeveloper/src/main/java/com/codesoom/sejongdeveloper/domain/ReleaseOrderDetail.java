@@ -25,7 +25,7 @@ import javax.persistence.Table;
 public class ReleaseOrderDetail extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "release_order_detail_id")
     private Long id;    //출고 상세 일련번호
 
