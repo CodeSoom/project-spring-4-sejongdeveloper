@@ -12,8 +12,6 @@ import com.querydsl.core.QueryResults;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -100,11 +98,21 @@ class ObtainOrderServiceTest {
                 .name(UPDATE_OBTAIN_ORDER_NAME)
                 .build();
 
-        ObtainOrderDetail obtainOrderDetail = ObtainOrderDetail.builder()
+        ObtainOrderDetail saveObtainOrderDetail = ObtainOrderDetail.builder()
+                .obtainOrder(obtainOrder)
                 .item(item)
                 .build();
 
-        obtainOrderService.updateObtainOrder(OBTAIN_ORDER_ID, obtainOrder, List.of(obtainOrderDetail));
+        ObtainOrderDetail updateObtainOrderDetail = ObtainOrderDetail.builder()
+                .id(OBTAIN_ORDER_DETAIL_ID)
+                .item(item)
+                .build();
+
+        List<ObtainOrderDetail> saveObtainOrderDetails = List.of(saveObtainOrderDetail);
+
+        List<ObtainOrderDetail> updateObtainOrderDetails = List.of(updateObtainOrderDetail);
+
+        obtainOrderService.updateObtainOrder(OBTAIN_ORDER_ID, obtainOrder, saveObtainOrderDetails, updateObtainOrderDetails);
 
         verify(obtainOrderDetailService).updateObtainOrderDetails(anyList());
     }
@@ -118,7 +126,7 @@ class ObtainOrderServiceTest {
         assertThatThrownBy(() -> obtainOrderService.updateObtainOrder(
                 INVALID_OBTAIN_ORDER_ID,
                 obtainOrder,
-                List.of(obtainOrderDetail))
+                null, List.of(obtainOrderDetail))
         ).isInstanceOf(ObtainOrderNotFoundException.class);
     }
 

@@ -36,17 +36,21 @@ public class ObtainOrderDetail extends BaseEntity {
 
     private Double quantity;    //수주 수량
 
+    private Boolean useYn;  //사용여부
+
     @Builder
-    public ObtainOrderDetail(Long id, ObtainOrder obtainOrder, Item item, Double quantity) {
+    public ObtainOrderDetail(Long id, ObtainOrder obtainOrder, Item item, Double quantity, Boolean useYn) {
         this.id = id;
         this.obtainOrder = obtainOrder;
         this.item = item;
         this.quantity = quantity;
+        this.useYn = useYn;
     }
 
-    public void update(Item item, Double quantity) {
+    public void update(Item item, Double quantity, Boolean useYn) {
         this.item = item;
         this.quantity = quantity;
+        this.useYn = useYn;
     }
 
 }

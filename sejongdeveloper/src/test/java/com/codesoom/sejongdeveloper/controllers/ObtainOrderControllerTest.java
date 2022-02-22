@@ -87,7 +87,7 @@ class ObtainOrderControllerTest {
         given(obtainOrderService.updateObtainOrder(
                 eq(INVALID_OBTAIN_ORDER_ID),
                 any(ObtainOrder.class),
-                anyList())
+                anyList(), anyList())
         ).willThrow(new ObtainOrderNotFoundException(INVALID_OBTAIN_ORDER_ID));
 
         Item item = Item.builder()
@@ -163,7 +163,8 @@ class ObtainOrderControllerTest {
                         .content(json))
                 .andExpect(status().isOk());
 
-        verify(obtainOrderService).updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
+        verify(obtainOrderService)
+                .updateObtainOrder(eq(OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList(), anyList());
     }
 
     @DisplayName("존재하지 않는 아이디의 수주에 대한 수주수정 요청은 Bad Request로 응답한다.")
@@ -176,7 +177,8 @@ class ObtainOrderControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest());
 
-        verify(obtainOrderService).updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList());
+        verify(obtainOrderService)
+                .updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList(), anyList());
     }
 
     @DisplayName("주어진 아이디의 수주를 리턴한다.")

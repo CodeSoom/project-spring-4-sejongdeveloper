@@ -21,8 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script th:inline="javascript">
-        const items = /*[[${items}]]*/null;
-        const OBTAIN_ORDER_ID = /*[[${obtainOrderId}]]*/null;
+        const items = /*[[${items}]]*/null; //상품 목록
+        const OBTAIN_ORDER_ID = /*[[${obtainOrderId}]]*/null;   //수주 일련번호
 
         window.onload = function () {
             loadObtainOrder();
@@ -72,6 +72,10 @@
             let item = null;
 
             if (data !== undefined) {
+                if (!data.useYn) {
+                    return;
+                }
+
                 id = data.id;
                 quantity = data.quantity;
                 item = data.item;
@@ -84,6 +88,7 @@
                     <td><input type="text" class="form-control" name="quantity" value="${quantity}"></td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">-</button>
+                        <input type="hidden" name="useYn" value="true">
                     </td>
                 </tr>
             `;
@@ -169,7 +174,25 @@
         }
 
         function remove(me) {
+            const tr = me.closest('tr');
+            const id = tr.querySelector('input[name=id]').value;
+
+            if (id !== '') {
+                tr.querySelector('input[name=useYn]').value = false;
+                tr.style.display = 'none';
+                return;
+            }
+
             me.closest('tr').remove();
+        }
+
+        function update() {
+            const url = `/obtain-orders/${OBTAIN_ORDER_ID}`;
+            const param = getParam();
+
+            axios.patch(url, param).then(function (response) {
+                location.reload();
+            });
         }
 
     </script>

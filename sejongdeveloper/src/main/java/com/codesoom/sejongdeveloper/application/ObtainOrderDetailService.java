@@ -24,15 +24,24 @@ public class ObtainOrderDetailService {
 
     @Transactional
     public void createObtainOrderDetails(List<ObtainOrderDetail> obtainOrderDetails) {
+        if (obtainOrderDetails == null) {
+            return;
+        }
+
         obtainOrderDetailRepository.saveAll(obtainOrderDetails);
     }
 
     @Transactional
     public void updateObtainOrderDetails(List<ObtainOrderDetail> obtainOrderDetails) {
+        if (obtainOrderDetails == null) {
+            return;
+        }
+
         obtainOrderDetails.forEach(source -> getObtainOrderDetail(source.getId())
                 .update(
                         source.getItem(),
-                        source.getQuantity()
+                        source.getQuantity(),
+                        source.getUseYn()
                 )
         );
     }
@@ -48,6 +57,7 @@ public class ObtainOrderDetailService {
                         .id(source.getId())
                         .item(getItemResponse(source.getItem()))
                         .quantity(source.getQuantity())
+                        .useYn(source.getUseYn())
                         .build())
                 .collect(Collectors.toList());
     }
