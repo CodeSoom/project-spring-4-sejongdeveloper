@@ -271,8 +271,9 @@ class ReleaseOrderControllerTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                ReleaseOrderSearchCondition condition = new ReleaseOrderSearchCondition();
-                condition.setName(RELEASE_ORDER_NAME);
+                ReleaseOrderSearchCondition condition = ReleaseOrderSearchCondition.builder()
+                        .name(RELEASE_ORDER_NAME)
+                        .build();
 
                 json = objectMapper.writeValueAsString(condition);
             }

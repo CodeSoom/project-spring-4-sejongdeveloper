@@ -51,8 +51,9 @@ class ReleaseOrderQueryServiceTest {
 
                 releaseOrderRepository.save(releaseOrder);
 
-                condition = new ReleaseOrderSearchCondition();
-                condition.setName(releaseOrder.getName());
+                condition = ReleaseOrderSearchCondition.builder()
+                        .name(releaseOrder.getName())
+                        .build();
 
                 pageable = PageRequest.of(0, 10);
             }
@@ -80,8 +81,9 @@ class ReleaseOrderQueryServiceTest {
 
                 releaseOrderRepository.save(releaseOrder);
 
-                condition = new ReleaseOrderSearchCondition();
-                condition.setName(releaseOrder.getName() + 1004);
+                condition = ReleaseOrderSearchCondition.builder()
+                        .name(releaseOrder.getName() + 1004)
+                        .build();
 
                 pageable = PageRequest.of(0, 10);
             }
