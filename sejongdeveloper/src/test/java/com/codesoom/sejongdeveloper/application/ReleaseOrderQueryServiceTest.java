@@ -17,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -39,7 +41,7 @@ class ReleaseOrderQueryServiceTest {
     class search_메소드는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 일치하는_검색조건이_있는_경우 {
+        class 주어진_출고명의_출고를_찾은_경우 {
             private ReleaseOrderSearchCondition condition;
             private Pageable pageable;
 
@@ -53,6 +55,37 @@ class ReleaseOrderQueryServiceTest {
 
                 condition = ReleaseOrderSearchCondition.builder()
                         .name(releaseOrder.getName())
+                        .build();
+
+                pageable = PageRequest.of(0, 10);
+            }
+
+            @Test
+            @DisplayName("출고 목록을 리턴한다")
+            void 출고_목록을_리턴한다() {
+                Page<ReleaseOrderResponse> page = releaseOrderQueryService.search(condition, pageable);
+
+                assertThat(page.getContent().size()).isEqualTo(1);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_출고일의_출고를_찾은_경우 {
+            private ReleaseOrderSearchCondition condition;
+            private Pageable pageable;
+
+            @BeforeEach
+            void setUp() {
+                ReleaseOrder releaseOrder = ReleaseOrder.builder()
+                        .date(LocalDate.now())
+                        .build();
+
+                releaseOrderRepository.save(releaseOrder);
+
+                condition = ReleaseOrderSearchCondition.builder()
+                        .startDate(LocalDate.now().minusDays(7))
+                        .startDate(LocalDate.now())
                         .build();
 
                 pageable = PageRequest.of(0, 10);
