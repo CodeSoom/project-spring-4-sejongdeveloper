@@ -273,7 +273,6 @@ class ReleaseOrderControllerTest {
             void setUp() throws JsonProcessingException {
                 ReleaseOrderSearchCondition condition = new ReleaseOrderSearchCondition();
                 condition.setName(RELEASE_ORDER_NAME);
-                condition.setPageable(PageRequest.of(0, 10));
 
                 json = objectMapper.writeValueAsString(condition);
             }

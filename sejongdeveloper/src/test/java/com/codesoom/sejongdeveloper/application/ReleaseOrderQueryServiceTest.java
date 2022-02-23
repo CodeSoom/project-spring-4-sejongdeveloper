@@ -53,13 +53,14 @@ class ReleaseOrderQueryServiceTest {
 
                 condition = new ReleaseOrderSearchCondition();
                 condition.setName(releaseOrder.getName());
-                condition.setPageable(PageRequest.of(0, 10));
+
+                pageable = PageRequest.of(0, 10);
             }
 
             @Test
             @DisplayName("출고 목록을 리턴한다")
             void 출고_목록을_리턴한다() {
-                Page<ReleaseOrderResponse> page = releaseOrderQueryService.search(condition);
+                Page<ReleaseOrderResponse> page = releaseOrderQueryService.search(condition, pageable);
 
                 assertThat(page.getContent().size()).isEqualTo(1);
             }
@@ -81,13 +82,14 @@ class ReleaseOrderQueryServiceTest {
 
                 condition = new ReleaseOrderSearchCondition();
                 condition.setName(releaseOrder.getName() + 1004);
-                condition.setPageable(PageRequest.of(0, 10));
+
+                pageable = PageRequest.of(0, 10);
             }
 
             @Test
             @DisplayName("비어있는 목록을 리턴한다")
             void 비어있는_목록을_리턴한다() {
-                Page<ReleaseOrderResponse> page = releaseOrderQueryService.search(condition);
+                Page<ReleaseOrderResponse> page = releaseOrderQueryService.search(condition, pageable);
 
                 assertThat(page.getContent().size()).isEqualTo(0);
             }

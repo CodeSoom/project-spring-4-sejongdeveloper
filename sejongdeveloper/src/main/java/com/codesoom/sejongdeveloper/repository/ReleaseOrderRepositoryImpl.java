@@ -5,6 +5,7 @@ import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 
@@ -20,12 +21,12 @@ public class ReleaseOrderRepositoryImpl implements ReleaseOrderRepositoryCustom 
     }
 
     @Override
-    public QueryResults<ReleaseOrder> search(ReleaseOrderSearchCondition condition) {
+    public QueryResults<ReleaseOrder> search(ReleaseOrderSearchCondition condition, Pageable pageable) {
         return queryFactory
                 .selectFrom(releaseOrder)
                 .where(nameLike(condition.getName()))
-                .offset(condition.getPageable().getOffset())
-                .limit(condition.getPageable().getPageSize())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetchResults();
     }
 

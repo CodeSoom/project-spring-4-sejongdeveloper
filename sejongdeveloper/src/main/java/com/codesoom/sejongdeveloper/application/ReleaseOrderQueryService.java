@@ -8,6 +8,7 @@ import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,16 +29,17 @@ public class ReleaseOrderQueryService {
      * 주어진 검색조건과 일치하는 출고목록 페이지를 리턴한다.
      *
      * @param condition 검색조건
+     * @param pageable 페이지
      * @return 주어진 검색조건과 일치하는 출고목록
      */
-    public Page<ReleaseOrderResponse> search(ReleaseOrderSearchCondition condition) {
-        QueryResults<ReleaseOrder> queryResults = releaseOrderRepository.search(condition);
+    public Page<ReleaseOrderResponse> search(ReleaseOrderSearchCondition condition, Pageable pageable) {
+        QueryResults<ReleaseOrder> queryResults = releaseOrderRepository.search(condition, pageable);
 
         List<ReleaseOrderResponse> content = queryResults.getResults().stream()
                 .map(ReleaseOrderResponse::new)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(content, condition.getPageable(), queryResults.getTotal());
+        return new PageImpl<>(content, pageable, queryResults.getTotal());
     }
 
 }

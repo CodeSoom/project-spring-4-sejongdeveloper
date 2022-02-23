@@ -8,6 +8,4 @@ import org.springframework.data.domain.Pageable;
 @Setter
 public class ReleaseOrderSearchCondition {
     private String name;    //출고명
-
-    private Pageable pageable;  //페이지
 }
