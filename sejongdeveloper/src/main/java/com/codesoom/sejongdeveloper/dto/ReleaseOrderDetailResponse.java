@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.dto;
 
+import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import lombok.Getter;
@@ -19,9 +20,24 @@ public class ReleaseOrderDetailResponse {
         this.quantity = releaseOrderDetail.getQuantity();
     }
 
-    private ObtainOrderDetailResponse getObtainOrderDetailResponse(ObtainOrderDetail source) {
-        //TODO: 응답객체 리펙토링할 때 반영할 것
+    private ObtainOrderDetailResponse getObtainOrderDetailResponse(ObtainOrderDetail entity) {
+        if (entity == null) {
+            return null;
+        }
 
-        return null;
+        return ObtainOrderDetailResponse.builder()
+                .item(getItemResponse(entity.getItem()))
+                .build();
+    }
+
+    private ItemResponse getItemResponse(Item entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        return ItemResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
     }
 }

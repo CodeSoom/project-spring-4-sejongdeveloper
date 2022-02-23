@@ -52,12 +52,17 @@ public class PageController {
      *
      * @return 출고상세 페이지
      */
-    @GetMapping("/release-order")
-    public String releaseOrder(@RequestParam(required = false) Long obtainOrderId, Model model) {
+    @GetMapping({"/release-order", "/release-order/{id}"})
+    public String releaseOrder(@RequestParam(required = false) Long obtainOrderId,
+                               @PathVariable(required = false) Long id,
+                               Model model) {
+
         if (obtainOrderId != null) {
             model.addAttribute("obtainOrder", obtainOrderService.findObtainOrder(obtainOrderId));
             model.addAttribute("today", LocalDate.now());
         }
+
+        model.addAttribute("releaseOrderId", id);
 
         return "releaseOrders/releaseOrder";
     }

@@ -21,22 +21,49 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script th:inline="javascript">
-        window.onload = function () {
+        const RELEASE_ORDER_ID = /*[[${releaseOrderId}]]*/null;
 
+        window.onload = function () {
+            loadReleaseOrder();
+            loadReleaseOrderDetails();
         }
 
-        function addObtainOrderDetailHtml() {
+        function loadReleaseOrder() {
+            if (RELEASE_ORDER_ID == null) {
+                return;
+            }
+
+            const url = `/release-orders/${RELEASE_ORDER_ID}`;
+
+            axios.get(url).then(function (response) {
+                for (const [key, value] of Object.entries(response.data)) {
+                    document.querySelector(`#${key}`).value = value;
+                }
+            });
+        }
+
+        function loadReleaseOrderDetails() {
+            if (RELEASE_ORDER_ID == null) {
+                return;
+            }
+
+            const url = `/release-order-details/release-orders/${RELEASE_ORDER_ID}`;
+
+            axios.get(url).then(function (response) {
+                response.data.forEach(function (obj) {
+                    addListHtml(obj);
+                });
+            });
+        }
+
+        function addListHtml(data) {
             const tr = document.createElement('tr');
 
             tr.innerHTML = `
                 <tr>
-                    <th><input type="text" class="form-control" name="id" readonly></th>
-                    <td>${getItemsHtml()}</td>
-                    <td><input type="text" class="form-control" name="quantity"></td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">-</button>
-                        <input type="hidden" name="useYn" value="true">
-                    </td>
+                    <th><input type="text" class="form-control" name="id" value="${data.id}" readonly></th>
+                    <td><input type="text" class="form-control" value="${data.obtainOrderDetail.item.name}"></td>
+                    <td><input type="text" class="form-control" name="quantity" value="${data.quantity}"></td>
                 </tr>
             `;
 
@@ -44,6 +71,7 @@
         }
 
         function getItemsHtml() {
+            return;
             if (items === null) {
                 return '';
             }
@@ -98,7 +126,7 @@
             const param = getParam();
 
             axios.post(url, param).then(function (response) {
-                console.log(response.date);
+                location.href = `/page/release-order/${response.data}`;
             });
         }
 
