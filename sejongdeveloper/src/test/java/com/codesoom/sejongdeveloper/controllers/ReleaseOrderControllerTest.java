@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -266,14 +265,39 @@ class ReleaseOrderControllerTest {
     class 출고목록조회_요청을_처리하는_핸들러는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 유효한_파라미터인_경우 {
+        class 주어진_출고명의_출고를_찾은_경우 {
             private String json;
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                ReleaseOrderSearchCondition condition = new ReleaseOrderSearchCondition();
-                condition.setName(RELEASE_ORDER_NAME);
-                condition.setPageable(PageRequest.of(0, 10));
+                ReleaseOrderSearchCondition condition = ReleaseOrderSearchCondition.builder()
+                        .name(RELEASE_ORDER_NAME)
+                        .build();
+
+                json = objectMapper.writeValueAsString(condition);
+            }
+
+            @Test
+            @DisplayName("출고목록을 리턴한다")
+            void 출고목록을_리턴한다() throws Exception {
+                mockMvc.perform(get("/release-orders")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 주어진_날짜기간의_출고를_찾은_경우 {
+            private String json;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                ReleaseOrderSearchCondition condition = ReleaseOrderSearchCondition.builder()
+                        .startDate(LocalDate.now().minusDays(7))
+                        .endDate(LocalDate.now())
+                        .build();
 
                 json = objectMapper.writeValueAsString(condition);
             }

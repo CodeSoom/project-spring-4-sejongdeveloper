@@ -66,4 +66,15 @@ public class PageController {
 
         return "releaseOrders/releaseOrder";
     }
+
+    /**
+     * 출고목록 페이지로 이동한다.
+     *
+     * @return 출고목록 페이지
+     */
+    @GetMapping("/release-orders")
+    public String getReleaseOrders() {
+        return "releaseOrders/releaseOrders";
+    }
+
 }

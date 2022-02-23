@@ -1,14 +1,10 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-    th:replace="~{layout/mainLayout :: layout ('obtain-order', ~{::link}, ~{::style}, ~{::script}, ~{::content})}">
+      th:replace="~{layout/mainLayout :: layout ('release-order', ~{::link}, ~{::style}, ~{::script}, ~{::content})}">
 
 <style>
     .content {
         margin-top: 100px;
-    }
-
-    .menu-right {
-        text-align: right;
     }
 
     .date-type {
@@ -28,7 +24,7 @@
     function loadList() {
         const queryString = getQueryString(page);
 
-        axios.get(`/obtain-orders${queryString}`)
+        axios.get(`/release-orders${queryString}`)
             .then(function (res) {
                 const data = res.data;
                 const pageable = data.pageable;
@@ -42,9 +38,7 @@
                             <td>${obj.name}</td>
                             <td>${obj.date}</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="moveObtainOrder(${obj.id})">수정</button>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="moveReleaseOrder(${obj.id})">출고</button>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="movePlaceOrder(${obj.id})">발주</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="moveReleaseOrder(${obj.id})">수정</button>
                             </td>
                         </tr>
                     `;
@@ -55,12 +49,8 @@
             });
     }
 
-    function moveObtainOrder(id) {
-        if (id === undefined) {
-            id = '';
-        }
-
-        location.href = `/page/obtain-order/${id}`;
+    function moveReleaseOrder(id) {
+        location.href = `/page/release-order/${id}`;
     }
 
     function getQueryString() {
@@ -109,14 +99,6 @@
     function logout() {
         alert('로그아웃되었습니다.');
     }
-
-    function moveReleaseOrder(id) {
-        location.href = `/page/release-order?obtainOrderId=${id}`;
-    }
-
-    function movePlaceOrder(id) {
-        location.href = `/page/place-order?obtainOrderId=${id}`;
-    }
 </script>
 
 <th:block th:fragment="content">
@@ -126,7 +108,7 @@
                 <input type="hidden" id="page" name="page" value="0">
                 <input type="hidden" id="size" name="size" value="10">
                 <div class="col-sm-3">
-                    <input type="search" name="name" class="form-control" placeholder="수주명" aria-label="Search">
+                    <input type="search" name="name" class="form-control" placeholder="출고명" aria-label="Search">
                 </div>
                 <div class="col-sm-4 date-type">
                     <input type="date" name="startDate" class="form-control date" aria-label="Search">
@@ -139,16 +121,12 @@
             </div>
         </form>
 
-        <div class="menu-right">
-            <button type="button" class="btn btn-primary" onclick="moveObtainOrder()">등록</button>
-        </div>
-
         <table class="table">
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">수주명</th>
-                <th scope="col">수주일</th>
+                <th scope="col">출고명</th>
+                <th scope="col">출고일</th>
                 <th scope="col">기능</th>
             </tr>
             </thead>
@@ -165,7 +143,6 @@
                 </li>
             </ul>
         </nav>
-
     </div><!-- /.container -->
 </th:block>
 
