@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>코드숨 개인프로젝트</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/carousel/">
+
+    <style>
+        .content {
+            margin-top: 100px;
+        }
+
+        .date {
+            width: 250px !important;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script th:inline="javascript">
+        const RELEASE_ORDER_ID = /*[[${releaseOrderId}]]*/null;
+
+        window.onload = function () {
+            loadReleaseOrder();
+            loadReleaseOrderDetails();
+        }
+
+        function loadReleaseOrder() {
+            if (RELEASE_ORDER_ID == null) {
+                return;
+            }
+
+            const url = `/release-orders/${RELEASE_ORDER_ID}`;
+
+            axios.get(url).then(function (response) {
+                for (const [key, value] of Object.entries(response.data)) {
+                    document.querySelector(`#${key}`).value = value;
+                }
+            });
+        }
+
+        function loadReleaseOrderDetails() {
+            if (RELEASE_ORDER_ID == null) {
+                return;
+            }
+
+            const url = `/release-order-details/release-orders/${RELEASE_ORDER_ID}`;
+
+            axios.get(url).then(function (response) {
+                response.data.forEach(function (obj) {
+                    addListHtml(obj);
+                });
+            });
+        }
+
+        function addListHtml(data) {
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+                <tr>
+                    <th><input type="text" class="form-control" name="id" value="${data.id}" readonly></th>
+                    <td><input type="text" class="form-control" value="${data.obtainOrderDetail.item.name}"></td>
+                    <td><input type="text" class="form-control" name="quantity" value="${data.quantity}"></td>
+                </tr>
+            `;
+
+            document.querySelector('#listTbody').appendChild(tr);
+        }
+
+        function getItemsHtml() {
+            return;
+            if (items === null) {
+                return '';
+            }
+
+            let html = '<select name="itemId" class="custom-select">';
+
+            items.forEach(function (obj) {
+                html += `<option value="${obj.id}" ${selected}>${obj.name}</option>`;
+            });
+
+            html += '</select>';
+
+            return html;
+        }
+
+        function moveReleaseOrders() {
+            location.href = '/page/release-orders';
+        }
+
+        function getElemParam(data) {
+            const param = {};
+
+            data.querySelectorAll('input, select').forEach(function (elem) {
+                param[elem.name] = elem.value;
+            });
+
+            return param;
+        }
+
+        function getElemParams() {
+            const params = [];
+
+            document.querySelectorAll('#listTbody tr').forEach(function (tr) {
+                const param = getElemParam(tr);
+
+                params.push(param);
+            });
+
+            return params;
+        }
+
+        function getParam() {
+            const param = getElemParam(document.querySelector('#obtainOrderDiv'));
+
+            param.releaseOrderDetails = getElemParams();
+
+            return param;
+        }
+
+        function save() {
+            const url = '/release-orders';
+            const param = getParam();
+
+            axios.post(url, param).then(function (response) {
+                alert('저장되었습니다.');
+                location.href = `/page/release-order/${response.data}`;
+            });
+        }
+
+        function update() {
+            const url = `/release-orders/${RELEASE_ORDER_ID}`;
+            const param = getParam();
+
+            axios.patch(url, param).then(function () {
+                alert('수정되었습니다.');
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">코드숨</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/page/obtain-orders}">수주</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/page/release-orders}">출고</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/page/place-orders}">발주</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="login">
+                <a href="javascript:logout()">로그아웃</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container content">
+
+        <div class="row">
+
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">출고상세</h4>
+                <div id="obtainOrderDiv">
+                    <div class="mb-3">
+                        <label for="id">식별자</label>
+                        <input type="hidden" id="obtainOrderId" name="obtainOrderId" th:value="${obtainOrder?.id}">
+                        <input type="text" class="form-control" id="id" name="id" placeholder="자동생성" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name">출고명</label>
+                        <input type="text" class="form-control" id="name" name="name" th:value="${obtainOrder?.name}" placeholder="출고명">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date">출고일</label>
+                        <input type="date" class="form-control date" id="date" name="date" th:value="${today}" placeholder="출고일">
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>식별자</th>
+                        <th>품목</th>
+                        <th>수량</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listTbody">
+                        <tr th:each="obtainOrderDetail : ${obtainOrder?.obtainOrderDetails}">
+                            <td>
+                                <input type="hidden" name="obtainOrderDetailId" th:value="${obtainOrderDetail.id}">
+                                <input type="text" class="form-control" placeholder="자동생성" readonly>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" th:value="${obtainOrderDetail.item.name}" readonly>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="quantity" th:value="${obtainOrderDetail.quantity}">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr class="mb-4">
+                <button type="button" class="btn btn-primary btn-save" onclick="save()" th:if="${obtainOrder != null}">등록</button>
+                <button type="button" class="btn btn-primary btn-update" onclick="update()" th:if="${obtainOrder == null}">수정</button>
+                <button type="button" class="btn btn-secondary btn-update" onclick="moveReleaseOrders()">목록</button>
+            </div>
+        </div>
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; sejongdeveloper Company, Inc.</p>
+        </footer>
+    </div>
+
+</main>
+
+
+
+</body>
+</html>

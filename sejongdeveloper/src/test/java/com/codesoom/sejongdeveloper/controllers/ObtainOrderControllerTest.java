@@ -10,6 +10,7 @@ import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
+import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,6 +65,9 @@ class ObtainOrderControllerTest {
     @MockBean
     private ItemRepository itemRepository;
 
+    @MockBean
+    private ObtainOrderRepository obtainOrderRepository;
+
     private ObjectMapper objectMapper;
 
     @BeforeEach
@@ -101,6 +105,13 @@ class ObtainOrderControllerTest {
 
         given(obtainOrderQueryService.findObtainOrders(any(ObtainOrderSearchCondition.class), any(Pageable.class)))
                 .willReturn(new PageImpl<>(list, PageRequest.of(0, 10), 1L));
+
+        ObtainOrder obtainOrder = ObtainOrder.builder()
+                .id(OBTAIN_ORDER_ID)
+                .name(OBTAIN_ORDER_NAME)
+                .build();
+
+        given(obtainOrderRepository.findById(OBTAIN_ORDER_ID)).willReturn(Optional.of(obtainOrder));
     }
 
     @DisplayName("유효한 파라미터에 대한 수주저장 요청은 수주를 저장한다.")
@@ -176,9 +187,6 @@ class ObtainOrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
-
-        verify(obtainOrderService)
-                .updateObtainOrder(eq(INVALID_OBTAIN_ORDER_ID), any(ObtainOrder.class), anyList(), anyList());
     }
 
     @DisplayName("주어진 아이디의 수주를 리턴한다.")
