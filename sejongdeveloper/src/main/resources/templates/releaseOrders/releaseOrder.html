@@ -126,7 +126,17 @@
             const param = getParam();
 
             axios.post(url, param).then(function (response) {
+                alert('저장되었습니다.');
                 location.href = `/page/release-order/${response.data}`;
+            });
+        }
+
+        function update() {
+            const url = `/release-orders/${RELEASE_ORDER_ID}`;
+            const param = getParam();
+
+            axios.patch(url, param).then(function () {
+                alert('수정되었습니다.');
             });
         }
 
