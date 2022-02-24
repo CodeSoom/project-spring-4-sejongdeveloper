@@ -9,6 +9,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/js/custom.js}"></script>
+    <script th:src="@{/js/page.js}"></script>
 
     <!-- 추가 css -->
     <th:block th:if="${links}">
@@ -31,13 +33,19 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link obtain-order" th:href="@{/page/obtain-orders}">수주</a>
+                        <a class="nav-link obtain-order"
+                           th:classappend="${menuName} == 'obtain-order' ? 'active'"
+                           th:href="@{/page/obtain-orders}">수주</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link release-order" th:href="@{/page/release-orders}">출고</a>
+                        <a class="nav-link release-order"
+                           th:classappend="${menuName} == 'release-order' ? 'active'"
+                           th:href="@{/page/release-orders}">출고</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link place-order" th:href="@{/page/place-orders}">발주</a>
+                        <a class="nav-link place-order"
+                           th:classappend="${menuName} == 'place-order' ? 'active'"
+                           th:href="@{/page/place-orders}">발주</a>
                     </li>
                 </ul>
             </div>
@@ -58,25 +66,6 @@
 </main>
 
 <script th:inline="javascript">
-    window.onload = function () {
-        setMenu();
-    }
-
-    function setMenu() {
-        const menuName = /*[[${menuName}]]*/null;
-
-        if (menuName === 'obtain-order') {
-            document.querySelector(`.${menuName}`).classList.add('active');
-        }
-
-        if (menuName === 'release-order') {
-            document.querySelector(`.${menuName}`).classList.add('active');
-        }
-
-        if (menuName === 'place-order') {
-            document.querySelector(`.${menuName}`).classList.add('active');
-        }
-    }
 
     function logout() {
         alert('로그아웃되었습니다.');

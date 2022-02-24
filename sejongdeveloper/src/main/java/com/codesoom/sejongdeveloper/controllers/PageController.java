@@ -77,4 +77,24 @@ public class PageController {
         return "releaseOrders/releaseOrders";
     }
 
+    /**
+     * 발주상세 페이지로 이동한다.
+     *
+     * @return 발주상세 페이지
+     */
+    @GetMapping({"/place-order", "/place-order/{id}"})
+    public String placeOrder(@RequestParam(required = false) Long obtainOrderId,
+                             @PathVariable(required = false) Long id,
+                             Model model) {
+
+        if (obtainOrderId != null) {
+            model.addAttribute("obtainOrder", obtainOrderService.findObtainOrder(obtainOrderId));
+            model.addAttribute("today", LocalDate.now());
+        }
+
+        model.addAttribute("placeOrderId", id);
+
+        return "placeOrders/placeOrder";
+    }
+
 }

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/mainLayout :: layout ('place-order', ~{::link}, ~{::style}, ~{::script}, ~{::content})}">
+
+<style>
+    .content {
+        margin-top: 100px;
+    }
+
+    .date {
+        width: 250px !important;
+    }
+</style>
+
+<script th:inline="javascript">
+    const PLACE_ORDER_ID = /*[[${placeOrderId}]]*/null;
+
+    window.onload = function () {
+        loadPlaceOrder();
+        loadPlaceOrderDetails();
+    }
+
+    function loadPlaceOrder() {
+        if (PLACE_ORDER_ID == null) {
+            return;
+        }
+
+        const url = `/place-orders/${PLACE_ORDER_ID}`;
+
+        axios.get(url).then(function (response) {
+            for (const [key, value] of Object.entries(response.data)) {
+                document.querySelector(`#${key}`).value = value;
+            }
+        });
+    }
+
+    function loadPlaceOrderDetails() {
+        if (PLACE_ORDER_ID == null) {
+            return;
+        }
+
+        const url = `/place-order-details/place-orders/${PLACE_ORDER_ID}`;
+
+        axios.get(url).then(function (response) {
+            response.data.forEach(function (obj) {
+                addListHtml(obj);
+            });
+        });
+    }
+
+    function addListHtml(data) {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+            <tr>
+                <th><input type="text" class="form-control" name="id" value="${data.id}" readonly></th>
+                <td><input type="text" class="form-control" value="${data.item.name}"></td>
+                <td><input type="text" class="form-control" name="quantity" value="${data.quantity}"></td>
+            </tr>
+        `;
+
+        document.querySelector('#listTbody').appendChild(tr);
+    }
+
+    function getParam() {
+        const param = getElemParam(document.querySelector('#placeOrderDiv'));
+
+        param.placeOrderDetails = getElemParams('#listTbody tr');
+
+        return param;
+    }
+
+    function save() {
+        const url = '/place-orders';
+        const param = getParam();
+
+        axios.post(url, param).then(function (response) {
+            alert('저장되었습니다.');
+            location.href = `/page/place-order/${response.data}`;
+        });
+    }
+
+    function update() {
+        const url = `/place-orders/${PLACE_ORDER_ID}`;
+        const param = getParam();
+
+        axios.patch(url, param).then(function () {
+            alert('수정되었습니다.');
+        });
+    }
+
+</script>
+
+<th:block th:fragment="content">
+
+    <div class="container content">
+
+        <div class="row">
+
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">발주상세</h4>
+                <div id="placeOrderDiv">
+                    <div class="mb-3">
+                        <label for="id">식별자</label>
+                        <input type="hidden" id="obtainOrderId" name="obtainOrderId" th:value="${obtainOrder?.id}">
+                        <input type="text" class="form-control" id="id" name="id" placeholder="자동생성" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name">발주명</label>
+                        <input type="text" class="form-control" id="name" name="name" th:value="${obtainOrder?.name}" placeholder="출고명">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date">발주일</label>
+                        <input type="date" class="form-control date" id="date" name="date" th:value="${today}" placeholder="출고일">
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>식별자</th>
+                        <th>품목</th>
+                        <th>수량</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listTbody">
+                        <tr th:each="obtainOrderDetail : ${obtainOrder?.obtainOrderDetails}">
+                            <td>
+                                <input type="text" class="form-control" placeholder="자동생성" readonly>
+                            </td>
+                            <td>
+                                <input type="hidden" name="itemId" th:value="${obtainOrderDetail.item.id}">
+                                <input type="text" class="form-control" th:value="${obtainOrderDetail.item.name}" readonly>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="quantity" th:value="${obtainOrderDetail.quantity}">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr class="mb-4">
+                <button type="button" class="btn btn-primary btn-save" onclick="save()" th:if="${obtainOrder != null}">등록</button>
+                <button type="button" class="btn btn-primary btn-update" onclick="update()" th:if="${obtainOrder == null}">수정</button>
+                <button type="button" class="btn btn-secondary btn-update" onclick="movePlaceOrders()">목록</button>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>
