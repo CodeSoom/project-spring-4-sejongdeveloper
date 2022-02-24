@@ -12,12 +12,9 @@ public class PlaceOrderSearchCondition {
 
     private LocalDate date; //발주일
 
-    private Pageable pageable;  //페이지
-
     @Builder
     public PlaceOrderSearchCondition(String name, LocalDate date, Pageable pageable) {
         this.name = name;
         this.date = date;
-        this.pageable = pageable;
     }
 }

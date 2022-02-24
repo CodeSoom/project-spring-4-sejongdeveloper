@@ -11,6 +11,7 @@ import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -93,7 +94,7 @@ public class PlaceOrderController {
      * @return 주어진 검색조건을 만족하는 발주목록 페이지
      */
     @GetMapping
-    public Page<PlaceOrderResponse> list(PlaceOrderSearchCondition condition) {
-        return placeOrderQueryService.search(condition);
+    public Page<PlaceOrderResponse> list(PlaceOrderSearchCondition condition, Pageable pageable) {
+        return placeOrderQueryService.search(condition, pageable);
     }
 }

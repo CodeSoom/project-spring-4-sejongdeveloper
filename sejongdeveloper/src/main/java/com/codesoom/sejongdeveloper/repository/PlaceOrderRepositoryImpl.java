@@ -5,10 +5,10 @@ import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.List;
 
 import static com.codesoom.sejongdeveloper.domain.QPlaceOrder.placeOrder;
 import static org.springframework.util.StringUtils.hasText;
@@ -22,13 +22,13 @@ public class PlaceOrderRepositoryImpl implements PlaceOrderRepositoryCustom {
     }
 
     @Override
-    public QueryResults<PlaceOrder> findAll(PlaceOrderSearchCondition condition) {
+    public QueryResults<PlaceOrder> findAll(PlaceOrderSearchCondition condition, Pageable pageable) {
         return queryFactory
                 .selectFrom(placeOrder)
                 .where(nameLike(condition.getName()),
                         dateEq(condition.getDate()))
-                .offset(condition.getPageable().getOffset())
-                .limit(condition.getPageable().getPageSize())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetchResults();
     }
 

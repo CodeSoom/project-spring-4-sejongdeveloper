@@ -97,4 +97,14 @@ public class PageController {
         return "placeOrders/placeOrder";
     }
 
+    /**
+     * 발주목록 페이지로 이동한다.
+     *
+     * @return 발주목록 페이지
+     */
+    @GetMapping("/place-orders")
+    public String getPlaceOrders() {
+        return "placeOrders/placeOrders";
+    }
+
 }
