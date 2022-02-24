@@ -32,6 +32,7 @@ public class ReleaseOrderRepositoryImpl implements ReleaseOrderRepositoryCustom 
                         endDateLoe(condition.getEndDate()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(releaseOrder.id.desc())
                 .fetchResults();
     }
 

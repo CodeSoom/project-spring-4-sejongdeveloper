@@ -30,6 +30,7 @@ public class PlaceOrderRepositoryImpl implements PlaceOrderRepositoryCustom {
                         endDateLoe(condition.getEndDate()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(placeOrder.id.desc())
                 .fetchResults();
     }
 
