@@ -60,8 +60,8 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                nameCondition = getCondition(PLACE_ORDER_NAME, null);
-                dateCondition = getCondition(null, PLACE_ORDER_DATE);
+                nameCondition = getCondition(PLACE_ORDER_NAME, null, null);
+                dateCondition = getCondition(null, PLACE_ORDER_DATE, PLACE_ORDER_DATE);
             }
 
             @Test
@@ -85,7 +85,7 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                condition = getCondition(NOT_PLACE_ORDER_NAME, PLACE_ORDER_DATE);
+                condition = getCondition(NOT_PLACE_ORDER_NAME, PLACE_ORDER_DATE, null);
             }
 
             @Test
@@ -106,7 +106,7 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                condition = getCondition(null, null);
+                condition = getCondition(null, null, null);
             }
 
             @Test
@@ -121,15 +121,11 @@ public class PlaceOrderQueryServiceTest {
         }
     }
 
-    private PageRequest getPageable() {
-        return PageRequest.of(0, 10);
-    }
-
-    private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
+    private PlaceOrderSearchCondition getCondition(String name, LocalDate startDate, LocalDate endDate) {
         return PlaceOrderSearchCondition.builder()
                 .name(name)
-                .date(date)
-                .pageable(getPageable())
+                .startDate(startDate)
+                .endDate(endDate)
                 .build();
     }
 

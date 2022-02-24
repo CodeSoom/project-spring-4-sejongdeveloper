@@ -26,17 +26,23 @@ public class PlaceOrderRepositoryImpl implements PlaceOrderRepositoryCustom {
         return queryFactory
                 .selectFrom(placeOrder)
                 .where(nameLike(condition.getName()),
-                        dateEq(condition.getDate()))
+                        startDateGoe(condition.getStartDate()),
+                        endDateLoe(condition.getEndDate()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
+    }
+
+    private BooleanExpression endDateLoe(LocalDate endDate) {
+        return endDate != null ? placeOrder.date.loe(endDate) : null;
+    }
+
+    private BooleanExpression startDateGoe(LocalDate startDate) {
+        return startDate != null ? placeOrder.date.goe(startDate) : null;
     }
 
     private BooleanExpression nameLike(String name) {
         return hasText(name) ? placeOrder.name.contains(name) : null;
     }
 
-    private BooleanExpression dateEq(LocalDate date) {
-        return date != null ? placeOrder.date.eq(date) : null;
-    }
 }

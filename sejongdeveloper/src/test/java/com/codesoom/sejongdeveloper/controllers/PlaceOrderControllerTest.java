@@ -362,8 +362,8 @@ class PlaceOrderControllerTest {
         private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
             return PlaceOrderSearchCondition.builder()
                     .name(name)
-                    .date(date)
-                    .pageable(getPageable())
+                    .startDate(LocalDate.now().minusDays(1))
+                    .endDate(LocalDate.now())
                     .build();
         }
 
