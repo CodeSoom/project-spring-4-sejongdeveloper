@@ -116,42 +116,10 @@
         return html;
     }
 
-    function getObtainOrderParam() {
-        const obtainOrder = {};
-
-        document.querySelector('#obtainOrderDiv').querySelectorAll('input').forEach(function (elem) {
-            obtainOrder[elem.name] = elem.value;
-        });
-
-        return obtainOrder;
-    }
-
-    function getElemParam(data) {
-        const param = {};
-
-        data.querySelectorAll('input, select').forEach(function (elem) {
-            param[elem.name] = elem.value;
-        });
-
-        return param;
-    }
-
-    function getObtainOrderDetailsParam() {
-        const obtainOrderDetails = [];
-
-        document.querySelectorAll('#listTbody tr').forEach(function (tr) {
-            const obtainOrderDetail = getElemParam(tr);
-
-            obtainOrderDetails.push(obtainOrderDetail);
-        });
-
-        return obtainOrderDetails;
-    }
-
     function getParam() {
-        const obtainOrder = getObtainOrderParam();
+        const obtainOrder = getElemParam(document.querySelector('#obtainOrderDiv'));
 
-        obtainOrder.obtainOrderDetails = getObtainOrderDetailsParam();
+        obtainOrder.obtainOrderDetails = getElemParams('#listTbody tr');
 
         return obtainOrder;
     }

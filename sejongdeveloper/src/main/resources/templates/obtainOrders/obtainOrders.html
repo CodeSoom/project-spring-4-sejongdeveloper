@@ -26,7 +26,7 @@
     }
 
     function loadList() {
-        const queryString = getQueryString(page);
+        const queryString = getQueryString();
 
         axios.get(`/obtain-orders${queryString}`)
             .then(function (res) {
@@ -44,7 +44,7 @@
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm" onclick="moveObtainOrder(${obj.id})">수정</button>
                                 <button type="button" class="btn btn-danger btn-sm" onclick="moveReleaseOrder(${obj.id})">출고</button>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="movePlaceOrder(${obj.id})">발주</button>
+                                <button type="button" class="btn btn-success btn-sm" onclick="movePlaceOrder(${obj.id})">발주</button>
                             </td>
                         </tr>
                     `;
@@ -61,53 +61,6 @@
         }
 
         location.href = `/page/obtain-order/${id}`;
-    }
-
-    function getQueryString() {
-        let queryString = '';
-
-        document.querySelector('#searchForm').querySelectorAll('input').forEach(function (obj, index) {
-            if (index === 0) {
-                queryString = `?${obj.name}=${obj.value}`;
-                return;
-            }
-
-            queryString += `&${obj.name}=${obj.value}`;
-        });
-
-        return queryString;
-    }
-
-    function changePage(page) {
-        document.querySelector('#page').value = page;
-        loadList();
-    }
-
-    function setPagination(data) {
-        const pageNumber = data.pageable.pageNumber;
-        let previous = '';
-        let next = '';
-
-        if (data.first) {
-            previous = 'disabled';
-        }
-
-        if (data.last) {
-            next = 'disabled';
-        }
-
-        document.querySelector('.pagination').innerHTML = `
-            <li class="page-item ${previous}">
-                <a class="page-link" href="javascript:changePage(${pageNumber - 1})">Previous</a>
-            </li>
-            <li class="page-item ${next}">
-                <a class="page-link" href="javascript:changePage(${pageNumber + 1})">Next</a>
-            </li>
-        `;
-    }
-
-    function logout() {
-        alert('로그아웃되었습니다.');
     }
 
     function moveReleaseOrder(id) {

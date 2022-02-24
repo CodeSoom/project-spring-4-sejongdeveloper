@@ -62,53 +62,14 @@
         document.querySelector('#listTbody').appendChild(tr);
     }
 
-    function getItemsHtml() {
-        return;
-        if (items === null) {
-            return '';
-        }
-
-        let html = '<select name="itemId" class="custom-select">';
-
-        items.forEach(function (obj) {
-            html += `<option value="${obj.id}" ${selected}>${obj.name}</option>`;
-        });
-
-        html += '</select>';
-
-        return html;
-    }
-
     function moveReleaseOrders() {
         location.href = '/page/release-orders';
     }
 
-    function getElemParam(data) {
-        const param = {};
-
-        data.querySelectorAll('input, select').forEach(function (elem) {
-            param[elem.name] = elem.value;
-        });
-
-        return param;
-    }
-
-    function getElemParams() {
-        const params = [];
-
-        document.querySelectorAll('#listTbody tr').forEach(function (tr) {
-            const param = getElemParam(tr);
-
-            params.push(param);
-        });
-
-        return params;
-    }
-
     function getParam() {
-        const param = getElemParam(document.querySelector('#obtainOrderDiv'));
+        const param = getElemParam(document.querySelector('#releaseOrderDiv'));
 
-        param.releaseOrderDetails = getElemParams();
+        param.releaseOrderDetails = getElemParams('#listTbody tr');
 
         return param;
     }
@@ -142,7 +103,7 @@
 
             <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">출고상세</h4>
-                <div id="obtainOrderDiv">
+                <div id="releaseOrderDiv">
                     <div class="mb-3">
                         <label for="id">식별자</label>
                         <input type="hidden" id="obtainOrderId" name="obtainOrderId" th:value="${obtainOrder?.id}">
