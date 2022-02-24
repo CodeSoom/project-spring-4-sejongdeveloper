@@ -1,6 +1,5 @@
 package com.codesoom.sejongdeveloper.controllers;
 
-import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ItemResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailResponse;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
