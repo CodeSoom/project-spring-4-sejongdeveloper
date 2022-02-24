@@ -8,6 +8,7 @@ import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSaveRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderUpdateRequest;
+import com.codesoom.sejongdeveloper.errors.PlaceOrderNotFoundException;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +35,9 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -212,12 +215,19 @@ class PlaceOrderControllerTest {
                         .build();
 
                 json = objectMapper.writeValueAsString(request);
+
+                doThrow(new PlaceOrderNotFoundException(INVALID_PLACE_ORDER_ID))
+                        .when(placeOrderService).updatePlaceOrder(
+                                eq(INVALID_PLACE_ORDER_ID),
+                                any(PlaceOrderUpdateRequest.class)
+                        );
+
             }
 
             @Test
             @DisplayName("Bad Request로 응답한다")
             void Bad_Request로_응답한다() throws Exception {
-                mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
+                mockMvc.perform(patch("/place-orders/" + INVALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isBadRequest());
@@ -267,7 +277,7 @@ class PlaceOrderControllerTest {
 
                 List<PlaceOrderResponse> content = List.of(getPlaceOrderResponse());
 
-                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class)))
+                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class), any(Pageable.class)))
                         .willReturn(new PageImpl<>(content, getPageable(), content.size()));
             }
 
@@ -310,7 +320,7 @@ class PlaceOrderControllerTest {
             void setUp() throws JsonProcessingException {
                 json = objectMapper.writeValueAsString(getCondition(NOT_PLACE_ORDER_NAME, null));
 
-                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class)))
+                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class), any(Pageable.class)))
                         .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
             }
 
@@ -334,7 +344,7 @@ class PlaceOrderControllerTest {
             void setUp() throws JsonProcessingException {
                 json = objectMapper.writeValueAsString(getCondition(null, null));
 
-                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class)))
+                given(placeOrderQueryService.search(any(PlaceOrderSearchCondition.class), any(Pageable.class)))
                         .willReturn(new PageImpl<>(new ArrayList<>(), getPageable(), 0));
             }
 
@@ -352,8 +362,8 @@ class PlaceOrderControllerTest {
         private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
             return PlaceOrderSearchCondition.builder()
                     .name(name)
-                    .date(date)
-                    .pageable(getPageable())
+                    .startDate(LocalDate.now().minusDays(1))
+                    .endDate(LocalDate.now())
                     .build();
         }
 

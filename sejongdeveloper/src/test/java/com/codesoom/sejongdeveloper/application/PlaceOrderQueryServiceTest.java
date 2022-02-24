@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -59,17 +60,19 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                nameCondition = getCondition(PLACE_ORDER_NAME, null);
-                dateCondition = getCondition(null, PLACE_ORDER_DATE);
+                nameCondition = getCondition(PLACE_ORDER_NAME, null, null);
+                dateCondition = getCondition(null, PLACE_ORDER_DATE, PLACE_ORDER_DATE);
             }
 
             @Test
             @DisplayName("발주목록 페이지를 리턴한다")
             void 발주목록_페이지를_리턴한다() {
-                Page<PlaceOrderResponse> page = placeOrderQueryService.search(nameCondition);
+                Pageable pageable = PageRequest.of(0, 10);
+
+                Page<PlaceOrderResponse> page = placeOrderQueryService.search(nameCondition, pageable);
                 assertThat(page.getContent().size()).isEqualTo(PLACE_ORDER_SIZE);
 
-                page = placeOrderQueryService.search(dateCondition);
+                page = placeOrderQueryService.search(dateCondition, pageable);
                 assertThat(page.getContent().size()).isOne();
             }
         }
@@ -82,13 +85,15 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                condition = getCondition(NOT_PLACE_ORDER_NAME, PLACE_ORDER_DATE);
+                condition = getCondition(NOT_PLACE_ORDER_NAME, PLACE_ORDER_DATE, null);
             }
 
             @Test
             @DisplayName("비어있는 발주목록 페이지를 리턴한다")
             void 비어있는_발주목록_페이지를_리턴한다() {
-                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
+                Pageable pageable = PageRequest.of(0, 10);
+
+                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition, pageable);
 
                 assertThat(page.getContent().size()).isZero();
             }
@@ -101,28 +106,26 @@ public class PlaceOrderQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                condition = getCondition(null, null);
+                condition = getCondition(null, null, null);
             }
 
             @Test
             @DisplayName("비어있는 발주목록 페이지를 리턴한다")
             void 비어있는_발주목록_페이지를_리턴한다() {
-                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition);
+                Pageable pageable = PageRequest.of(0, 10);
+
+                Page<PlaceOrderResponse> page = placeOrderQueryService.search(condition, pageable);
 
                 assertThat(page.getContent().size()).isEqualTo(PLACE_ORDER_SIZE);
             }
         }
     }
 
-    private PageRequest getPageable() {
-        return PageRequest.of(0, 10);
-    }
-
-    private PlaceOrderSearchCondition getCondition(String name, LocalDate date) {
+    private PlaceOrderSearchCondition getCondition(String name, LocalDate startDate, LocalDate endDate) {
         return PlaceOrderSearchCondition.builder()
                 .name(name)
-                .date(date)
-                .pageable(getPageable())
+                .startDate(startDate)
+                .endDate(endDate)
                 .build();
     }
 
