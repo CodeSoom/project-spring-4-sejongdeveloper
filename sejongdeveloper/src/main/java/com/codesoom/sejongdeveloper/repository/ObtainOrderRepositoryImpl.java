@@ -30,6 +30,7 @@ public class ObtainOrderRepositoryImpl implements ObtainOrderRepositoryCustom {
                         endDateLoe(condition.getEndDate()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(obtainOrder.id.desc())
                 .fetchResults();
     }
 

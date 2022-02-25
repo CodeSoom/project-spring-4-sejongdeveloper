@@ -11,8 +11,8 @@ function getElemParam(data) {
 function getElemParams(selector) {
     const params = [];
 
-    document.querySelectorAll(selector).forEach(function (tr) {
-        const param = getElemParam(tr);
+    document.querySelectorAll(selector).forEach(function (elem) {
+        const param = getElemParam(elem);
 
         params.push(param);
     });
