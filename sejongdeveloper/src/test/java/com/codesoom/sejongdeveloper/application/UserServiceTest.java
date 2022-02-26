@@ -71,4 +71,19 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("findUser 메소드는")
+    class b {
+        @Nested
+        @DisplayName("주어진 토큰의 유저가 있는 경우")
+        class b1 {
+            @Test
+            @DisplayName("유저를 리턴한다.")
+            void test() {
+                User user = userService.findUser(VALID_TOKEN);
+                assertThat(user).isNotNull();
+            }
+        }
+    }
 }

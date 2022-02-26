@@ -24,4 +24,8 @@ public class UserService {
         return jwtUtil.encode("userId", user.getId());
     }
 
+    public User findUser(String token) {
+        return null;
+    }
+
 }
