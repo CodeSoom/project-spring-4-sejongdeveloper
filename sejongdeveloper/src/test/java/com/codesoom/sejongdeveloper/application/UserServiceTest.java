@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.User;
+import com.codesoom.sejongdeveloper.errors.JwtInvalidException;
 import com.codesoom.sejongdeveloper.errors.UserNotFoundException;
 import com.codesoom.sejongdeveloper.repository.UserRepository;
 import com.codesoom.sejongdeveloper.utils.JwtUtil;
@@ -26,6 +27,7 @@ class UserServiceTest {
 
     private static final String KEY = "12345678901234567890123456789012";
     private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
+    private static final String INVALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaD9";
 
     private UserService userService;
     private UserRepository userRepository;
@@ -44,6 +46,7 @@ class UserServiceTest {
                 .build();
 
         given(userRepository.findByLoginIdAndPassword(LOGIN_ID, VALID_PASSWORD)).willReturn(Optional.of(user));
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
     }
 
     @Nested
@@ -68,6 +71,32 @@ class UserServiceTest {
             void test() {
                 assertThatThrownBy(() -> userService.login(LOGIN_ID, INVALID_PASSWORD))
                         .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findUser 메소드는")
+    class b {
+        @Nested
+        @DisplayName("주어진 토큰의 유저가 있는 경우")
+        class b1 {
+            @Test
+            @DisplayName("유저를 리턴한다.")
+            void test() {
+                User user = userService.findUser(VALID_TOKEN);
+                assertThat(user).isNotNull();
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 토큰의 유저가 없는 경우")
+        class b2 {
+            @Test
+            @DisplayName("예외를 던진다.")
+            void test() {
+                assertThatThrownBy(() -> userService.findUser(INVALID_TOKEN))
+                        .isInstanceOf(JwtInvalidException.class);
             }
         }
     }

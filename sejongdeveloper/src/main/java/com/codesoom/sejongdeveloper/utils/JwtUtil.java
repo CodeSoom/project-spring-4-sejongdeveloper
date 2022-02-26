@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.errors.JwtInvalidException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.StandardCharsets;
@@ -32,10 +33,14 @@ public class JwtUtil {
             throw new JwtInvalidException(token);
         }
 
-        return Jwts.parserBuilder()
-                .setSigningKey(tokenKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(tokenKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (SignatureException e) {
+            throw new JwtInvalidException(token);
+        }
     }
 }

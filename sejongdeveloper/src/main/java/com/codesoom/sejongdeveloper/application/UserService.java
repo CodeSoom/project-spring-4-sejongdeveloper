@@ -24,4 +24,12 @@ public class UserService {
         return jwtUtil.encode("userId", user.getId());
     }
 
+    public User findUser(String token) {
+        Claims claims = jwtUtil.decode(token);
+        Long id = claims.get("userId", Long.class);
+
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
 }
