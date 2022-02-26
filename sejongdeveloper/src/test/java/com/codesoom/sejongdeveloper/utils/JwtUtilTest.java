@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.utils;
 
 import com.codesoom.sejongdeveloper.errors.JwtInvalidException;
+import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -55,4 +56,18 @@ class JwtUtilTest {
         }
     }
 
+    @Nested
+    @DisplayName("decode 메소드는")
+    class b {
+        @Nested
+        @DisplayName("주어진 토큰이 있는 경우")
+        class b1 {
+            @Test
+            @DisplayName("Claims를 리턴한다")
+            void b1_1() {
+                Claims claims = jwtUtil.decode(VALID_TOKEN);
+                assertThat(claims).isNotNull();
+            }
+        }
+    }
 }
