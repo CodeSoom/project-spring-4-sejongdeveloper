@@ -2,7 +2,6 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
 import com.codesoom.sejongdeveloper.repository.ItemRepository;
-import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

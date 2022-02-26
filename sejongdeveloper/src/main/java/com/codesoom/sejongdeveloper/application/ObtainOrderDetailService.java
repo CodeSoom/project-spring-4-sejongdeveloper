@@ -1,11 +1,9 @@
 package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.Item;
-import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.dto.ItemResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailResponse;
-import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.errors.ObtainOrderDetailNotFoundException;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -68,14 +66,6 @@ public class ObtainOrderDetailService {
                 .code(source.getCode())
                 .name(source.getName())
                 .quantity(source.getQuantity())
-                .build();
-    }
-
-    private ObtainOrderResponse getObtainOrderResponse(ObtainOrder source) {
-        return ObtainOrderResponse.builder()
-                .id(source.getId())
-                .name(source.getName())
-                .date(source.getDate())
                 .build();
     }
 }
