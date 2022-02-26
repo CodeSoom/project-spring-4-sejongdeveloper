@@ -4,6 +4,7 @@ import com.codesoom.sejongdeveloper.domain.User;
 import com.codesoom.sejongdeveloper.errors.UserNotFoundException;
 import com.codesoom.sejongdeveloper.repository.UserRepository;
 import com.codesoom.sejongdeveloper.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
