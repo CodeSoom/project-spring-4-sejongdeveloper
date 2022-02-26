@@ -21,6 +21,26 @@
             margin-top: 10px;
         }
     </style>
+
+    <script th:inline="javascript">
+        function getParam() {
+            return {
+                loginId: document.querySelector('#loginId').value,
+                password: document.querySelector('#password').value
+            }
+        }
+
+        function login() {
+            const url = '/users/login';
+            const param = getParam();
+
+            axios.post(url, param).then(function (response) {
+                document.cookie = `Authentication=Bearer ${response.data}`;
+                location.href = '/page/obtain-orders';
+            });
+
+        }
+    </script>
 </head>
 <body>
 
@@ -28,12 +48,12 @@
     <h1>로그인 페이지</h1>
     <hr>
     <div>
-        <label>ID: <input type="text" id="loginId" class="form-control"></label>
+        <label>ID: <input type="text" id="loginId" name="loginId" class="form-control"></label>
     </div>
     <div>
-        <label>PW: <input type="password" id="password" class="form-control"></label>
+        <label>PW: <input type="password" id="password" name="loginId" class="form-control"></label>
     </div>
-    <button class="btn btn-primary btn-login">로그인 하기</button>
+    <button class="btn btn-primary btn-login" onclick="login()">로그인 하기</button>
     <hr>
 </div>
 
