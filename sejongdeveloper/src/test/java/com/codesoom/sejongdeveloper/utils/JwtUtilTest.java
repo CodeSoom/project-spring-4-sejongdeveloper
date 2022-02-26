@@ -72,5 +72,16 @@ class JwtUtilTest {
                 assertThat(claims.get(TOKEN_KEY, Long.class)).isEqualTo(TOKEN_VALUE);
             }
         }
+
+        @Nested
+        @DisplayName("주어진 토큰이 없는 경우")
+        class b2 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void b2_1() {
+                assertThatThrownBy(() -> jwtUtil.decode(VALID_TOKEN))
+                        .isInstanceOf(JwtInvalidException.class);
+            }
+        }
     }
 }
