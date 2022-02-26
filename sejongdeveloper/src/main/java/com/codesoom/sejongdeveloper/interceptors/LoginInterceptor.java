@@ -1,7 +1,6 @@
 package com.codesoom.sejongdeveloper.interceptors;
 
 import com.codesoom.sejongdeveloper.application.UserService;
-import com.codesoom.sejongdeveloper.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 
