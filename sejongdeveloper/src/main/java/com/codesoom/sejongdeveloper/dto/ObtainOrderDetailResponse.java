@@ -1,13 +1,10 @@
 package com.codesoom.sejongdeveloper.dto;
 
-import com.codesoom.sejongdeveloper.domain.Item;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class ObtainOrderDetailResponse {
 

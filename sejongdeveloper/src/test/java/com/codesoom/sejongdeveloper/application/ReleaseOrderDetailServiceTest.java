@@ -172,9 +172,11 @@ class ReleaseOrderDetailServiceTest {
 
             @BeforeEach
             void setUp() {
-                ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
-                request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
-                request.setQuantity(UPDATE_QUANTITY);
+                ReleaseOrderDetailUpdateRequest request = ReleaseOrderDetailUpdateRequest.builder()
+                        .id(VALID_RELEASE_ORDER_DETAIL_ID)
+                        .quantity(UPDATE_QUANTITY)
+                        .build();
+                        new ReleaseOrderDetailUpdateRequest();
 
                 list = List.of(request);
             }
@@ -202,8 +204,9 @@ class ReleaseOrderDetailServiceTest {
 
             @BeforeEach
             void setUp() {
-                ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
-                request.setId(INVALID_RELEASE_ORDER_DETAIL_ID);
+                ReleaseOrderDetailUpdateRequest request = ReleaseOrderDetailUpdateRequest.builder()
+                        .id(INVALID_RELEASE_ORDER_DETAIL_ID)
+                        .build();
 
                 list = List.of(request);
             }
@@ -223,9 +226,10 @@ class ReleaseOrderDetailServiceTest {
 
             @BeforeEach
             void setUp() {
-                ReleaseOrderDetailUpdateRequest request = new ReleaseOrderDetailUpdateRequest();
-                request.setId(VALID_RELEASE_ORDER_DETAIL_ID);
-                request.setQuantity(1_004.0);
+                ReleaseOrderDetailUpdateRequest request = ReleaseOrderDetailUpdateRequest.builder()
+                        .id(VALID_RELEASE_ORDER_DETAIL_ID)
+                        .quantity(QUANTITY + 4)
+                        .build();
 
                 list = List.of(request);
             }

@@ -3,17 +3,12 @@ package com.codesoom.sejongdeveloper.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @NoArgsConstructor
-@ToString
 public class ObtainOrderSearchCondition {
     private String name;    //수주명
 

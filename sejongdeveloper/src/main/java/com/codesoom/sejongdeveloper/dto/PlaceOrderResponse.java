@@ -2,10 +2,12 @@ package com.codesoom.sejongdeveloper.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class PlaceOrderResponse {
 
     private Long id;    //발주 일련번호

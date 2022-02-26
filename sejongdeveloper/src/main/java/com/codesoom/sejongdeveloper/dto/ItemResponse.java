@@ -2,8 +2,10 @@ package com.codesoom.sejongdeveloper.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ItemResponse {
 
     private Long id;    //상품 일련번호

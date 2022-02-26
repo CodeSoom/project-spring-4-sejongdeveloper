@@ -2,8 +2,10 @@ package com.codesoom.sejongdeveloper.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ReleaseOrderDetailSaveRequest {
 
     private Long obtainOrderDetailId;    //수주 상세 일련번호

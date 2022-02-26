@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 발주에 대한 요청을 관리한다.

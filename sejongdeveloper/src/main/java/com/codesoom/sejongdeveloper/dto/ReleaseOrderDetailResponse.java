@@ -4,8 +4,10 @@ import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ReleaseOrderDetailResponse {
 
     private Long id;    //출고 상세 일련번호

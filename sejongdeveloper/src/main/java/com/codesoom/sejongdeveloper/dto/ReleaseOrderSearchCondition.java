@@ -2,13 +2,13 @@ package com.codesoom.sejongdeveloper.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.domain.Pageable;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class ReleaseOrderSearchCondition {
     private String name;    //출고명
 

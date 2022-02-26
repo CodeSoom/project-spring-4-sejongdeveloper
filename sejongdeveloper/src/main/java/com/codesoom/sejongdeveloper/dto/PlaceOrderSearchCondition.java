@@ -2,11 +2,13 @@ package com.codesoom.sejongdeveloper.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class PlaceOrderSearchCondition {
     private String name;    //발주명
 

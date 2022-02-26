@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class PlaceOrderUpdateRequest {
 
     private Long id;    //발주 일련번호
