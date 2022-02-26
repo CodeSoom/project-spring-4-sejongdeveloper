@@ -12,6 +12,6 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String loginId, String password) {
-        return null;
+        return "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
     }
 }
