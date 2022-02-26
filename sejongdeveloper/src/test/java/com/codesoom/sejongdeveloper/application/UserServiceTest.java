@@ -44,6 +44,7 @@ class UserServiceTest {
                 .build();
 
         given(userRepository.findByLoginIdAndPassword(LOGIN_ID, VALID_PASSWORD)).willReturn(Optional.of(user));
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
     }
 
     @Nested
