@@ -8,12 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -66,6 +68,27 @@ class UserControllerTest {
                                 .content(json))
                         .andExpect(status().isCreated())
                         .andExpect(content().string(TOKEN));
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 아이디와 비밀번호가 없는 경우")
+        class a2 {
+            String json;
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                User user = User.builder().build();
+
+                json = objectMapper.writeValueAsString(user);
+            }
+
+            @Test
+            @DisplayName("Bad Request로 응답한다")
+            void test() throws Exception {
+                mockMvc.perform(post("/users/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
