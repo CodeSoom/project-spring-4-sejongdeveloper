@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +49,7 @@ class UserControllerTest {
         @DisplayName("주어진 아이디와 비밀번호가 있는 경우")
         class a1 {
             String json;
+
             @BeforeEach
             void setUp() throws JsonProcessingException {
                 LoginData loginData = LoginData.builder()
@@ -73,6 +75,7 @@ class UserControllerTest {
         @DisplayName("주어진 아이디와 비밀번호가 없는 경우")
         class a2 {
             String json;
+
             @BeforeEach
             void setUp() throws JsonProcessingException {
                 LoginData loginData = LoginData.builder().build();
@@ -87,6 +90,21 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("로그아웃 요청을 처리하는 핸들러는")
+    class b {
+        @Nested
+        @DisplayName("인증 토큰의 쿠키가 있는 경우")
+        class b1 {
+            @Test
+            @DisplayName("토큰을 만료하고 로그인 페이지로 리다이렉트한다")
+            void test() throws Exception {
+                mockMvc.perform(get("/users/logout"))
+                        .andExpect(status().isFound());
             }
         }
     }
