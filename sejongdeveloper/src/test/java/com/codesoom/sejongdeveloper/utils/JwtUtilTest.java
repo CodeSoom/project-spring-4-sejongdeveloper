@@ -32,7 +32,7 @@ class JwtUtilTest {
         class a1 {
             @Test
             @DisplayName("토큰을 리턴한다")
-            void a1_1() {
+            void test() {
                 String token = jwtUtil.encode(TOKEN_KEY, TOKEN_VALUE);
 
                 assertThat(token).isEqualTo(VALID_TOKEN);
@@ -44,7 +44,7 @@ class JwtUtilTest {
         class a2 {
             @Test
             @DisplayName("예외를 던진다")
-            void a2_1() {
+            void test() {
                 assertThatThrownBy(() -> jwtUtil.encode(TOKEN_KEY, null))
                         .isInstanceOf(JwtInvalidException.class);
 
@@ -65,7 +65,7 @@ class JwtUtilTest {
         class b1 {
             @Test
             @DisplayName("Claims를 리턴한다")
-            void b1_1() {
+            void test() {
                 Claims claims = jwtUtil.decode(VALID_TOKEN);
 
                 assertThat(claims).isNotNull();
@@ -78,7 +78,7 @@ class JwtUtilTest {
         class b2 {
             @Test
             @DisplayName("예외를 던진다")
-            void b2_1() {
+            void test() {
                 assertThatThrownBy(() -> jwtUtil.decode(null))
                         .isInstanceOf(JwtInvalidException.class);
 
