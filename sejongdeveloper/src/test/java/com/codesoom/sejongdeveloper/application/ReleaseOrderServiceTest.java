@@ -104,8 +104,9 @@ class ReleaseOrderServiceTest {
 
             @BeforeEach
             void setUp() {
-                request = new ReleaseOrderUpdateRequest();
-                request.setName(RELEASE_ORDER_NAME + "수정");
+                request = ReleaseOrderUpdateRequest.builder()
+                        .name(RELEASE_ORDER_NAME + "수정")
+                        .build();
             }
 
             @Test
@@ -120,12 +121,11 @@ class ReleaseOrderServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 주어진_아이디의_출고가_존재하지_않는_경우 {
-            private ReleaseOrderUpdateRequest request;
 
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-                assertThatThrownBy(() -> releaseOrderService.updateReleaseOrder(INVALID_RELEASE_ORDER_ID, request))
+                assertThatThrownBy(() -> releaseOrderService.updateReleaseOrder(INVALID_RELEASE_ORDER_ID, null))
                         .isInstanceOf(ReleaseOrderNotFoundException.class);
             }
         }

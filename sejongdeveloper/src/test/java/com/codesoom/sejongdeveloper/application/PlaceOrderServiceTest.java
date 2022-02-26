@@ -58,8 +58,9 @@ class PlaceOrderServiceTest {
 
             @BeforeEach
             void setUp() {
-                request = new PlaceOrderSaveRequest();
-                request.setName(PLACE_ORDER_NAME);
+                request = PlaceOrderSaveRequest.builder()
+                        .name(PLACE_ORDER_NAME)
+                        .build();
             }
 
             @Test

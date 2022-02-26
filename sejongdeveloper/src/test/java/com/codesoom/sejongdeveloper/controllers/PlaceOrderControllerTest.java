@@ -92,8 +92,9 @@ class PlaceOrderControllerTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                PlaceOrderSaveRequest request = new PlaceOrderSaveRequest();
-                request.setName(PLACE_ORDER_NAME);
+                PlaceOrderSaveRequest request = PlaceOrderSaveRequest.builder()
+                        .name(PLACE_ORDER_NAME)
+                        .build();
 
                 json = objectMapper.writeValueAsString(request);
             }

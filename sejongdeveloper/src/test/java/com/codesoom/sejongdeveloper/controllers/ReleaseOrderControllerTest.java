@@ -222,8 +222,9 @@ class ReleaseOrderControllerTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                request = new ReleaseOrderUpdateRequest();
-                request.setName(RELEASE_ORDER_NAME + "수정");
+                request = ReleaseOrderUpdateRequest.builder()
+                        .name(RELEASE_ORDER_NAME + "수정")
+                        .build();
 
                 json = objectMapper.writeValueAsString(request);
             }
