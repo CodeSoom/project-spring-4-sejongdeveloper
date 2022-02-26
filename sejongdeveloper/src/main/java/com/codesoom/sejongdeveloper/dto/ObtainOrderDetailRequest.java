@@ -5,10 +5,12 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.domain.ObtainOrderDetail;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@NoArgsConstructor
 public class ObtainOrderDetailRequest {
 
     private Long id;

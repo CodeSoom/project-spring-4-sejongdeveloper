@@ -2,10 +2,12 @@ package com.codesoom.sejongdeveloper.dto;
 
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
 public class ReleaseOrderResponse {
 
     private Long id;    //출고 일련번호

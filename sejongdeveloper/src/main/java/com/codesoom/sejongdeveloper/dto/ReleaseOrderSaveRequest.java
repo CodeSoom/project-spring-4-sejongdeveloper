@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.dto;
 import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class ReleaseOrderSaveRequest {
 
     @NotBlank(message = "출고명을 입력하세요.")
