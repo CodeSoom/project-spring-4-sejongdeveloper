@@ -1,21 +1,19 @@
 package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.UserService;
-import com.codesoom.sejongdeveloper.domain.User;
+import com.codesoom.sejongdeveloper.dto.LoginData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -52,12 +50,12 @@ class UserControllerTest {
             String json;
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                User user = User.builder()
+                LoginData loginData = LoginData.builder()
                         .loginId(LOGIN_ID)
                         .password(PASSWORD)
                         .build();
 
-                json = objectMapper.writeValueAsString(user);
+                json = objectMapper.writeValueAsString(loginData);
             }
 
             @Test
@@ -77,9 +75,9 @@ class UserControllerTest {
             String json;
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                User user = User.builder().build();
+                LoginData loginData = LoginData.builder().build();
 
-                json = objectMapper.writeValueAsString(user);
+                json = objectMapper.writeValueAsString(loginData);
             }
 
             @Test

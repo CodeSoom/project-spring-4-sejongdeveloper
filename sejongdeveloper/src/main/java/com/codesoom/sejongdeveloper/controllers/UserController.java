@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.UserService;
 import com.codesoom.sejongdeveloper.domain.User;
+import com.codesoom.sejongdeveloper.dto.LoginData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        return userService.login(user.getLoginId(), user.getPassword());
+    public String login(@RequestBody LoginData loginData) {
+        return userService.login(loginData.getLoginId(), loginData.getPassword());
     }
 }
