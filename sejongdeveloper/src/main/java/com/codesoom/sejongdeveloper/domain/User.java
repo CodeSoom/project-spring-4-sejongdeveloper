@@ -1,6 +1,7 @@
 package com.codesoom.sejongdeveloper.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +27,10 @@ public class User extends BaseEntity {
 
     private String password;
 
+    @Builder
+    public User(Long id, String loginId, String password) {
+        this.id = id;
+        this.loginId = loginId;
+        this.password = password;
+    }
 }
