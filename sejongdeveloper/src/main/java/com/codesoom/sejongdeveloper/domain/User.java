@@ -15,17 +15,17 @@ import javax.persistence.Table;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "item")   //상품
+@Table(name = "user")   //사용자
 public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
-    private Long id;
+    private Long id;    //사용자 일련번호
 
-    private String loginId;
+    private String loginId; //로그인 아이디
 
-    private String password;
+    private String password;    //비밀번호
 
     @Builder
     public User(Long id, String loginId, String password) {
