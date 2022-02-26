@@ -28,6 +28,10 @@ public class JwtUtil {
     }
 
     public Claims decode(String token) {
-        return null;
+        return Jwts.parserBuilder()
+                .setSigningKey(tokenKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

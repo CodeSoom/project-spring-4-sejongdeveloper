@@ -12,7 +12,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("JwtUtil 클래스")
 class JwtUtilTest {
-    private static final Long USER_ID = 1L;
+    private static final String TOKEN_KEY = "userId";
+    private static final Long TOKEN_VALUE = 1L;
     private static final String KEY = "12345678901234567890123456789012";
     private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
 
@@ -32,7 +33,7 @@ class JwtUtilTest {
             @Test
             @DisplayName("토큰을 리턴한다")
             void a1_1() {
-                String token = jwtUtil.encode("userId", USER_ID);
+                String token = jwtUtil.encode(TOKEN_KEY, TOKEN_VALUE);
 
                 assertThat(token).isEqualTo(VALID_TOKEN);
             }
@@ -44,10 +45,10 @@ class JwtUtilTest {
             @Test
             @DisplayName("예외를 던진다")
             void a2_1() {
-                assertThatThrownBy(() -> jwtUtil.encode("userId", null))
+                assertThatThrownBy(() -> jwtUtil.encode(TOKEN_KEY, null))
                         .isInstanceOf(JwtInvalidException.class);
 
-                assertThatThrownBy(() -> jwtUtil.encode(null, 1L))
+                assertThatThrownBy(() -> jwtUtil.encode(null, TOKEN_VALUE))
                         .isInstanceOf(JwtInvalidException.class);
 
                 assertThatThrownBy(() -> jwtUtil.encode(null, null))
@@ -66,7 +67,9 @@ class JwtUtilTest {
             @DisplayName("Claims를 리턴한다")
             void b1_1() {
                 Claims claims = jwtUtil.decode(VALID_TOKEN);
+
                 assertThat(claims).isNotNull();
+                assertThat(claims.get(TOKEN_KEY, Long.class)).isEqualTo(TOKEN_VALUE);
             }
         }
     }
