@@ -31,10 +31,9 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public void logout(HttpServletResponse response) throws IOException {
+    public void logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("Authentication", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
-        response.sendRedirect("/");
     }
 }

@@ -104,7 +104,7 @@ class UserControllerTest {
             @DisplayName("토큰을 만료하고 로그인 페이지로 리다이렉트한다")
             void test() throws Exception {
                 mockMvc.perform(get("/users/logout"))
-                        .andExpect(status().isFound());
+                        .andExpect(status().isOk());
             }
         }
     }
