@@ -79,7 +79,10 @@ class JwtUtilTest {
             @Test
             @DisplayName("예외를 던진다")
             void b2_1() {
-                assertThatThrownBy(() -> jwtUtil.decode(VALID_TOKEN))
+                assertThatThrownBy(() -> jwtUtil.decode(null))
+                        .isInstanceOf(JwtInvalidException.class);
+
+                assertThatThrownBy(() -> jwtUtil.decode(""))
                         .isInstanceOf(JwtInvalidException.class);
             }
         }

@@ -28,6 +28,10 @@ public class JwtUtil {
     }
 
     public Claims decode(String token) {
+        if (token == null || token.isBlank()) {
+            throw new JwtInvalidException(token);
+        }
+
         return Jwts.parserBuilder()
                 .setSigningKey(tokenKey)
                 .build()
