@@ -17,18 +17,18 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Optional<Cookie> foundCookie = Arrays.stream(request.getCookies())
+        Optional<String> authentication = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals("Authentication"))
-                .findFirst();
+                .map(Cookie::getValue)
+                .findAny();
 
-        if (foundCookie.isEmpty()) {
+        if (authentication.isEmpty()) {
             response.sendRedirect("/");
             return false;
         }
 
         try {
-            String authentication = foundCookie.get().getValue();
-            String token = authentication.substring("Bearer ".length());
+            String token = authentication.get();
             userService.findUser(token);
         } catch (Exception e) {
             response.sendRedirect("/");
