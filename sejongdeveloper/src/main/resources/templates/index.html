@@ -35,7 +35,7 @@
             const param = getParam();
 
             axios.post(url, param).then(function (response) {
-                document.cookie = `Authentication=Bearer ${response.data}`;
+                document.cookie = `Authentication=${response.data}`;
                 location.href = '/page/obtain-orders';
             }).catch(function () {
                 alert('아이디 또는 비밀번호를 확인하세요.');
