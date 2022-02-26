@@ -10,12 +10,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("JwtUtil 클래스")
 class JwtUtilTest {
     private static final Long USER_ID = 1L;
+    private static final String KEY = "12345678901234567890123456789012";
+    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
 
     private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
-        jwtUtil = new JwtUtil();
+        jwtUtil = new JwtUtil(KEY);
     }
 
     @Nested
@@ -29,7 +31,7 @@ class JwtUtilTest {
             void a3() {
                 String token = jwtUtil.encode("userId", USER_ID);
 
-                assertThat(token).isEqualTo("");
+                assertThat(token).isEqualTo(VALID_TOKEN);
             }
         }
     }
