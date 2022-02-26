@@ -3,6 +3,7 @@ package com.codesoom.sejongdeveloper.application;
 import com.codesoom.sejongdeveloper.domain.User;
 import com.codesoom.sejongdeveloper.errors.UserNotFoundException;
 import com.codesoom.sejongdeveloper.repository.UserRepository;
+import com.codesoom.sejongdeveloper.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public User login(String loginId, String password) {
+    public String login(String loginId, String password) {
         User user = userRepository.findByLoginIdAndPassword(loginId, password)
                 .orElseThrow(() -> new UserNotFoundException(loginId));
 
-        return user;
+        return jwtUtil.encode("userId", user.getId());
     }
 
 }

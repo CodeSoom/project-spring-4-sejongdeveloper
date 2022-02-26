@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.User;
 import com.codesoom.sejongdeveloper.repository.UserRepository;
+import com.codesoom.sejongdeveloper.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,15 +21,18 @@ class UserServiceTest {
     private static final String LOGIN_ID = "test";
     private static final String PASSWORD = "1234";
 
-    private UserService userService;
+    private static final String KEY = "12345678901234567890123456789012";
+    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
 
+    private UserService userService;
     private UserRepository userRepository;
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
-
-        userService = new UserService(userRepository);
+        jwtUtil = new JwtUtil(KEY);
+        userService = new UserService(userRepository, jwtUtil);
 
         User user = User.builder()
                 .id(USER_ID)
@@ -46,10 +50,10 @@ class UserServiceTest {
         @DisplayName("주어진 아이디와 비밀번호의 유저가 있는 경우")
         class a1 {
             @Test
-            @DisplayName("유저를 리턴한다")
+            @DisplayName("토큰을 리턴한다")
             void test() {
-                User user = userService.login(LOGIN_ID, PASSWORD);
-                assertThat(user).isNotNull();
+                String token = userService.login(LOGIN_ID, PASSWORD);
+                assertThat(token).isEqualTo(VALID_TOKEN);
             }
         }
     }
