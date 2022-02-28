@@ -9,6 +9,7 @@
 ![erd2](https://user-images.githubusercontent.com/51711799/154278930-c0efaeaa-2669-4dac-a5ed-7b748cb1231f.png)
 
 #기본 sql
+
 insert into item (item_id, save_date_time, name, quantity, use_yn)
 values(1, now(), '상품1', 0, 1);
 
