@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.interceptors;
 
 import com.codesoom.sejongdeveloper.application.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.Cookie;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     private final UserService userService;

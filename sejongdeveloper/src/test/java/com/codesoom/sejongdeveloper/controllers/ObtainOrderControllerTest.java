@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ObtainOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ObtainOrderService;
+import com.codesoom.sejongdeveloper.application.UserService;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderDetailRequest;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +54,8 @@ class ObtainOrderControllerTest {
     private static final String UPDATE_OBTAIN_ORDER_NAME = "수정한 수주명 테스트";
     private static final Long INVALID_OBTAIN_ORDER_ID = 2L;
     private static final Long OBTAIN_ORDER_DETAIL_ID = 1L;
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
+    private static final Cookie COOKIE = new Cookie("Authentication", TOKEN);
 
     @Autowired
     private MockMvc mockMvc;
@@ -69,6 +73,9 @@ class ObtainOrderControllerTest {
     private ObtainOrderRepository obtainOrderRepository;
 
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -121,7 +128,8 @@ class ObtainOrderControllerTest {
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isCreated());
 
         verify(obtainOrderService).createObtainOrder(any(ObtainOrder.class), anyList());
@@ -134,21 +142,24 @@ class ObtainOrderControllerTest {
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isBadRequest());
 
         json = objectMapper.writeValueAsString(getIsNullObtainOrderDetails());
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isBadRequest());
 
         json = objectMapper.writeValueAsString(getInvalidItem());
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isBadRequest());
 
     }
@@ -160,7 +171,8 @@ class ObtainOrderControllerTest {
 
         mockMvc.perform(post("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isBadRequest());
     }
 
@@ -171,7 +183,8 @@ class ObtainOrderControllerTest {
 
         mockMvc.perform(patch("/obtain-orders/"+OBTAIN_ORDER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isOk());
 
         verify(obtainOrderService)
@@ -185,14 +198,16 @@ class ObtainOrderControllerTest {
 
         mockMvc.perform(patch("/obtain-orders/"+INVALID_OBTAIN_ORDER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isBadRequest());
     }
 
     @DisplayName("주어진 아이디의 수주를 리턴한다.")
     @Test
     void getObtainOrder() throws Exception {
-        mockMvc.perform(get("/obtain-orders/" + OBTAIN_ORDER_ID))
+        mockMvc.perform(get("/obtain-orders/" + OBTAIN_ORDER_ID)
+                        .cookie(COOKIE))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":" + OBTAIN_ORDER_ID)));
 
@@ -202,7 +217,8 @@ class ObtainOrderControllerTest {
     @DisplayName("존재하지 않는 아이디의 수주 대한 수주조회 요청은 Bad Request로 응답한다.")
     @Test
     void getObtainOrderInvalidId() throws Exception {
-        mockMvc.perform(get("/obtain-orders/" + INVALID_OBTAIN_ORDER_ID))
+        mockMvc.perform(get("/obtain-orders/" + INVALID_OBTAIN_ORDER_ID)
+                        .cookie(COOKIE))
                 .andExpect(status().isBadRequest());
     }
 
@@ -221,7 +237,8 @@ class ObtainOrderControllerTest {
 
         mockMvc.perform(get("/obtain-orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .cookie(COOKIE))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":" + OBTAIN_ORDER_DETAIL_ID)));
     }
