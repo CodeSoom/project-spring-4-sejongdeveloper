@@ -13,7 +13,7 @@
 3. 발주
 
 # ERD
-![erd2](https://user-images.githubusercontent.com/51711799/154278930-c0efaeaa-2669-4dac-a5ed-7b748cb1231f.png)
+![erd](https://user-images.githubusercontent.com/51711799/156001778-894c7c07-d3ea-4c45-baf3-f1429ecb49b4.png)
 
 # 기본 sql
 insert into item (item_id, save_date_time, name, quantity, use_yn)
