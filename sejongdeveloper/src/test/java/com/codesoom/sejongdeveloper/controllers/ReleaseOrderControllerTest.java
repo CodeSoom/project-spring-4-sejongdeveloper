@@ -2,12 +2,17 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.ReleaseOrderQueryService;
 import com.codesoom.sejongdeveloper.application.ReleaseOrderService;
+import com.codesoom.sejongdeveloper.application.UserService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
+import com.codesoom.sejongdeveloper.domain.User;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderDetailSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSaveRequest;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderUpdateRequest;
+import com.codesoom.sejongdeveloper.interceptors.LoginInterceptor;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
+import com.codesoom.sejongdeveloper.repository.UserRepository;
+import com.codesoom.sejongdeveloper.utils.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -18,11 +23,14 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +43,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("ReleaseOrderController 클래스")
 @WebMvcTest(ReleaseOrderController.class)
 class ReleaseOrderControllerTest {
@@ -47,6 +55,7 @@ class ReleaseOrderControllerTest {
     private static final Long OBTAIN_ORDER__DETAIL_ID = 1L;
     private static final Long INVALID_RELEASE_ORDER_ID = 2L;
     private Long VALID_RELEASE_ORDER_ID = 1L;
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
 
     @Autowired
     private MockMvc mockMvc;
@@ -62,6 +71,11 @@ class ReleaseOrderControllerTest {
     @MockBean
     private ReleaseOrderQueryService releaseOrderQueryService;
 
+    @MockBean
+    private UserService userService;
+
+    private Cookie cookie = new Cookie("Authentication", TOKEN);
+
     @BeforeEach
     void setUp() {
         //Object Mapper 사용할 때 LocalDate 이슈 해결
@@ -75,6 +89,10 @@ class ReleaseOrderControllerTest {
 
         given(releaseOrderService.updateReleaseOrder(eq(VALID_RELEASE_ORDER_ID), any(ReleaseOrderUpdateRequest.class)))
                 .willReturn(releaseOrder);
+
+        User user = User.builder().build();
+
+        given(userService.findUser(TOKEN)).willReturn(user);
     }
 
     @Nested
@@ -114,7 +132,8 @@ class ReleaseOrderControllerTest {
             void 회원을_저장한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(validParam))
+                                .content(validParam)
+                                .cookie(cookie))
                         .andExpect(status().isCreated());
             }
         }
@@ -145,7 +164,8 @@ class ReleaseOrderControllerTest {
             void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(invalidName))
+                                .content(invalidName)
+                                .cookie(cookie))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -178,7 +198,8 @@ class ReleaseOrderControllerTest {
             void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(post("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(invalidDetail))
+                                .content(invalidDetail)
+                                .cookie(cookie))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -193,7 +214,8 @@ class ReleaseOrderControllerTest {
             @Test
             @DisplayName("출고를 리턴한다")
             void 출고를_리턴한다() throws Exception {
-                mockMvc.perform(get("/release-orders/" + VALID_RELEASE_ORDER_ID))
+                mockMvc.perform(get("/release-orders/" + VALID_RELEASE_ORDER_ID)
+                                .cookie(cookie))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("\"id\":" + VALID_RELEASE_ORDER_ID)));
             }
@@ -205,7 +227,8 @@ class ReleaseOrderControllerTest {
             @Test
             @DisplayName("Bad Request로 응답한다")
             void Bad_Request로_응답한다() throws Exception {
-                mockMvc.perform(get("/release-orders/" + INVALID_RELEASE_ORDER_ID))
+                mockMvc.perform(get("/release-orders/" + INVALID_RELEASE_ORDER_ID)
+                                .cookie(cookie))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -235,7 +258,8 @@ class ReleaseOrderControllerTest {
             void 출고를_리턴한다() throws Exception {
                 mockMvc.perform(patch("/release-orders/" + VALID_RELEASE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(cookie))
                         .andExpect(status().isOk());
             }
         }
@@ -255,7 +279,8 @@ class ReleaseOrderControllerTest {
             void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/release-orders/" + INVALID_RELEASE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(cookie))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -283,7 +308,8 @@ class ReleaseOrderControllerTest {
             void 출고목록을_리턴한다() throws Exception {
                 mockMvc.perform(get("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(cookie))
                         .andExpect(status().isOk());
             }
         }
@@ -308,7 +334,8 @@ class ReleaseOrderControllerTest {
             void 출고목록을_리턴한다() throws Exception {
                 mockMvc.perform(get("/release-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(cookie))
                         .andExpect(status().isOk());
             }
         }

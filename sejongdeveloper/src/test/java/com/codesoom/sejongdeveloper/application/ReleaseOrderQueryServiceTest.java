@@ -1,9 +1,11 @@
 package com.codesoom.sejongdeveloper.application;
 
 import com.codesoom.sejongdeveloper.domain.ReleaseOrder;
+import com.codesoom.sejongdeveloper.domain.User;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ReleaseOrderSearchCondition;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderRepository;
+import com.codesoom.sejongdeveloper.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -11,15 +13,19 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 
 @SpringBootTest
@@ -35,6 +41,12 @@ class ReleaseOrderQueryServiceTest {
 
     @Autowired
     private ReleaseOrderRepository releaseOrderRepository;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)

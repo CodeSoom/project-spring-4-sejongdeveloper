@@ -68,7 +68,11 @@
 <script th:inline="javascript">
 
     function logout() {
-        alert('로그아웃되었습니다.');
+        axios.get("/users/logout").then(function (response) {
+            alert('로그아웃되었습니다.');
+            document.cookie = `Authentication=1234`;
+            location.href = "/";
+        });
     }
 
 </script>

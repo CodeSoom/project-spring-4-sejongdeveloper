@@ -14,7 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
+
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +29,7 @@ class UserControllerTest {
     private static final String LOGIN_ID = "test";
     private static final String PASSWORD = "1234";
     private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
+    private static final Cookie COOKIE = new Cookie("Authentication", TOKEN);
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,6 +52,7 @@ class UserControllerTest {
         @DisplayName("주어진 아이디와 비밀번호가 있는 경우")
         class a1 {
             String json;
+
             @BeforeEach
             void setUp() throws JsonProcessingException {
                 LoginData loginData = LoginData.builder()
@@ -73,6 +78,7 @@ class UserControllerTest {
         @DisplayName("주어진 아이디와 비밀번호가 없는 경우")
         class a2 {
             String json;
+
             @BeforeEach
             void setUp() throws JsonProcessingException {
                 LoginData loginData = LoginData.builder().build();
@@ -87,6 +93,21 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("로그아웃 요청을 처리하는 핸들러는")
+    class b {
+        @Nested
+        @DisplayName("인증 토큰의 쿠키가 있는 경우")
+        class b1 {
+            @Test
+            @DisplayName("토큰을 만료하고 로그인 페이지로 리다이렉트한다")
+            void test() throws Exception {
+                mockMvc.perform(get("/users/logout"))
+                        .andExpect(status().isOk());
             }
         }
     }

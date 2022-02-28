@@ -4,11 +4,13 @@ import com.codesoom.sejongdeveloper.domain.ObtainOrder;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderResponse;
 import com.codesoom.sejongdeveloper.dto.ObtainOrderSearchCondition;
 import com.codesoom.sejongdeveloper.repository.ObtainOrderRepository;
+import com.codesoom.sejongdeveloper.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class ObtainOrderQueryServiceTest {
 
-
     private static final String OBTAIN_ORDER_NAME = "수주명";
 
     @Autowired
@@ -32,6 +33,12 @@ class ObtainOrderQueryServiceTest {
 
     @Autowired
     private ObtainOrderRepository obtainOrderRepository;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {

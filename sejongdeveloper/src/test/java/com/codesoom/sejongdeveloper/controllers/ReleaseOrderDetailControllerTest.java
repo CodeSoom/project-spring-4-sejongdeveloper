@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.UserService;
 import com.codesoom.sejongdeveloper.domain.ReleaseOrderDetail;
 import com.codesoom.sejongdeveloper.repository.ReleaseOrderDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -29,12 +31,17 @@ class ReleaseOrderDetailControllerTest {
 
     private static final Long VALID_RELEASE_ORDER_ID = 1L;
     private static final Long VALID_RELEASE_ORDER_DETAIL_ID = 1L;
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
+    private static final Cookie COOKIE = new Cookie("Authentication", TOKEN);
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private ReleaseOrderDetailRepository releaseOrderDetailRepository;
+
+    @MockBean
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -54,7 +61,8 @@ class ReleaseOrderDetailControllerTest {
             @Test
             @DisplayName("출고상세를 리턴한다")
             void 출고상세를_리턴한다() throws Exception {
-                mockMvc.perform(get("/release-order-details/release-orders/" + VALID_RELEASE_ORDER_ID))
+                mockMvc.perform(get("/release-order-details/release-orders/" + VALID_RELEASE_ORDER_ID)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("\"id\":" + VALID_RELEASE_ORDER_DETAIL_ID)));
             }

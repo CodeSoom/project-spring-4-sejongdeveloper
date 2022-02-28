@@ -2,6 +2,7 @@ package com.codesoom.sejongdeveloper.controllers;
 
 import com.codesoom.sejongdeveloper.application.PlaceOrderQueryService;
 import com.codesoom.sejongdeveloper.application.PlaceOrderService;
+import com.codesoom.sejongdeveloper.application.UserService;
 import com.codesoom.sejongdeveloper.domain.PlaceOrder;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderDetailUpdateRequest;
 import com.codesoom.sejongdeveloper.dto.PlaceOrderResponse;
@@ -28,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,8 @@ class PlaceOrderControllerTest {
     private static final Long INVALID_PLACE_ORDER_ID = 2L;
     private static final Long PLACE_ORDER_DETAIL_ID = 1L;
     private static final Long ITEM_ID = 1L;
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
+    private static final Cookie COOKIE = new Cookie("Authentication", TOKEN);
 
     @Autowired
     private MockMvc mockMvc;
@@ -68,6 +72,9 @@ class PlaceOrderControllerTest {
 
     @MockBean
     private PlaceOrderQueryService placeOrderQueryService;
+
+    @MockBean
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -104,7 +111,8 @@ class PlaceOrderControllerTest {
             void 발주를_저장한다() throws Exception {
                 mockMvc.perform(post("/place-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("" + VALID_PLACE_ORDER_ID)));
             }
@@ -120,7 +128,8 @@ class PlaceOrderControllerTest {
             @Test
             @DisplayName("발주를 리턴한다")
             void 발주를_리턴한다() throws Exception {
-                mockMvc.perform(get("/place-orders/" + VALID_PLACE_ORDER_ID))
+                mockMvc.perform(get("/place-orders/" + VALID_PLACE_ORDER_ID)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("\"id\":" + VALID_PLACE_ORDER_ID)));
             }
@@ -132,7 +141,8 @@ class PlaceOrderControllerTest {
             @Test
             @DisplayName("Bad Request로 응답한다")
             void Bad_Request로_응답한다() throws Exception {
-                mockMvc.perform(get("/place-orders/" + INVALID_PLACE_ORDER_ID))
+                mockMvc.perform(get("/place-orders/" + INVALID_PLACE_ORDER_ID)
+                                .cookie(COOKIE))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -170,7 +180,8 @@ class PlaceOrderControllerTest {
             void 발주를_수정한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk());
             }
         }
@@ -192,7 +203,8 @@ class PlaceOrderControllerTest {
             void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -230,7 +242,8 @@ class PlaceOrderControllerTest {
             void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + INVALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -254,7 +267,8 @@ class PlaceOrderControllerTest {
             void Bad_Request로_응답한다() throws Exception {
                 mockMvc.perform(patch("/place-orders/" + VALID_PLACE_ORDER_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -297,7 +311,8 @@ class PlaceOrderControllerTest {
 
                 mockMvc.perform(get("/place-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(PLACE_ORDER_NAME)));
 
@@ -305,7 +320,8 @@ class PlaceOrderControllerTest {
 
                 mockMvc.perform(get("/place-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(PLACE_ORDER_DATE.toString())));
             }
@@ -330,7 +346,8 @@ class PlaceOrderControllerTest {
             void 비어있는_발주목록을_리턴한다() throws Exception {
                 mockMvc.perform(get("/place-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("[]")));
             }
@@ -354,7 +371,8 @@ class PlaceOrderControllerTest {
             void 비어있는_발주목록을_리턴한다() throws Exception {
                 mockMvc.perform(get("/place-orders")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
+                                .content(json)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("[]")));
             }

@@ -1,5 +1,6 @@
 package com.codesoom.sejongdeveloper.controllers;
 
+import com.codesoom.sejongdeveloper.application.UserService;
 import com.codesoom.sejongdeveloper.domain.Item;
 import com.codesoom.sejongdeveloper.domain.PlaceOrderDetail;
 import com.codesoom.sejongdeveloper.repository.PlaceOrderDetailRepository;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -33,6 +35,8 @@ class PlaceOrderDetailControllerTest {
     private static final Long PLACE_ORDER_DETAIL_ID = 1L;
     private static final Long ITEM_ID = 1L;
     private static final String ITEM_NAME = "test";
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaDk";
+    private static final Cookie COOKIE = new Cookie("Authentication", TOKEN);
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,6 +45,9 @@ class PlaceOrderDetailControllerTest {
 
     @MockBean
     private PlaceOrderDetailRepository placeOrderDetailRepository;
+
+    @MockBean
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -77,7 +84,8 @@ class PlaceOrderDetailControllerTest {
             void a3() throws Exception {
                 String json = objectMapper.writeValueAsString(placeOrderDetail);
 
-                mockMvc.perform(get("/place-order-details/place-orders/" + PLACE_ORDER_ID))
+                mockMvc.perform(get("/place-order-details/place-orders/" + PLACE_ORDER_ID)
+                                .cookie(COOKIE))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("\"name\":\"test\"")));
             }
